@@ -4,20 +4,37 @@ import {
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Divider, List
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
+import axios from 'axios';
 
 
 const Registration_Second = ({ formData, setForm, navigation }) => {
 
-    const { secondName, age } = formData;
+    const { COUNSELLOR_NAME, COUNSELLOR_AGE } = formData;
     console.log(formData);
 
     const { handleSubmit, register, errors } = useForm({
 
     });
 
-    const onSubmit = (data) => {
-        navigation.next()
-    };
+    const onSubmit = data => {
+        const body = { COUNSELLOR_NAME, COUNSELLOR_AGE };
+        axios.post('http://localhost:5000/Counsellor', {
+            COUNSELLOR_NAME: COUNSELLOR_NAME,
+            COUNSELLOR_AGE: COUNSELLOR_AGE
+        })
+            .then(json => {
+                console.log(json);
+                navigation.next();
+            })
+
+    
+
+            .catch(err => {
+                console.log(err.Message);
+            })
+    }
+
+
 
     return (
         <Grid textAlign='center' verticalAlign='middle'>
@@ -38,14 +55,14 @@ const Registration_Second = ({ formData, setForm, navigation }) => {
                                 iconPosition='left'
                                 placeholder='Enter your details'
                                 type='text'
-                                name="secondName"
+                                name="COUNSELLOR_AGE"
                                 onChange={setForm}
-                                value={secondName}
-                                ref={register({ validate: secondName => secondName && secondName.length > 3 })}
+                                value={COUNSELLOR_AGE}
+                                ref={register({ validate: COUNSELLOR_AGE => COUNSELLOR_AGE && COUNSELLOR_AGE.length != null })}
                             />
                         </Form.Field>
-                        
-                        {errors.secondName && <p>secondName invalid</p>}
+
+                        {errors.COUNSELLOR_AGE && <p>COUNSELLOR_AGE invalid</p>}
 
 
                         <Button

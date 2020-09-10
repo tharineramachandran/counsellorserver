@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 
 const Registration_First = ({ formData, setForm, navigation }) => {
 
-    const { firstName } = formData;
+    const { COUNSELLOR_NAME } = formData;
     console.log(formData)
 
     const { handleSubmit, register, errors } = useForm({
@@ -35,12 +35,12 @@ const Registration_First = ({ formData, setForm, navigation }) => {
                                         iconPosition='left'
                                         placeholder='Enter your details'
                                         type='text'
-                                        name="firstName"
+                                        name="COUNSELLOR_NAME"
                                         onChange={setForm}
-                                        value={firstName}
-                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                        value={COUNSELLOR_NAME}
+                                        ref={register({ validate: COUNSELLOR_NAME => COUNSELLOR_NAME && COUNSELLOR_NAME.length > 3 })}
                                     />
-                                    {errors.firstName && <p className="customError">Username invalid</p>}
+                                    {errors.COUNSELLOR_NAME && <p className="customError">Username invalid</p>}
                                 </Form.Field>
                                
 
@@ -52,12 +52,12 @@ const Registration_First = ({ formData, setForm, navigation }) => {
                                         iconPosition='left'
                                         placeholder='Enter your details'
                                         type='text'
-                                        name="firstName"
+                                        name="COUNSELLOR_NAME"
                                         onChange={setForm}
-                                        value={firstName}
-                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                        value={COUNSELLOR_NAME}
+                                        ref={register({ validate: COUNSELLOR_NAME => COUNSELLOR_NAME && COUNSELLOR_NAME.length > 3 })}
                                     />
-                                     {errors.firstName && <p className="customError">Username invalid</p>}
+                                     {errors.COUNSELLOR_NAME && <p className="customError">Username invalid</p>}
                                 </Form.Field>
                                
 
@@ -72,12 +72,12 @@ const Registration_First = ({ formData, setForm, navigation }) => {
                                         iconPosition='left'
                                         placeholder='Enter your details'
                                         type='text'
-                                        name="firstName"
+                                        name="COUNSELLOR_NAME"
                                         onChange={setForm}
-                                        value={firstName}
-                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                        value={COUNSELLOR_NAME}
+                                        ref={register({ validate: COUNSELLOR_NAME => COUNSELLOR_NAME && COUNSELLOR_NAME.length > 3 })}
                                     />
-                                      {errors.firstName && <p className="customError">Username invalid</p>}
+                                      {errors.COUNSELLOR_NAME && <p className="customError">Username invalid</p>}
                                 </Form.Field>
 
                                 <Form.Field  className="CustomForm">
@@ -88,12 +88,12 @@ const Registration_First = ({ formData, setForm, navigation }) => {
                                         iconPosition='left'
                                         placeholder='Enter your details'
                                         type='text'
-                                        name="firstName"
+                                        name="COUNSELLOR_NAME"
                                         onChange={setForm}
-                                        value={firstName}
-                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                        value={COUNSELLOR_NAME}
+                                        ref={register({ validate: COUNSELLOR_NAME => COUNSELLOR_NAME && COUNSELLOR_NAME.length > 3 })}
                                     />
-                                     {errors.firstName && <p className="customError">Username invalid</p>}
+                                     {errors.COUNSELLOR_NAME && <p className="customError">Username invalid</p>}
                                 </Form.Field>
                             </Form.Group>
 

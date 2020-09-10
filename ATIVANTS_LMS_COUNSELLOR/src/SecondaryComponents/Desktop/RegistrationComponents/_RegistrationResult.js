@@ -5,21 +5,14 @@ import {
 } from 'semantic-ui-react';
 
 
-const Registration_Result = ({ formData }) => {
+const Registration_Result = () => {
 
-    const {
-        firstName,
-        secondName,
-        age
-
-    } = formData;
 
     return (
         <Grid textAlign='center' verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 450 }}>
                 <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
-                   {firstName}
-                   {secondName}
+                 Submitted...
                 </Header>
                
             </Grid.Column>

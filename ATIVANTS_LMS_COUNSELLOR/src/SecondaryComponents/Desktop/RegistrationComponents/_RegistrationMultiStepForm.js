@@ -6,9 +6,8 @@ import Registration_Result from './_RegistrationResult';
 
 
 const defaultData = {
-    firstName: "",
-    secondName: "",
-    age: ""
+    COUNSELLOR_NAME: "",
+    COUNSELLOR_AGE: ""
 }
 
 const steps = [
