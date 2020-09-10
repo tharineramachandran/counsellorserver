@@ -35,7 +35,7 @@ const RegistrationMultiStepForm = () => {
         case 'address':
             return <Registration_Second {...props} />
 
-        case 'summary':
+        case 'result':
             return <Registration_Result {...props} />
     }
 
@@ -43,7 +43,6 @@ const RegistrationMultiStepForm = () => {
 
     return (
         <React.Fragment>
-            {/* <Registration_First /> */}
         </React.Fragment>
 
     )

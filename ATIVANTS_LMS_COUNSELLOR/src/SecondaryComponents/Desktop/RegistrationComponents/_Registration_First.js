@@ -3,45 +3,111 @@ import {
     Header, Icon, Form, Image, Message,
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Divider, List
 } from 'semantic-ui-react';
+import { useForm } from "react-hook-form";
 
-
-const Registration_First = ({ formData, setForm, navigation}) => {
+const Registration_First = ({ formData, setForm, navigation }) => {
 
     const { firstName } = formData;
     console.log(formData)
 
+    const { handleSubmit, register, errors } = useForm({
+
+    });
+
+    const onSubmit = (data) => {
+        navigation.next()
+    };
+
+
     return (
-        <Grid textAlign='center' verticalAlign='middle'>
-            <Grid.Column style={{ maxWidth: 450 }}>
-                <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
-                    Registration
-                    </Header>
-                <br />
-                <Divider horizontal>Or</Divider>
-                <Form size='small'>
-                    <Segment stacked>
 
-                        <Form.Input 
-                        fluid 
-                        icon='user' 
-                        iconPosition='left' 
-                        placeholder='E-mail address' 
-                        type='text' 
-                        name="firstName"
-                        value={firstName} 
-                        autoComplete = "off"
-                        onChange={setForm}
-                        />
+        <Grid>
+            <Grid.Column>
+                <Form size='small' onSubmit={handleSubmit(onSubmit)}>
+                    <center>
+                        <Segment stacked style={{ width: '90%', textAlign:'left' }}>
+                            <Form.Group widths='equal'>
+                                <Form.Field  className="CustomForm">
+                                    <label>User Input</label>
+                                    <input
+                                        fluid
+                                        icon='user'
+                                        iconPosition='left'
+                                        placeholder='Enter your details'
+                                        type='text'
+                                        name="firstName"
+                                        onChange={setForm}
+                                        value={firstName}
+                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                    />
+                                    {errors.firstName && <p className="customError">Username invalid</p>}
+                                </Form.Field>
+                               
 
-                        <Button 
-                        color='teal' 
-                        fluid 
-                        size='large'
-                        onClick={() => navigation.next()}
-                        >
-                            Next
+                                <Form.Field  className="CustomForm">
+                                    <label>User Input</label>
+                                    <input
+                                        fluid
+                                        icon='user'
+                                        iconPosition='left'
+                                        placeholder='Enter your details'
+                                        type='text'
+                                        name="firstName"
+                                        onChange={setForm}
+                                        value={firstName}
+                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                    />
+                                     {errors.firstName && <p className="customError">Username invalid</p>}
+                                </Form.Field>
+                               
+
+                            </Form.Group>
+
+                            <Form.Group widths='equal'>
+                                <Form.Field  className="CustomForm">
+                                    <label>User Input</label>
+                                    <input
+                                        fluid
+                                        icon='user'
+                                        iconPosition='left'
+                                        placeholder='Enter your details'
+                                        type='text'
+                                        name="firstName"
+                                        onChange={setForm}
+                                        value={firstName}
+                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                    />
+                                      {errors.firstName && <p className="customError">Username invalid</p>}
+                                </Form.Field>
+
+                                <Form.Field  className="CustomForm">
+                                    <label>User Input</label>
+                                    <input
+                                        fluid
+                                        icon='user'
+                                        iconPosition='left'
+                                        placeholder='Enter your details'
+                                        type='text'
+                                        name="firstName"
+                                        onChange={setForm}
+                                        value={firstName}
+                                        ref={register({ validate: firstName => firstName && firstName.length > 3 })}
+                                    />
+                                     {errors.firstName && <p className="customError">Username invalid</p>}
+                                </Form.Field>
+                            </Form.Group>
+
+                            <Button
+                                color='teal'
+                                fluid
+                                size='large'
+                                type="submit"
+                            >
+                                Next
                         </Button>
-                    </Segment>
+
+                        </Segment>
+                    </center>
                 </Form>
 
             </Grid.Column>

@@ -18,7 +18,8 @@ const Registration_Result = ({ formData }) => {
         <Grid textAlign='center' verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 450 }}>
                 <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
-                    Summary
+                   {firstName}
+                   {secondName}
                 </Header>
                
             </Grid.Column>

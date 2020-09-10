@@ -10,37 +10,37 @@ const _MovieGenres = props => {
     return (
         <React.Fragment>
                 <center>
-                    <Grid relaxed='very' columns={4} style={{ width: '90%' }}>
+                    <Grid relaxed='very' columns={4} style={{ width: '99%' }}>
                         <Grid.Column className="PromoColumnGrid">
-                            <center className="CustomPromo">
+                            <center className="CustomPromo boxShadow1">
                                 <Image src={promo1} size="tiny" className="sizeOfPromos" />
                                 <p>The Quick Brown Fox Jumps Over The Lazy Dog..</p>
-                                <button className="PromoBtn btn1">Promo 1</button>
+                                <button className="PromoBtn Promo_btn1">Promo 1</button>
                             </center>
                         </Grid.Column>
 
                         <Grid.Column className="PromoColumnGrid">
-                            <center className="CustomPromo">
+                            <center className="CustomPromo boxShadow2">
                                 <Image src={promo2} size="tiny" className="sizeOfPromos" />
                                 <p>The Quick Brown Fox Jumps Over The Lazy Dog..</p>
-                                <button className="PromoBtn btn2">Promo 2</button>
+                                <button className="PromoBtn Promo_btn2">Promo 2</button>
                             </center>
                         </Grid.Column>
 
                         <Grid.Column className="PromoColumnGrid">
-                            <center className="CustomPromo">
+                            <center className="CustomPromo boxShadow3">
                                 <Image src={promo3} size="tiny" className="sizeOfPromos" />
                                 <p>The Quick Brown Fox Jumps Over The Lazy Dog..</p>
-                                <button className="PromoBtn btn3">Promo 3</button>
+                                <button className="PromoBtn Promo_btn3">Promo 3</button>
                                
                             </center>
                         </Grid.Column>
 
                         <Grid.Column className="PromoColumnGrid">
-                            <center className="CustomPromo">
+                            <center className="CustomPromo boxShadow4">
                                 <Image src={promo4} size="tiny" className="sizeOfPromos" />
                                 <p>The Quick Brown Fox Jumps Over The Lazy Dog..</p>
-                                <button className="PromoBtn btn4">Promo 4</button>
+                                <button className="PromoBtn Promo_btn4">Promo 4</button>
                             </center>
                         </Grid.Column>
                     </Grid>

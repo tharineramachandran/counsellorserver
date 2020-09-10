@@ -31,14 +31,14 @@ const _Header = () => {
                 <Grid.Column width={16}
                     style={{
                         width: '100%',
-                        minHeight: 520,
-                        maxHeight: 520,
+                        minHeight: 500,
+                        maxHeight: 500,
                         backgroundImage: `url(${abc})`,
                         // backgroundImage: `linear-gradient(360deg, rgba(1,73,88,0) 30%, rgba(0,212,255,1) 100%)`,
                         display: 'inline-block',
                         backgroundSize: 'cover',
                     }}>
-                    <Container clearing style={{ backgroundColor: 'transparent', width: "100%", padding: '30px 50px 0px 50px' }}>
+                    <Container clearing style={{ backgroundColor: 'transparent', width: "100%", padding: '30px 3rem 0px 3rem' }}>
                         <div style={{ float: 'left' }}>
                             <List horizontal >
                                 <List.Item as='a' style={{ color: 'black' }}>
@@ -74,7 +74,7 @@ const _Header = () => {
                         backgroundColor: 'transparent',
                         width: "100%",
                         marginTop: '5rem',
-                        padding: '0rem 7rem 0rem 7rem'
+                        padding: '0rem 7rem 0rem 3rem'
                     }}>
                         <div style={{ float: 'left', paddingTop: '7rem' }}>
                             <Input
