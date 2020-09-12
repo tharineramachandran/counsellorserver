@@ -4,7 +4,9 @@ import Registration_First from './_Registration_First';
 import Registration_Last from './_Registration_Last';
 import Registration_Result from './_RegistrationResult';
 import Registration_Second from './_Registration_Second';
+import Registration_Third from './_Registration_Third';
 import Registration_Fourth from './_Registration_Fourth';
+import Registration_Fifth from './_Registration_Fifth';
 
 
 
@@ -24,10 +26,10 @@ const defaultData = {
     COUNSELLOR_REGISTRATION_STATUS_CODE: "",
 
     //SECOND REGISTRATION PAGE
-    COUNSELLOR_PHOTO: {},
+    COUNSELLOR_PHOTO: "",
 
     //THIRD REGISTRATION PAGE
-    COUNSELLOR_PHOTO_DESCRIPTION: "",
+    COUNSELLOR_HEADLINE: "",
     COUNSELLOR_ABOUT_DESCRIPTION: "",
 
     //FOURTH REGISTRATION PAGE
@@ -35,9 +37,29 @@ const defaultData = {
 
     //FIFTH REGISTRATION PAGE
     COUNSELLOR_TIME_ZONE_CODE: "",
-    COUNSELLOR_AVAILABILITY_DATE: "",
-    COUNSELLOR_AVAILABILITY_TIME_FROM: "",
-    COUNSELLOR_AVAILABILITY_TIME_TO: "",
+    COUNSELLOR_AVAILABILITY_MONDAY: "",
+    COUNSELLOR_AVAILABILITY_TIME_MONDAY_FROM: "",
+    COUNSELLOR_AVAILABILITY_TIME_MONDAY_TO: "",
+
+    COUNSELLOR_AVAILABILITY_TUESDAY: "",
+    COUNSELLOR_AVAILABILITY_TIME_TUESDAY_FROM: "",
+    COUNSELLOR_AVAILABILITY_TIME_TUESDAY_TO: "",
+
+    COUNSELLOR_AVAILABILITY_WEDNESDAY: "",
+    COUNSELLOR_AVAILABILITY_TIME_WEDNESDAY_FROM: "",
+    COUNSELLOR_AVAILABILITY_TIME_WEDNESDAY_TO: "",
+
+    COUNSELLOR_AVAILABILITY_THURSDAY: "",
+    COUNSELLOR_AVAILABILITY_TIME_THURSDAY_FROM: "",
+    COUNSELLOR_AVAILABILITY_TIME_THURSDAY_TO: "",
+
+    COUNSELLOR_AVAILABILITY_FRIDAY: "",
+    COUNSELLOR_AVAILABILITY_TIME_FRIDAY_FROM: "",
+    COUNSELLOR_AVAILABILITY_TIME_FRIDAY_TO: "",
+
+    COUNSELLOR_AVAILABILITY_SATURDAY: "",
+    COUNSELLOR_AVAILABILITY_TIME_SATURDAY_FROM: "",
+    COUNSELLOR_AVAILABILITY_TIME_SATURDAY_TO: "",
 
     COUNSELLOR_DOCUMENT_NAME: "",
     COUNSELLOR_DOCUMENT_TYPE: ""
@@ -48,7 +70,8 @@ const steps = [
     { id: 'Counsellor_details' },
     { id: 'Counsellor_photo' },
     { id: 'Counsellor_about' },
-    { id: 'Registration_Fourth' }
+    { id: 'Counsellor_video' },
+    { id: 'Counsellor_availability' }
 ]
 
 const RegistrationMultiStepForm = () => {
@@ -64,13 +87,19 @@ const RegistrationMultiStepForm = () => {
 
     switch (step.id) {
         case 'Counsellor_details':
-            return <Registration_First {...props} />
+            return <Registration_Fifth {...props} />
 
         case 'Counsellor_photo':
             return <Registration_Second {...props} />
 
         case 'Counsellor_about':
+            return <Registration_Third {...props} />
+
+        case 'Counsellor_video':
             return <Registration_Fourth {...props} />
+
+        case 'Counsellor_availability':
+            return <Registration_Fifth {...props} />
 
         case 'Registration_Fourth':
             return <Registration_Last {...props} />

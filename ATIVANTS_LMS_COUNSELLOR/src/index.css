@@ -88,6 +88,97 @@
   text-align: center;
 }
 
+
+  .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .custom-file-input::before {
+    content: 'Select Your Photo';
+    display: inline-block;
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 7px 10px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+
+  }
+  .custom-file-input:hover::before {
+    border-color: black;
+  }
+  .custom-file-input:active::before {
+    background: -webkit-linear-gradient(top,black, #f9f9f9);
+  }
+
+  .hiddenButton{
+    visibility: hidden;
+  }
+
+  .css-1lmy46j-ClockWrapper {
+    display: none !important;
+}
+
+.css-upwegn-TopBar {
+  padding: 0px !important;
+
+}
+
+.css-ue2et3-DoneButton {
+  padding: 9px !important;
+}
+
+.css-1aty463-TopBar {
+  color: var(--top-text-color,gray) !important;
+  font-size: 25px !important;
+
+}
+
+.css-nakgy8-TimeKeeper {
+  display: contents !important;
+  width: 160px !important;
+  position: relative;
+}
+
+.css-1vnxzrd-TopBar {
+  color: var(--top-text-color,gray) !important;
+  font-size: 25px !important;
+}
+
+.css-53xtas-TopBar {
+  color: var(--top-colon-color, gray) !important;
+  font-size: 25px !important;
+}
+
+.css-6z0716-TopBar {
+
+  margin-left: 20px !important;
+}
+
+.css-s5ggn4-TopBar {
+  color: var(--top-text-color,gray) !important;
+  font-size: 25px !important;
+}
+
+.css-53xtas-TopBar {
+  color: var(--top-text-color,gray) !important;
+  font-size: 25px !important;
+}
+
+.css-1nkra40-TopBar {
+  color: var(--top-text-color,gray) !important;
+  font-size: 25px !important;
+}
+
+.css-6z0716-TopBar {
+
+  margin-left: 0px !important;
+}
+
 /* ********************************** */
 /* END */
 
@@ -164,6 +255,10 @@ body {
 .customThreatres{
     width: 4rem;
     height: 4rem;
+}
+
+.form-control{
+  text-align: center !important;
 }
 
 .customButtonProps{
@@ -295,6 +390,12 @@ body {
   background:white !important;
 
 }
+.customSegment{
+  padding:0.7rem 0.7rem!important;
+  border-left:none !important;
+  text-align:center !important;
+ 
+}
 
 /* .customImageDisplay { transition: cubic-bezier() } */
 
@@ -328,6 +429,14 @@ body {
 
 .scrollable-element {
   scrollbar-color: red yellow;
+}
+
+.HeadingForAvailability{
+  padding:0px !important;
+  border:none !important;
+  box-shadow: none !important;
+  margin:0px !important;
+  text-align:center !important;
 }
 
 ui.grid {

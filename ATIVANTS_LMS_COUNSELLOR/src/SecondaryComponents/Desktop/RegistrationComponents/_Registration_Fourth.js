@@ -1,43 +1,91 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
     Header, Icon, Form, Image, Message,
-    Segment, Grid, Modal, Search, Button, Dimmer, Loader, Divider, List, Dropdown, Select
+    Segment, Grid, Modal, Search, Button, Dimmer, Item, Label, Divider, List, Dropdown, Select
 } from 'semantic-ui-react';
-
 import { useForm } from "react-hook-form";
 
 const Registration_Fourth = ({ formData, setForm, navigation }) => {
 
-    const { COUNSELLOR_PHOTO } = formData;
+    const { COUNSELLOR_VIDEO_URL } = formData;
 
     const { handleSubmit, register, errors } = useForm({
 
     });
 
-    
     const onSubmit = (data) => {
+
         navigation.next()
     };
-
-    console.log(formData)
 
     return (
 
         <Grid>
             <Grid.Column>
-                <Form size='small' onSubmit={handleSubmit(onSubmit)}>
-                    <center>
-                        <Segment stacked style={{ width: '80%', textAlign: 'left' }}>
-                            <h1>Profile Photo</h1>
+                <center>
+                    <Segment stacked style={{ width: '80%', textAlign: 'left' }}>
+                        <h2>Video</h2>
+                        <center>
+                            <Grid>
+                                <Grid.Row>
+                                    <Grid.Column width={8}>
+                                        <Segment stacked style={{ width: '100%' }}>
+                                            <div style={{ width: '100%', textAlign: 'left' }}>
+                                                <Label color='blue' horizontal>
+                                                    Upload your video
+                                            </Label>
+                                            </div>
+                                            <br />
+                                            <Item.Group>
+                                                <Item>
 
-                            <div>
-                                <Grid  padded style={{ textAlign: 'center' }}>
-                                    <Grid.Column>
-                                        <Image src={COUNSELLOR_PHOTO} size="medium" alt="preview of uploaded image" />
+                                                    <Item.Content>
+                                                        <Item.Header as='a'>Paste a link to your video</Item.Header>
+                                                        <Form.Group>
+                                                        <Form.Field className="CustomForm">
+                                                            <input
+                                                                fluid
+                                                                icon='user'
+                                                                iconPosition='left'
+                                                                placeholder='Enter your details'
+                                                                type='text'
+                                                                placeholder='Enter your details'
+                                                                type='text'
+                                                                name="COUNSELLOR_VIDEO_URL"
+                                                                onChange={setForm}
+                                                                value={COUNSELLOR_VIDEO_URL}
+                                                            />
+                                                        </Form.Field>
+                                                        </Form.Group>
+                                                    </Item.Content>
+                                                </Item>
+
+                                            </Item.Group>
+
+
+                                        </Segment>
                                     </Grid.Column>
-                                </Grid>
-                            </div>
-
+                                    <Grid.Column width={8} style={{ textAlign: 'left' }}>
+                                        <Segment stacked style={{ width: '100%' }}>
+                                            <Label color='green' horizontal>
+                                                Tips for great videos
+                                            </Label>
+                                            <br />
+                                            <br />
+                                            <div>
+                                                <Segment color='olive' size="mini">Smile and look at the camera</Segment>
+                                                <Segment color='teal' size="mini">Smile and look at the camera</Segment>
+                                                <Segment color='violet' size="mini">Smile and look at the camera</Segment>
+                                                <Segment color='red' size="mini">Smile and look at the camera</Segment>
+                                                <Segment color='yellow' size="mini">Smile and look at the camera</Segment>
+                                            </div>
+                                        </Segment>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                        </center>
+                        <br /><br />
+                        <Form size='small' onSubmit={handleSubmit(onSubmit)}>
 
                             <Button
                                 color='teal'
@@ -47,7 +95,7 @@ const Registration_Fourth = ({ formData, setForm, navigation }) => {
                             >
                                 Back
                             </Button>
-
+                            <br />
                             <Button
                                 color='teal'
                                 fluid
@@ -57,10 +105,9 @@ const Registration_Fourth = ({ formData, setForm, navigation }) => {
                             >
                                 Next
                     </Button>
-
-                        </Segment>
-                    </center>
-                </Form>
+                        </Form>
+                    </Segment>
+                </center>
 
             </Grid.Column>
         </Grid >
