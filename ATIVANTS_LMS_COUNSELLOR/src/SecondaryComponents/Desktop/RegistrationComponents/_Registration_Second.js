@@ -59,10 +59,16 @@ const Registration_Second = ({ formData, setForm, navigation }) => {
 
     }
 
-
     const Cropped = () => {
-        formData.COUNSELLOR_PHOTO = result;
-     }
+        const e = {
+          target: {
+            name: "COUNSELLOR_PHOTO",
+            value: result
+          }
+        };
+        setForm(e);
+      };
+    
 
     console.log(result);
 
@@ -113,14 +119,28 @@ const Registration_Second = ({ formData, setForm, navigation }) => {
                                             <Button>Preview your cropped Photo</Button><br /><br />
                                             {result ?
                                                 <>
-
                                                     <Image src="" size="medium">
-                                                        <img src={result ? result : COUNSELLOR_PHOTO} alt="cropped image"  onLoad={Cropped}/>
+                                                        <img src={result} alt="cropped" onLoad={Cropped} />
                                                     </Image>
                                                 </>
                                                 :
-                                                <Image src='https://react.semantic-ui.com/images/wireframe/image.png' size='small' disabled/>
+                                                { COUNSELLOR_PHOTO } &&
+                                                    <>
+                                                        <Image src="" size="medium">
+                                                            <img src={COUNSELLOR_PHOTO} alt="cropped"/>
+                                                        </Image>
+                                                    </>
                                             }
+                                            {/* {COUNSELLOR_PHOTO || result ?
+                                                <>
+
+                                                    <Image src="" size="medium">
+                                                        <img src={result || COUNSELLOR_PHOTO} alt="cropped image" onLoad={Cropped} />
+                                                    </Image>
+                                                </>
+                                                :
+                                                <Image src='https://react.semantic-ui.com/images/wireframe/image.png' size='small' disabled />
+                                            } */}
                                         </Segment>
                                     </Grid.Column>
                                     <Grid.Column width={8} style={{ textAlign: 'left' }}>

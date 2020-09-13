@@ -96,31 +96,14 @@ const _RegistrationModal = props => {
                 </Modal> :
 
                 <Modal
+                    closeIcon
                     centered={false}
-                    size={'fullscreen'}
-                    dimmer="inverted"
                     open={open}
                     onClose={() => close()}
                     closeOnEscape={false}
                     closeOnDimmerClick={false}
                 >
-
-                    <Modal.Actions style={{ padding: '0.5rem', backgroundColor: 'teal' }}>
-                        <Grid padded="true" textAlign="center">
-                            <Grid.Column width={13} >
-                                Hello
-                                </Grid.Column>
-                            <Grid.Column width={3} >
-                                <Button onClick={() => close()} icon labelPosition='left' style={{ backgroundColor: `#111111` }}>
-                                    <Icon name='checkmark' color='green' />
-                                    <span style={{ color: 'white' }}>Done
-                                            </span>
-                                </Button>
-                            </Grid.Column>
-                        </Grid>
-                    </Modal.Actions>
-
-                    <Modal.Content style={{ border: '2px solid teal' }}>
+                    <Modal.Content scrolling>
                         <RegistrationMultiStepForm />
                     </Modal.Content>
                 </Modal>

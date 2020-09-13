@@ -7,16 +7,17 @@ import Registration_Second from './_Registration_Second';
 import Registration_Third from './_Registration_Third';
 import Registration_Fourth from './_Registration_Fourth';
 import Registration_Fifth from './_Registration_Fifth';
+import Registration_Sixth from './_Registration_Sixth';
 
 
 
 const defaultData = {
 
     //FIRST REGISTRATION PAGE
-    COUNSELLOR_FIRST_NAME: "indrajit",
-    COUNSELLOR_LAST_NAME: "maurya",
-    COUNSELLOR_EMAIL: "indra@activants.com",
-    COUNSELLOR_PHONE_NUMBER: "12321321",
+    COUNSELLOR_FIRST_NAME: "",
+    COUNSELLOR_LAST_NAME: "",
+    COUNSELLOR_EMAIL: "",
+    COUNSELLOR_PHONE_NUMBER: "",
     COUNSELLOR_COUNTRY_CODE: "",
     COUNSELLOR_COUNSELLING_SUBJECT_CODE: "",
     COUNSELLOR_COUNSELLING_LEVEL_CODE: "",
@@ -61,8 +62,7 @@ const defaultData = {
     COUNSELLOR_AVAILABILITY_TIME_SATURDAY_FROM: "",
     COUNSELLOR_AVAILABILITY_TIME_SATURDAY_TO: "",
 
-    COUNSELLOR_DOCUMENT_NAME: "",
-    COUNSELLOR_DOCUMENT_TYPE: ""
+    COUNSELLOR_DOCUMENT_IMAGE: "",
 
 }
 
@@ -71,7 +71,8 @@ const steps = [
     { id: 'Counsellor_photo' },
     { id: 'Counsellor_about' },
     { id: 'Counsellor_video' },
-    { id: 'Counsellor_availability' }
+    { id: 'Counsellor_availability' },
+    { id: 'Counsellor_documents' }
 ]
 
 const RegistrationMultiStepForm = () => {
@@ -87,7 +88,7 @@ const RegistrationMultiStepForm = () => {
 
     switch (step.id) {
         case 'Counsellor_details':
-            return <Registration_Fifth {...props} />
+            return <Registration_First {...props} />
 
         case 'Counsellor_photo':
             return <Registration_Second {...props} />
@@ -100,9 +101,13 @@ const RegistrationMultiStepForm = () => {
 
         case 'Counsellor_availability':
             return <Registration_Fifth {...props} />
+            
+        case 'Counsellor_documents':
+            return <Registration_Sixth {...props} />
 
         case 'Registration_Fourth':
             return <Registration_Last {...props} />
+
     }
 
     console.log(step);

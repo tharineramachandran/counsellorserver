@@ -75,17 +75,46 @@
   font-weight: bold;
 }
 
-.ui.form input[type="text"], .ui.form input[type="time"], .ui.form input[type="url"], .ui.form textarea {
-  width: 80%;
-  vertical-align: top;
+.CustomForm input[type="text"]:focus {
+  border-bottom: 1px solid teal !important;
 }
-
 .customError{
     color:#DC143C;
 }
 
-.CustomForm{
-  text-align: center;
+.CustomForm input[type="text"]::placeholder {
+  color: lightslategray;
+  opacity: 1; /* Firefox */
+}
+
+.CustomForm input[type="text"]:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: red;
+}
+
+.CustomForm input[type="text"]::-ms-input-placeholder { /* Microsoft Edge */
+ color: red;
+}
+
+.CustomForm input[type="text"]{
+  font:0.9em !important;
+  width: 75% !important;
+  text-align: left;
+  border: 0px !important;
+  border-bottom: 1px solid lightsteelblue !important; 
+}
+
+.CustomForm select{
+  display: initial !important;
+  font:0.9em !important;
+  width: 75% !important;
+  text-align: left;
+  border: 0px !important;
+  border-bottom: 1px solid lightsteelblue !important; 
+}
+
+
+.customIconsAlign{
+  vertical-align: middle;
 }
 
 
@@ -290,6 +319,30 @@ body {
   body {
     line-height: 2em;
   }
+
+  .ui.modal {
+    width: 1000px;
+    margin: 0;
+}
+
+input[type="text"], .ui.form {
+  padding:0.4rem !important;
+}
+
+.ui.form select {
+  padding: 0.4rem !important
+}
+
+.ui.modal > .content {
+  padding: 1rem !important;
+}
+
+.ui.modal .scrolling.content {
+  max-height: calc(95vh - 4em);
+  overflow: auto;
+}
+
+
 
   .customSearch .ui.input, .customSearch .ui.input > input{
     width: -moz-available !important;
