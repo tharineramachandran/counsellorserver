@@ -8,7 +8,7 @@ const Footer = () => {
             <Segment padded='very'>
                 <Divider/>
                 <div textAlign="center">
-                    Activnts Pte Ltd | 2020
+                    Activants Pte Ltd | 2020
                 </div>
             </Segment>
         </center>

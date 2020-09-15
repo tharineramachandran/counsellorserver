@@ -30,7 +30,15 @@ app.get("/Counsellor/Selectlist", async(req,res) => {
         const allCountries = await pool.query('SELECT * FROM "CT_COUNTRY"');
         const allInstitutes = await pool.query('SELECT * FROM "CT_INSTITUTE"');
         const allQualifications = await pool.query('SELECT * FROM "CT_QUALIFICATION"');
-        res.json({COUNTRIES:allCountries.rows,INSTITUTES:allInstitutes.rows,QUALIFICATIONS:allQualifications.rows})
+        const allCounsellingSubjects = await pool.query('select * from "CT_COUNSELLING_SUBJECT"');
+        const allCounsellingLevel = await pool.query('select * from "CT_COUNSELLING_LEVEL"');
+        res.json({
+            COUNTRIES:allCountries.rows,
+            INSTITUTES:allInstitutes.rows,
+            QUALIFICATIONS:allQualifications.rows,
+            COUNSELLING_SUBJECTS:allCounsellingSubjects.rows,
+            COUNSELLING_LEVELS:allCounsellingLevel.rows
+        })
 
     } catch (error) {
         console.log(error.message);
