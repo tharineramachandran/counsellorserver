@@ -97,6 +97,7 @@ const _RegistrationModal = props => {
 
                 <Modal
                     closeIcon
+                    size="large"
                     centered={false}
                     open={open}
                     onClose={() => close()}
@@ -104,7 +105,11 @@ const _RegistrationModal = props => {
                     closeOnDimmerClick={false}
                 >
                     <Modal.Content scrolling>
-                        <RegistrationMultiStepForm />
+                        <Grid>
+                            <Grid.Column style={{ maxWidth: '100%', backgroundColor:'white' }}>
+                                <RegistrationMultiStepForm />
+                            </Grid.Column>
+                        </Grid>
                     </Modal.Content>
                 </Modal>
 

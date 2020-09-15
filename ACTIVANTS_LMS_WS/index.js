@@ -25,27 +25,30 @@ app.post("/Counsellor", async(req, res) => {
 })
 
 //get All counsellor
-app.get("/Counsellor", async(req,res) => {
+app.get("/Counsellor/Selectlist", async(req,res) => {
     try {
-        const allCounsellors = await pool.query('SELECT * FROM "COUNSELLOR"');
-        res.json(allCounsellors.rows)
+        const allCountries = await pool.query('SELECT * FROM "CT_COUNTRY"');
+        const allInstitutes = await pool.query('SELECT * FROM "CT_INSTITUTE"');
+        const allQualifications = await pool.query('SELECT * FROM "CT_QUALIFICATION"');
+        res.json({COUNTRIES:allCountries.rows,INSTITUTES:allInstitutes.rows,QUALIFICATIONS:allQualifications.rows})
 
     } catch (error) {
         console.log(error.message);
     }
 })
+
 
 //get counsellor
-app.get("/Counsellor/:id", async(req,res) => {
-    try {
-        const { id } = req.params;
-        const Counsellor = await pool.query('SELECT * FROM "COUNSELLOR" where "COUNSELLOR_ID" = $1', [id]);
-        res.json(Counsellor.rows[0])
+// app.get("/Counsellor/:id", async(req,res) => {
+//     try {
+//         const { id } = req.params;
+//         const Counsellor = await pool.query('SELECT * FROM "COUNSELLOR" where "COUNSELLOR_ID" = $1', [id]);
+//         res.json(Counsellor.rows[0])
 
-    } catch (error) {
-        console.log(error.message);
-    }
-})
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// })
 
 //update counsellor
 app.put("/Counsellor/:id", async(req,res) => {

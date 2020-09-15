@@ -5,6 +5,7 @@ import { Segment, Grid, Image, Label, Button, Header, Icon, Input, Container, Li
 import _RegistrationModal from './_RegistrationModal';
 import counsellor from '../../Static/Images/FinalBannerImage.png';
 
+
 const _Header = () => {
     const [value, setValue] = useState(false);
 

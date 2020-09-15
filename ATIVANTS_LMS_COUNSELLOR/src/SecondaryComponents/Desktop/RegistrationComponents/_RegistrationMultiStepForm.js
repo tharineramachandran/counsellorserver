@@ -25,6 +25,7 @@ const defaultData = {
     COUNSELLOR_QUALIFICATION_CODE: "",
     COUNSELLOR_INSTITUTION_TYPE_CODE: "",
     COUNSELLOR_REGISTRATION_STATUS_CODE: "",
+    COUNSELLOR_QUALIFICATION_INSTITUTE : [],
 
     //SECOND REGISTRATION PAGE
     COUNSELLOR_PHOTO: "",
@@ -79,12 +80,9 @@ const RegistrationMultiStepForm = () => {
 
     const [formData, setForm] = useForm(defaultData);
 
-    const { step, navigation } = useStep({
-        steps,
-        initialStep: 0
-    })
+    const { step, navigation } = useStep({ steps, initialStep: 0})
 
-    const props = { formData, setForm, navigation }
+    const props = { formData, setForm, navigation, step}
 
     switch (step.id) {
         case 'Counsellor_details':
@@ -105,12 +103,12 @@ const RegistrationMultiStepForm = () => {
         case 'Counsellor_documents':
             return <Registration_Sixth {...props} />
 
-        case 'Registration_Fourth':
-            return <Registration_Last {...props} />
+        // case 'Registration_Fourth':
+        //     return <Registration_Last {...props} />
 
     }
 
-    console.log(step);
+    console.log("steps=", step);
 
     return (
         <React.Fragment>

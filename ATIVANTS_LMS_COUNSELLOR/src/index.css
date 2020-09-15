@@ -83,20 +83,56 @@
 }
 
 .CustomForm input[type="text"]::placeholder {
-  color: lightslategray;
+  color: #C0C0C0;
   opacity: 1; /* Firefox */
 }
 
 .CustomForm input[type="text"]:-ms-input-placeholder { /* Internet Explorer 10-11 */
- color: red;
+ color: #C0C0C0;
 }
 
 .CustomForm input[type="text"]::-ms-input-placeholder { /* Microsoft Edge */
- color: red;
+ color: #C0C0C0;
 }
 
+.CustomDescForm input[type="text"]::placeholder {
+  color: #C0C0C0;
+  opacity: 1; /* Firefox */
+}
+
+.CustomDescForm input[type="text"]:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: #C0C0C0;
+}
+
+.CustomDescForm input[type="text"]::-ms-input-placeholder { /* Microsoft Edge */
+ color:#C0C0C0;
+}
+
+.ui.form textarea::placeholder {
+  color: #C0C0C0;
+  opacity: 1; /* Firefox */
+}
+
+.ui.form textarea:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: #C0C0C0;
+}
+
+.ui.form textarea::-ms-input-placeholder { /* Microsoft Edge */
+ color: #C0C0C0;
+}
+
+
+.CustomDescForm input[type="text"]{
+  font-size:0.9em !important;
+  width: 100% !important;
+  text-align: left;
+  border: 0px !important;
+  border-bottom: 1px solid lightsteelblue !important; 
+}
+
+
 .CustomForm input[type="text"]{
-  font:0.9em !important;
+  font-size:0.9em !important;
   width: 75% !important;
   text-align: left;
   border: 0px !important;
@@ -105,18 +141,26 @@
 
 .CustomForm select{
   display: initial !important;
-  font:0.9em !important;
+  font:0.8em !important;
   width: 75% !important;
   text-align: left;
   border: 0px !important;
   border-bottom: 1px solid lightsteelblue !important; 
 }
 
-
 .customIconsAlign{
   vertical-align: middle;
 }
 
+.ui.form textarea{
+  background: #fff;
+}
+
+.activeBreadCrumb{
+  background-color:#009c95!important;
+  border-color:#009c95!important;
+  color:#fff!important
+}
 
   .custom-file-input::-webkit-file-upload-button {
     visibility: hidden;
@@ -124,21 +168,21 @@
   .custom-file-input::before {
     content: 'Select Your Photo';
     display: inline-block;
-    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
-    border: 1px solid #999;
-    border-radius: 3px;
-    padding: 7px 10px;
-    outline: none;
+    border-radius: 5px;
+    background-color: #e0e1e2 !important;
+    padding:8px;
     white-space: nowrap;
     -webkit-user-select: none;
     cursor: pointer;
-    text-shadow: 1px 1px #fff;
     font-weight: 700;
-    font-size: 10pt;
+    font-size: 9pt;
+    color:rgba(0,0,0,.6);
 
   }
   .custom-file-input:hover::before {
-    border-color: black;
+    border-color: white;
+    background-color: lightgrey;
+    color:black;
   }
   .custom-file-input:active::before {
     background: -webkit-linear-gradient(top,black, #f9f9f9);
@@ -338,7 +382,7 @@ input[type="text"], .ui.form {
 }
 
 .ui.modal .scrolling.content {
-  max-height: calc(95vh - 4em);
+  max-height: calc(100vh - 4em);
   overflow: auto;
 }
 
