@@ -15,7 +15,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
         COUNSELLOR_EMAIL,
         COUNSELLOR_PHONE_NUMBER,
         COUNSELLOR_COUNTRY_CODE,
-        COUNSELLOR_COUNSELLING_SUBJECT_CODE,
+        COUNSELLOR_COUNSELLING_SUBJECT_ID,
         COUNSELLOR_HOURLY_RATE,
         COUNSELLOR_QUALIFICATION_INSTITUTE,
         COUNSELLOR_COUNSELLING_DETAILS
@@ -285,7 +285,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                             </Label>
                                                 <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
                                                     <Icon name="circle outline" />
-                                                Profile Photo&nbsp;
+                                                Photo&nbsp;
                                             </Label>
                                                 <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(2)}>
                                                     <Icon name="circle outline" />
@@ -294,6 +294,14 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                                 <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
                                                     <Icon name="circle outline" />
                                                 Video&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Icon name="circle outline" />
+                                                Availability&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
+                                            <Icon name="circle outline"/>
+                                                Verification&nbsp;
                                             </Label>
                                             </List.Item>
                                         </List>

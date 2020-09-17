@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
     Header, Icon, Form, Image, Message,
-    Segment, Grid, Modal, Search, Button, Dimmer, Label, Loader, Progress, Divider, List, Dropdown, Select
+    Segment, Grid, Modal, Search, Button, Dimmer, Label, Loader, Container, Card, Progress, Divider, List, Dropdown, Select
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 import { useStep } from 'react-hooks-helper';
@@ -10,7 +10,7 @@ import amazingPhoto from '../../../Static/Images/amazingPhoto.png'
 import 'react-image-crop/dist/ReactCrop.css'
 import ReactCrop from 'react-image-crop';
 
-const Registration_Second = ({ formData, setForm, navigation }) => {
+const Registration_Second = ({ formData, setForm, navigation, step }) => {
 
     const { COUNSELLOR_DOCUMENT_IMAGE } = formData;
     const [src, selectFile] = useState(null);
@@ -19,7 +19,8 @@ const Registration_Second = ({ formData, setForm, navigation }) => {
     const [result, setResult] = useState(null);
     const [completed, setCompleted] = useState(0);
     const [statusCode, setStatusCode] = useState('');
-    const [fileName, setFileName] = useState({file:'',name:''});
+    const [fileName, setFileName] = useState({ file: '', name: '' });
+    const [icon_name, setIcon_name] = useState('circle');
 
     const { handleSubmit, register, errors } = useForm({
 
@@ -55,6 +56,13 @@ const Registration_Second = ({ formData, setForm, navigation }) => {
 
 
     useEffect(() => {
+        if (step.id == 'Counsellor_documents')
+            setIcon_name('circle')
+        else
+            setIcon_name('circle outline')
+    }, [])
+
+    useEffect(() => {
         const e = {
             target: {
                 name: "COUNSELLOR_DOCUMENT_IMAGE",
@@ -68,70 +76,112 @@ const Registration_Second = ({ formData, setForm, navigation }) => {
 
         <Grid>
             <Grid.Column>
-                <center>
-                    <Segment stacked style={{ width: '80%', textAlign: 'left' }}>
-                        <h2>Profile Photo</h2>
-                        <center>
-
-
-                            <Form >
-                                <Form.Field>
-                                    <label>File input  upload </label>
-                                    <Button as="label" htmlFor="file" type="button" animated="fade">
-                                        <Button.Content visible>
-                                            <Icon name="file" />
-                                        </Button.Content>
-                                        <Button.Content hidden>Choose a File</Button.Content>
-                                    </Button>
-                                    <input
-                                        type="file"
-                                        id="file"
-                                        hidden
-                                        onChange={handleFileChange}
-                                    />
-                                    <Form.Input
-                                        fluid
-                                        label="File Chosen: "
-                                        placeholder="Use the above bar to browse your file system"
-                                        readOnly
-                                        value={fileName.name}
-                                    />
-                                </Form.Field>
-                            </Form>
-
-
-
-
-                                        <Segment>
-                                            {result && "Document Attached"}
-                                        </Segment>
-
-                        </center>
-                        <br /><br />
-                        <Form size='small' onSubmit={handleSubmit(onSubmit)}>
-
-                            <Button
-                                color='teal'
-                                fluid
-                                size='large'
-                                onClick={() => navigation.previous()}
-                            >
-                                Back
-                            </Button>
+                <Form size='small' onSubmit={handleSubmit(onSubmit)}>
+                    <center>
+                        <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
+                            <Container>
+                                <div style={{ float: 'left', marginLeft: '2rem' }}>
+                                    <h4>Registation for Counsellor</h4>
+                                </div>
+                                <div style={{ float: 'right', padding: '1rem;' }}>
+                                    <Label as='a' onClick={() => navigation.previous()}>
+                                        <Icon name='hand point left outline' />
+                                  Previous
+                                </Label>
+                                    <Label as='a' onClick={() => navigation.next()}>
+                                        <Icon name='hand point right outline' />
+                                  Next
+                                </Label>
+                                </div>
+                            </Container>
                             <br />
-                            <Button
-                                color='teal'
-                                fluid
-                                size='large'
-                                type="submit"
-                                onClick={() => navigation.next()}
-                            >
-                                Next
-                    </Button>
-                        </Form>
-                    </Segment>
-                </center>
+                            <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
+                                <div style={{ backgroundColor: 'transparent' }}>
+                                    <List horizontal >
+                                        <List.Item>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(0)}>
+                                                <Icon name="circle outline" />
+                                                Personal Details&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
+                                                <Icon name="circle outline" />
+                                                Photo&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(2)}>
+                                                <Icon name={icon_name} />
+                                                Description&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
+                                                <Icon name="circle outline" />
+                                                Video&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                                <Icon name="circle outline" />
+                                                Availability&nbsp;
+                                            </Label>
+                                            <Label as='a' circular onClick={() => navigation.go(5)}>
+                                                <Icon name={icon_name} />
+                                                Verification&nbsp;
+                                            </Label>
+                                        </List.Item>
+                                    </List>
+                                </div>
+                            </Container>
+                            <div style={{ width: '100%' }}>
+                                <center>
+                                    <Segment style={{ width: '70%', textAlign: 'left' }}>
 
+                                        <Container placeholder style={{ backgroundColor: '#e5f1f1', padding: '2rem' }}>
+                                            <Header as="h5">
+                                                <Icon name="check circle" color="teal" size="tiny" />
+                                                     Become a verified counsellor</Header>
+                                            <p style={{ marginLeft: '2.5rem' }}>please
+                                            upload a photo of you holding your passport. Make
+                                            sure passport's photo page is open, with your name and
+                                                    face clearly </p>
+
+                                        </Container>
+                                        <Card className="customCard">
+                                            <Card.Content className="customCard">
+                                                <Card.Meta>Upload your document</Card.Meta>
+                                                <Card.Description>
+                                                    <Form.Field>
+                                                        <Button as="label" htmlFor="file" type="button" animated="fade">
+                                                            <Button.Content visible>
+                                                                <Icon name="file" color="grey" />
+                                                            </Button.Content>
+                                                            <Button.Content hidden>Choose a File</Button.Content>
+                                                        </Button>
+                                                        <input
+                                                            type="file"
+                                                            id="file"
+                                                            hidden
+                                                            onChange={handleFileChange}
+                                                        />
+                                                    </Form.Field>
+                                                </Card.Description>
+                                                <Card.Meta className="customCarContent">
+                                                    {fileName.name && <>
+                                                        < Icon name='check' color="green" />
+                                                        {fileName.name}
+                                                    </>
+                                                    }
+                                                </Card.Meta>
+                                            </Card.Content>
+                                        </Card>
+                                        <Container placeholder style={{ backgroundColor: '#fff', padding: '2rem' }}>
+                                            <Header as="h5">
+                                                <Icon name="lock" color="green" size="tiny" />
+                                                     Safe</Header>
+                                            <p style={{ marginLeft: '2.5rem' }}>please
+                                            We do not store your documents on our server after verification is complete.</p>
+                                        </Container>
+                                    </Segment>
+                                </center>
+                            </div>
+                        </Segment>
+                    </center>
+                </Form>
             </Grid.Column>
         </Grid >
     )

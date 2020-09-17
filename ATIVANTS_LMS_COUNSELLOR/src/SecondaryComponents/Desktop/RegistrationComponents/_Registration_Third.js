@@ -64,7 +64,7 @@ const Registration_Third = ({ formData, setForm, navigation, step }) => {
                                             </Label>
                                             <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
                                                 <Icon name="circle outline" />
-                                                Profile Photo&nbsp;
+                                                Photo&nbsp;
                                             </Label>
                                             <Label as='a' circular onClick={() => navigation.go(2)}>
                                                 <Icon name={icon_name} />
@@ -73,6 +73,14 @@ const Registration_Third = ({ formData, setForm, navigation, step }) => {
                                             <Label as='a' className="activeBreadCrumb"  circular onClick={() => navigation.go(3)}>
                                             <Icon name="circle outline" />
                                                 Video&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Icon name="circle outline" />
+                                                Availability&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
+                                            <Icon name="circle outline"/>
+                                                Verification&nbsp;
                                             </Label>
                                         </List.Item>
                                     </List>

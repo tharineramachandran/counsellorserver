@@ -78,8 +78,19 @@
 .CustomForm input[type="text"]:focus {
   border-bottom: 1px solid teal !important;
 }
+
 .customError{
     color:#DC143C;
+}
+
+.customCard{ 
+  -webkit-box-shadow:none !important;
+  padding:0px !important;
+
+}
+.customCarContent{
+  border:0px solid white !important;
+
 }
 
 .CustomForm input[type="text"]::placeholder {
