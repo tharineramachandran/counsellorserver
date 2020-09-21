@@ -9,6 +9,10 @@ import Timekeeper from 'react-timekeeper';
 import { DateInput, TimeInput, DateTimeInput, DatesRangeInput } from 'semantic-ui-calendar-react';
 
 const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
+    var SLOT_AVAILABILITY = []
+
+
+
 
     const {
         COUNSELLOR_TIME_ZONE_CODE,
@@ -145,15 +149,112 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
         const { name, value } = e.target;
         const list = [...days[day]];
         list[index][name] = value;
+ 
 
-        setDays((days) => ({
-            ...days,
-            [day]: list
-        }));
+        for (var i = 0; i < list.length; i++) {
+            //check validity of date
+            var validateResults = validate(list[i].TO, list[i].FROM, i, list);
+            // view results and display validation results
+            var resultsDisplay = "your "+day+" slots : \r\n"    ;   
+            if (!(validateResults.results)) {
+                if (!(validateResults.isNotOverlapping)){
+
+                    resultsDisplay +="* Overlap with one another \r\n"    ;
+
+                }
+                if (!(validateResults.isdateTrue)){
+
+                    resultsDisplay +="* start timing is after ending time  "    ;
+
+                }
+ 
+                alert(resultsDisplay);
+                console.log(validateResults);
+                break;
+
+            }
+            else {
+                setDays((days) => ({
+                    ...days,
+                    [day]: list
+                }));} 
+        }
+
+        function validate(sTime, eTime, checkIndex, list) {
+
+            var isNotOverlapping = true;
+            var sTimedate = new Date();
+            var eTimedate = new Date();
+            var isdateTrue = true;
+
+            if ((sTime.includes(":")) && (eTime.includes(":"))) {
+                // init date values 
+                var sTime_t = sTime.split(":");
+                sTimedate.setHours(parseInt(sTime_t[0]));
+                sTimedate.setMinutes(parseInt(sTime_t[1]));
+
+                var eTime_t = eTime.split(":");
+                eTimedate.setHours(parseInt(eTime_t[0]));
+                eTimedate.setMinutes(parseInt(eTime_t[1]));
+
+                if (eTimedate > sTimedate) {  
+                    isdateTrue = false;
+                }
+
+
+            }
+
+
+            if (isdateTrue) {
+                for (var index = 0; index < list.length; index++) {
+
+                    var item = list[index];
+                    // make sure same date is not checked
+                    if ((checkIndex != index) && (item.TO.includes(":")) && (item.FROM.includes(":"))) {
+                        // init values
+                        var itemFrom = item.FROM.split(":");
+                        var startdate2 = new Date();
+                        startdate2.setHours(parseInt(itemFrom[0]));
+                        startdate2.setMinutes(parseInt(itemFrom[1]));
+
+                        var itemTo = item.TO.split(":");
+                        var enddate2 = new Date();
+                        enddate2.setHours(parseInt(itemTo[0]));
+                        enddate2.setMinutes(parseInt(itemTo[1]));
+                        // check if dates overlap
+                        if (dateRangeOverlaps(sTimedate, eTimedate, startdate2, enddate2)) {
+
+                            isNotOverlapping = false;
+
+                            break;
+                        }
+                        // function to check if dates overlap 
+                        function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
+                            if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
+                            if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
+                            if (b_start < a_start && a_end < b_end) return true; // a in b
+                            return false;
+                        }
+                    }
+
+                }
+
+            }
+            // init result values 
+            var validateObject = {
+                isNotOverlapping: isNotOverlapping,
+                isdateTrue: isdateTrue,
+                results : isNotOverlapping && isdateTrue
+            };
+            // return values
+            return validateObject;
+        }
+         
     };
 
     // handle click event of the Remove button
     const handleRemoveClickForDay = (day, index) => {
+        console.dir(day)
         const list = [...days[day]];
         list.splice(index, 1);
 
@@ -208,6 +309,7 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                             </Container>
                             <br />
                             <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
+                                
                                 <div style={{ backgroundColor: 'transparent' }}>
                                     <List horizontal >
                                         <List.Item>

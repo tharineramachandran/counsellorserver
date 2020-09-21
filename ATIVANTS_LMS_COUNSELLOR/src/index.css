@@ -75,7 +75,7 @@
   font-weight: bold;
 }
 
-.CustomForm input[type="text"]:focus {
+.CustomForm input[type="text"], input[type="text"]:focus {
   border-bottom: 1px solid teal !important;
 }
 
@@ -93,16 +93,16 @@
 
 }
 
-.CustomForm input[type="text"]::placeholder {
+.CustomForm input[type="text"], input[type="password"]::placeholder {
   color: #C0C0C0;
   opacity: 1; /* Firefox */
 }
 
-.CustomForm input[type="text"]:-ms-input-placeholder { /* Internet Explorer 10-11 */
+.CustomForm input[type="text"], input[type="password"]:-ms-input-placeholder { /* Internet Explorer 10-11 */
  color: #C0C0C0;
 }
 
-.CustomForm input[type="text"]::-ms-input-placeholder { /* Microsoft Edge */
+.CustomForm input[type="text"], input[type="password"]::-ms-input-placeholder { /* Microsoft Edge */
  color: #C0C0C0;
 }
 
@@ -133,7 +133,7 @@
 }
 
 
-.CustomDescForm input[type="text"]{
+.CustomDescForm input[type="text"], input[type="password"] {
   font-size:0.9em !important;
   width: 100% !important;
   text-align: left;
@@ -142,7 +142,7 @@
 }
 
 
-.CustomForm input[type="text"]{
+.CustomForm input[type="text"],  input[type="password"]{
   font-size:0.9em !important;
   width: 75% !important;
   text-align: left;

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
 import GetWidthOfComponent from './GetWidthOfComponent'
 
+
 const MobileComponent = ({ children }) => {
 
   const [sidebarOpened, setSidebarOpened] = useState(false);

@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const pool = require('./Database/Db_Connection');
+const pool = require('./database/Db_Connection');
 
 //middleware
 app.use(cors());
@@ -9,8 +9,15 @@ app.use(express.json());
 
 //routes
 
+
+
+//register and login routes
+
+app.use("/auth", require("./routes/jwtAuth"));
+app.use("/dashboard", require("./routes/dashboard"));
+
 //create counsellor
-app.post("/Counsellor", async(req, res) => {
+app.post("/counsellor", async(req, res) => {
     try {
         const { COUNSELLOR_NAME,COUNSELLOR_AGE } = req.body;
         console.log(req.body);
@@ -25,7 +32,7 @@ app.post("/Counsellor", async(req, res) => {
 })
 
 //get All counsellor
-app.get("/Counsellor/Selectlist", async(req,res) => {
+app.get("/counsellor/list", async(req,res) => {
     try {
         const allCountries = await pool.query('SELECT * FROM "CT_COUNTRY"');
         const allInstitutes = await pool.query('SELECT * FROM "CT_INSTITUTE"');
@@ -42,6 +49,17 @@ app.get("/Counsellor/Selectlist", async(req,res) => {
 
     } catch (error) {
         console.log(error.message);
+    }
+})
+
+app.get("/counsellor", async(req,res) => {
+    try {
+        const users = await pool.query('SELECT * FROM "T_USER"');
+        res.json({
+            users : users.rows
+        })
+    } catch (error) {
+        console.log(error.message)
     }
 })
 

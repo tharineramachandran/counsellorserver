@@ -7,7 +7,7 @@ import Footer from './Footer'
 const HomepageLayout = () => {
   return (
     <div>
-      <DesktopComponent><Footer /></DesktopComponent>
+      <DesktopComponent></DesktopComponent>
       <MobileContainer><Footer /></MobileContainer>
     </div>
   )

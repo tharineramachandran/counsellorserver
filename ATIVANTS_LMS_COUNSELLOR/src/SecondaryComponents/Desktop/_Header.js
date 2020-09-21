@@ -6,7 +6,7 @@ import _RegistrationModal from './_RegistrationModal';
 import counsellor from '../../Static/Images/FinalBannerImage.png';
 
 
-const _Header = () => {
+const _Header = (props) => {
     const [value, setValue] = useState(false);
 
     const showModal = () => {
@@ -101,7 +101,7 @@ const _Header = () => {
 
             </Grid.Row >
 
-            {value ? <_RegistrationModal onCloseModal={() => CloseModal()} /> : " "}
+            {value ? <_RegistrationModal {...props} onCloseModal={() => CloseModal()} /> : " "}
 
         </React.Fragment >
     )
