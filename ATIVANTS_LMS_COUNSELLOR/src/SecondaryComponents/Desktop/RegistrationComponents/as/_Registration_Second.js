@@ -124,10 +124,14 @@ const Registration_Second = ({ formData, setForm, navigation, step }) => {
                                             <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
                                             <Icon name="circle outline" />
                                                 Availability&nbsp;
-                                            </Label>
+                                            </Label> 
                                             <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
                                             <Icon name="circle outline"/>
-                                                Verification&nbsp;
+                                                Verificatasion&nbsp;
+                                            </Label>
+                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(6)}>
+                                                    <Icon name="circle outline" />
+                                                Summary&nbsp;
                                             </Label>
                                     </List.Item>
                                 </List>

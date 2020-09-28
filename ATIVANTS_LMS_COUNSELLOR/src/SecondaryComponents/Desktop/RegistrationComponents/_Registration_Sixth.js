@@ -173,7 +173,7 @@ const Registration_Second = ({ formData, setForm, navigation, step }) => {
                                             <Header as="h5">
                                                 <Icon name="lock" color="green" size="tiny" />
                                                      Safe</Header>
-                                            <p style={{ marginLeft: '2.5rem' }}>please
+                                            <p style={{ marginLeft: '2.5rem' }}>
                                             We do not store your documents on our server after verification is complete.</p>
                                         </Container>
                                     </Segment>
