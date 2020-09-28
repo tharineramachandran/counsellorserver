@@ -11,6 +11,9 @@ import { DateInput, TimeInput, DateTimeInput, DatesRangeInput } from 'semantic-u
 const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
     var SLOT_AVAILABILITY = []
 
+
+
+
     const {
         COUNSELLOR_TIME_ZONE_CODE,
         COUNSELLOR_AVAILABILITY_MONDAY,
@@ -146,28 +149,27 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
         const { name, value } = e.target;
         const list = [...days[day]];
         list[index][name] = value;
+ 
 
         for (var i = 0; i < list.length; i++) {
             //check validity of date
             var validateResults = validate(list[i].TO, list[i].FROM, i, list);
             // view results and display validation results
-            console.log(validateResults);
-            var resultsDisplay = "your " + day + " slots : \r\n";
+            var resultsDisplay = "your "+day+" slots : \r\n"    ;   
             if (!(validateResults.results)) {
-                if (!(validateResults.isNotOverlapping)) {
+                if (!(validateResults.isNotOverlapping)){
 
-                    resultsDisplay += "* Overlap with one another \r\n";
-                }
-                if (!(validateResults.isdateTrue)) {
-
-                    resultsDisplay += "* start timing is after ending time \r\n ";
+                    resultsDisplay +="* Overlap with one another \r\n"    ;
 
                 }
-                if (!(validateResults.isNotSameDate)) {
-                    resultsDisplay += "* is the same time\r\n";
-                }
+                if (!(validateResults.isdateTrue)){
 
+                    resultsDisplay +="* start timing is after ending time  "    ;
+
+                }
+ 
                 alert(resultsDisplay);
+                console.log(validateResults);
                 break;
 
             }
@@ -175,8 +177,7 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                 setDays((days) => ({
                     ...days,
                     [day]: list
-                }));
-            }
+                }));} 
         }
 
         function validate(sTime, eTime, checkIndex, list) {
@@ -185,10 +186,8 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
             var sTimedate = new Date();
             var eTimedate = new Date();
             var isdateTrue = true;
-            var isNotSameDate = true;
 
             if ((sTime.includes(":")) && (eTime.includes(":"))) {
-
                 // init date values 
                 var sTime_t = sTime.split(":");
                 sTimedate.setHours(parseInt(sTime_t[0]));
@@ -197,20 +196,16 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                 var eTime_t = eTime.split(":");
                 eTimedate.setHours(parseInt(eTime_t[0]));
                 eTimedate.setMinutes(parseInt(eTime_t[1]));
-                console.log(sTimedate);
-                console.log(eTimedate);
 
-                if (eTimedate > sTimedate) {
+                if (eTimedate > sTimedate) {  
                     isdateTrue = false;
                 }
-                if (sTimedate.getTime() === eTimedate.getTime()) {
-                    isNotSameDate = false;
-                }
+
 
             }
 
 
-            if (isdateTrue && isNotSameDate) {
+            if (isdateTrue) {
                 for (var index = 0; index < list.length; index++) {
 
                     var item = list[index];
@@ -226,7 +221,6 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                         var enddate2 = new Date();
                         enddate2.setHours(parseInt(itemTo[0]));
                         enddate2.setMinutes(parseInt(itemTo[1]));
-        
                         // check if dates overlap
                         if (dateRangeOverlaps(sTimedate, eTimedate, startdate2, enddate2)) {
 
@@ -250,13 +244,12 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
             var validateObject = {
                 isNotOverlapping: isNotOverlapping,
                 isdateTrue: isdateTrue,
-                isNotSameDate: isNotSameDate,
-                results: isNotOverlapping && isdateTrue && isNotSameDate
+                results : isNotOverlapping && isdateTrue
             };
             // return values
             return validateObject;
         }
-
+         
     };
 
     // handle click event of the Remove button
@@ -316,7 +309,7 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                             </Container>
                             <br />
                             <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
-
+                                
                                 <div style={{ backgroundColor: 'transparent' }}>
                                     <List horizontal >
                                         <List.Item>

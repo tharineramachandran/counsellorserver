@@ -31,13 +31,12 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     const [WS_Qualifications, setWS_Qualifications] = useState({});
     const [WS_Counselling_Subjects, setWS_Counselling_Subjects] = useState({});
     const [WS_Counselling_Levels, setWS_Counselling_Levels] = useState({});
-    const [inputQualificationList, setInputQualificationList] = useState([{ CT_QUALIFICATION_CODE: "", CT_INSTITUTE_CODE: "", CT_QUALIFICATION_NAME: "", CT_INSTITUTE_NAME: "" }]);
+    const [inputQualificationList, setInputQualificationList] = useState([{ CT_QUALIFICATION_CODE: "", CT_INSTITUTE_CODE: "" }]);
     const [inputCounsellingDetailsList, setInputCounsellingDetailsList] = useState([{
-        CT_COUNSELLING_SUBJECT_CODE: "", CT_COUNSELLING_LEVEL_CODE: "", COUNSELLOR_HOURLY_RATE: "",
-        CT_COUNSELLING_SUBJECT_NAME: "", CT_COUNSELLING_LEVEL_NAME: ""
-    }]); 
+        CT_COUNSELLING_SUBJECT_CODE: "", COUNSELLOR_COUNSELLING_LEVEL: "", COUNSELLOR_HOURLY_RATE: ""
+    }]);
 
-     useEffect(() => {
+    useEffect(() => {
         _AxiosInstance.get('Selectlist')
             .then(res => {
                 console.log(res.data)
@@ -210,26 +209,13 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
 
     useEffect(() => {
 
-    }, [])
+    },[])
 
     // handle input change
     const handleInputChangeForQualification = (e, index) => {
         const { name, value } = e.target;
         const list = [...inputQualificationList];
         list[index][name] = value;
-        console.log(WS_Qualifications);
-
-        if (name == "CT_QUALIFICATION_CODE") {
-            var CT_QUALIFICATION_NAME = WS_Qualifications.find(x => x.CT_QUALIFICATION_CODE === value).CT_QUALIFICATION_NAME;
-
-            list[index]["CT_QUALIFICATION_NAME"] = CT_QUALIFICATION_NAME;
-
-        }
-
-        if (name == "CT_INSTITUTE_CODE") {
-            var CT_INSTITUTE_NAME = WS_Institutes.find(x => x.CT_INSTITUTE_CODE === value).CT_INSTITUTE_NAME;
-            list[index]["CT_INSTITUTE_NAME"] = CT_INSTITUTE_NAME;
-        }
         setInputQualificationList(list);
     };
 
@@ -242,7 +228,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
 
     // handle click event of the Add button
     const handleAddClickForQualification = () => {
-        setInputQualificationList([...inputQualificationList, { CT_QUALIFICATION_CODE: "", CT_INSTITUTE_CODE: "", CT_QUALIFICATION_NAME: "", CT_INSTITUTE_NAME: "" }]);
+        setInputQualificationList([...inputQualificationList, { CT_QUALIFICATION_CODE: "", CT_INSTITUTE_CODE: "" }]);
     };
 
 
@@ -250,19 +236,8 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     const handleInputChangeForCounselling = (e, index) => {
         const { name, value } = e.target;
         const list = [...inputCounsellingDetailsList];
-        list[index][name] = value; 
-        if (name == "CT_COUNSELLING_LEVEL_CODE") {
-            var CT_COUNSELLING_LEVEL_NAME = WS_Counselling_Levels.find(x => x.CT_COUNSELLING_LEVEL_CODE === value).CT_COUNSELLING_LEVEL_NAME;
-            list[index]["CT_COUNSELLING_LEVEL_NAME"] = CT_COUNSELLING_LEVEL_NAME;
-    
-        }
-    
-        if (name == "CT_COUNSELLING_SUBJECT_CODE") {
-            var CT_COUNSELLING_SUBJECT_NAME = WS_Counselling_Subjects.find(x => x.CT_COUNSELLING_SUBJECT_CODE === value).CT_COUNSELLING_SUBJECT_NAME;
-            list[index]["CT_COUNSELLING_SUBJECT_NAME"] = CT_COUNSELLING_SUBJECT_NAME;
-        }
+        list[index][name] = value;
         setInputCounsellingDetailsList(list);
-
     };
 
     // handle click event of the Remove button
@@ -275,7 +250,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     // handle click event of the Add button
     const handleAddClickForCounselling = () => {
         setInputCounsellingDetailsList([...inputCounsellingDetailsList, {
-            CT_COUNSELLING_SUBJECT_CODE: "", CT_COUNSELLING_LEVEL_CODE: "", COUNSELLOR_HOURLY_RATE: ""
+            CT_COUNSELLING_SUBJECT_CODE: "", COUNSELLOR_COUNSELLING_LEVEL: "", COUNSELLOR_HOURLY_RATE: ""
         }]);
     };
 
@@ -320,12 +295,12 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                                     <Icon name="circle outline" />
                                                 Video&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
-                                                    <Icon name="circle outline" />
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Icon name="circle outline" />
                                                 Availability&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
-                                                    <Icon name="circle outline" />
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
+                                            <Icon name="circle outline"/>
                                                 Verification&nbsp;
                                             </Label>
                                             </List.Item>
@@ -517,8 +492,8 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                                                     <Icon name="university" className="customIconsAlign" />
                                                                     &nbsp;&nbsp;&nbsp;
                                                                     <select
-                                                                        name="CT_COUNSELLING_LEVEL_CODE"
-                                                                        value={x.CT_COUNSELLING_LEVEL_CODE}
+                                                                        name="COUNSELLOR_COUNSELLING_LEVEL"
+                                                                        value={x.COUNSELLOR_COUNSELLING_LEVEL}
                                                                         onChange={(e) => handleInputChangeForCounselling(e, i)}
                                                                         placeholder=""
                                                                     >

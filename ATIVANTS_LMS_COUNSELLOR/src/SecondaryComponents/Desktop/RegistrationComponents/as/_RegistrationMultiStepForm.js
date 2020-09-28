@@ -59,8 +59,7 @@ const steps = [
     { id: 'Counsellor_about' },
     { id: 'Counsellor_video' },
     { id: 'Counsellor_availability' },
-    { id: 'Counsellor_documents' },
-    { id: 'Counsellor_results' } 
+    { id: 'Counsellor_documents' }
 ]
 
 const RegistrationMultiStepForm = () => {
@@ -90,8 +89,8 @@ const RegistrationMultiStepForm = () => {
         case 'Counsellor_documents':
             return <Registration_Sixth {...props} />
 
-        case 'Counsellor_results':
-            return <Registration_Result {...props} />
+        // case 'Registration_Fourth':
+        //     return <Registration_Last {...props} />
 
     }
 
