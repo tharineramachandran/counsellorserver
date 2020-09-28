@@ -10,6 +10,8 @@
     "axios": "^0.19.2",
     "formik": "^2.1.5",
     "google-auth-library": "^6.0.6",
+    "http-proxy-middleware": "^1.0.5",
+    "js-cookie": "^2.2.1",
     "little-state-machine": "^3.1.1",
     "lodash": "^4.17.20",
     "react": "^16.13.1",

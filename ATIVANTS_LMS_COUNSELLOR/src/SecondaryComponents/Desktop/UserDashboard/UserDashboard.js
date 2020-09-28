@@ -63,9 +63,10 @@ const UserDashboard = (props) => {
     }, [])
 
 
-    const logout = () => {
+    const logout = async () => {
         localStorage.removeItem("jwtToken");
         setAuth(false);
+        window.open("http://localhost:5000/socialauth/logout", "_self");
     }
 
     const style = {

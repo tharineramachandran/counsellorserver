@@ -2,28 +2,50 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require('./database/Db_Connection');
+const socialAuth = require("./routes/socialAuth");
+const profileAuth = require("./routes/profileAuth");
+const passport = require("passport");
+const cookieSession = require('cookie-session');
+const keys = require('./config/keys');
+const cookieParser = require("cookie-parser");
+require('./config/passportSetup');
 
-//middleware
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
+app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [keys.session.cookieKey]
+}))
+
+app.use(cookieParser());
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: true,
+    })
+);
 
 //routes
-
-
-
-//register and login routes
-
 app.use("/auth", require("./routes/jwtAuth"));
 app.use("/dashboard", require("./routes/dashboard"));
+app.use("/socialauth", socialAuth);
+app.use("/profile", profileAuth)
+
 
 //create counsellor
-app.post("/counsellor", async(req, res) => {
+app.post("/counsellor", async (req, res) => {
     try {
-        const { COUNSELLOR_NAME,COUNSELLOR_AGE } = req.body;
+        const { COUNSELLOR_NAME, COUNSELLOR_AGE } = req.body;
         console.log(req.body);
-        const newCounsellor  = await pool.query(
-            'INSERT INTO "COUNSELLOR" ("COUNSELLOR_NAME","COUNSELLOR_AGE") VALUES($1,$2) RETURNING *', 
-            [COUNSELLOR_NAME,COUNSELLOR_AGE]);
+        const newCounsellor = await pool.query(
+            'INSERT INTO "COUNSELLOR" ("COUNSELLOR_NAME","COUNSELLOR_AGE") VALUES($1,$2) RETURNING *',
+            [COUNSELLOR_NAME, COUNSELLOR_AGE]);
         res.json(newCounsellor.rows[0]);
 
     } catch (error) {
@@ -32,7 +54,7 @@ app.post("/counsellor", async(req, res) => {
 })
 
 //get All counsellor
-app.get("/counsellor/list", async(req,res) => {
+app.get("/counsellor/list", async (req, res) => {
     try {
         const allCountries = await pool.query('SELECT * FROM "CT_COUNTRY"');
         const allInstitutes = await pool.query('SELECT * FROM "CT_INSTITUTE"');
@@ -40,11 +62,11 @@ app.get("/counsellor/list", async(req,res) => {
         const allCounsellingSubjects = await pool.query('select * from "CT_COUNSELLING_SUBJECT"');
         const allCounsellingLevel = await pool.query('select * from "CT_COUNSELLING_LEVEL"');
         res.json({
-            COUNTRIES:allCountries.rows,
-            INSTITUTES:allInstitutes.rows,
-            QUALIFICATIONS:allQualifications.rows,
-            COUNSELLING_SUBJECTS:allCounsellingSubjects.rows,
-            COUNSELLING_LEVELS:allCounsellingLevel.rows
+            COUNTRIES: allCountries.rows,
+            INSTITUTES: allInstitutes.rows,
+            QUALIFICATIONS: allQualifications.rows,
+            COUNSELLING_SUBJECTS: allCounsellingSubjects.rows,
+            COUNSELLING_LEVELS: allCounsellingLevel.rows
         })
 
     } catch (error) {
@@ -52,11 +74,11 @@ app.get("/counsellor/list", async(req,res) => {
     }
 })
 
-app.get("/counsellor", async(req,res) => {
+app.get("/counsellor", async (req, res) => {
     try {
         const users = await pool.query('SELECT * FROM "T_USER"');
         res.json({
-            users : users.rows
+            users: users.rows
         })
     } catch (error) {
         console.log(error.message)
@@ -77,12 +99,12 @@ app.get("/counsellor", async(req,res) => {
 // })
 
 //update counsellor
-app.put("/Counsellor/:id", async(req,res) => {
+app.put("/Counsellor/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { COUNSELLOR_NAME, COUNSELLOR_AGE } = req.body;
         const UpdateCounsellor = await pool.query(
-            'UPDATE "COUNSELLOR" SET "COUNSELLOR_NAME" = $1, "COUNSELLOR_AGE" = $2 WHERE "COUNSELLOR_ID" = $3 RETURNING *', [COUNSELLOR_NAME,COUNSELLOR_AGE,id]);
+            'UPDATE "COUNSELLOR" SET "COUNSELLOR_NAME" = $1, "COUNSELLOR_AGE" = $2 WHERE "COUNSELLOR_ID" = $3 RETURNING *', [COUNSELLOR_NAME, COUNSELLOR_AGE, id]);
         res.json(UpdateCounsellor.rows[0])
 
     } catch (error) {
@@ -92,7 +114,7 @@ app.put("/Counsellor/:id", async(req,res) => {
 
 
 //DELETE
-app.delete("/Counsellor/:id", async(req,res) => {
+app.delete("/Counsellor/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const DeleteCounsellor = await pool.query(
@@ -105,7 +127,7 @@ app.delete("/Counsellor/:id", async(req,res) => {
 })
 
 //DELETE ALL
-app.delete("/Counsellor", async(req,res) => {
+app.delete("/Counsellor", async (req, res) => {
     try {
         const { id } = req.params;
         const DeleteCounsellor = await pool.query('DELETE FROM "COUNSELLOR"');

@@ -158,6 +158,10 @@ const _RegistrationModal = props => {
         props.onCloseModal();
     }
 
+    const _handleGoogleSignInClick = async () => {
+        window.open("http://localhost:5000/socialauth/google", "_self");
+    }
+
     console.log(rememberMe);
 
     return (
@@ -191,7 +195,7 @@ const _RegistrationModal = props => {
                                     </Button>
                                             </List.Item>
                                             <List.Item>
-                                                <Button color='red'>
+                                                <Button color='red' onClick={_handleGoogleSignInClick}>
                                                     <Icon name='google' /> Log In with Google &nbsp;&nbsp;
                                     </Button> &nbsp;&nbsp;&nbsp;
                                     <Button color='linkedin'>

@@ -9,7 +9,6 @@ const authorization = require("../middleware/authorization");
 //registering
 router.post("/register", validInfo, async (req, res) => {
   const { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD } = req.body;
-  console.log(req.body);  
 
   try {
     const user = await pool.query('SELECT * FROM "T_USER" WHERE "TX_USER_EMAIL" = $1', [
@@ -34,7 +33,6 @@ router.post("/register", validInfo, async (req, res) => {
     res.json({ jwtToken });
 
   } catch (err) {
-    console.error(err.message);
     res.status(500).send("Server error");
   }
 });
@@ -66,7 +64,6 @@ router.post("/login", validInfo, async (req, res) => {
 
 
   } catch (error) {
-    console.log(error.message);
     res.status(500).send("Server Error");
   }
 })
@@ -77,7 +74,6 @@ router.get("/verify", authorization, async (req, res) => {
     res.json(true);
   } 
   catch (error) {
-    console.error(error.message);
     res.status(500).send("Server Error");
   }
 })
