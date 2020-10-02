@@ -6,19 +6,13 @@ const pool = require("../database/Db_Connection")
 //create cookie and send to browser
 passport.serializeUser((user, done) => {
     console.log("serialise user", user);
-    done(null, user.ID_USER_UUID); //make cookie with id
+    done(null, user); //make cookie with id
 });
 
 //authorisation based on Browser cookie,
-passport.deserializeUser((ID_USER_UUID, done) => {
-    console.log("desiralise user", ID_USER_UUID);
-    //find the user by Id returned from browser.
-    pool.query('SELECT * FROM "T_USER" WHERE "ID_USER_UUID" = $1', [ID_USER_UUID], (err, results) => {
-        if (err) {
-            done(new Error("Failed to deserialize the user"));
-        }
-        done(null, results.rows[0])
-    })
+passport.deserializeUser((user, done) => {
+    console.log("serialise user", user);
+    done(null, user); //make cookie with id
 });
 
 //2.
@@ -45,6 +39,7 @@ passport.use(new GoogleStrategy({
             }
 
         } catch (err) {
+            console.log("-----------------------------");
             console.error(err.message);
         }
     }

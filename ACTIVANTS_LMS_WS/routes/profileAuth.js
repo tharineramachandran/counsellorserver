@@ -2,8 +2,12 @@ const router = require('express').Router();
 const jwtGenerator = require("../utils/jwtGenerator");
 
 const authChecking = (req, res, next) => {
-    if (!req.isAuthenticated()) 
-        res.redirect('/socialauth/login');
+    if (!req.isAuthenticated()) {
+ 
+  res.redirect('/socialauth/login');
+    }
+    
+        
     else
         next();
 };

@@ -19,8 +19,6 @@ const Registration_Second = ({ formData, setForm, navigation, step }) => {
     const [crop, setCrop] = useState({ aspect: 1 / 1 });
     const [result, setResult] = useState(null);
     const [icon_name, setIcon_name] = useState('circle');
-
-
     const { handleSubmit, register, errors } = useForm({
 
     });
@@ -128,6 +126,10 @@ const Registration_Second = ({ formData, setForm, navigation, step }) => {
                                             <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
                                             <Icon name="circle outline"/>
                                                 Verification&nbsp;
+                                            </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(6)}>
+                                                    <Icon name="circle outline" />
+                                                Summary&nbsp;
                                             </Label>
                                     </List.Item>
                                 </List>

@@ -344,6 +344,10 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                                                 <Icon name="circle outline" />
                                                 Verification&nbsp;
                                             </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(6)}>
+                                                    <Icon name="circle outline" />
+                                                Summary&nbsp;
+                                            </Label>
                                         </List.Item>
                                     </List>
                                 </div>

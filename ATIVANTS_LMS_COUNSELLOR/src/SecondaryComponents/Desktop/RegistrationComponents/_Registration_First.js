@@ -38,7 +38,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     }]); 
 
      useEffect(() => {
-        _AxiosInstance.get('Selectlist')
+        _AxiosInstance.get('form/list')
             .then(res => {
                 console.log(res.data)
                 const countries = res.data['COUNTRIES'];
@@ -112,7 +112,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     const onSubmit = (data) => {
 
         navigation.next();
-    };
+    };  
 
     useEffect(() => {
 

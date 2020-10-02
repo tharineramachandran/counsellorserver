@@ -22,8 +22,8 @@ import {
 
 import ViewProfile from './layout/ViewProfile'
 import Search from './layout/Search'
-
-
+import DisplayProfiles from './layout/DisplayProfiles'
+import Test from './layout/test'
 
 
 toast.configure();
@@ -138,8 +138,9 @@ const UserDashboard = (props) => {
             </Grid.Row >
 
             {isProfileSelected && <ViewProfile />}
-            {!isProfileSelected && <Search />}
-
+            {/* {!isProfileSelected && <Search />} */}
+            {/* {!isProfileSelected && <DisplayProfiles />} */}
+            {!isProfileSelected && <Test />}
         </>
     )
 }

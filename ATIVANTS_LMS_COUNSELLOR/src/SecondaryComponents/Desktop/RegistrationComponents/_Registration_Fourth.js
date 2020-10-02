@@ -76,6 +76,10 @@ const Registration_Fourth = ({ formData, setForm, navigation, step }) => {
                                             <Icon name="circle outline"/>
                                                 Verification&nbsp;
                                             </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(6)}>
+                                                    <Icon name="circle outline" />
+                                                Summary&nbsp;
+                                            </Label>
                                     </List.Item>
                                 </List>
                             </div>
@@ -105,7 +109,7 @@ const Registration_Fourth = ({ formData, setForm, navigation, step }) => {
                                                                             <Icon name="youtube" color="red" className="customIconsAlign" />
                                                                                 &nbsp;&nbsp;&nbsp;
                                                                                 <input
-                                                                                placeholder='First Name'
+                                                                                placeholder='Video URL from Youtube'
                                                                                 type='text'
                                                                                 name="COUNSELLOR_VIDEO_URL"
                                                                                 onChange={setForm}
