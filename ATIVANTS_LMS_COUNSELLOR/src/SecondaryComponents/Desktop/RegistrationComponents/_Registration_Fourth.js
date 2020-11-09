@@ -118,6 +118,7 @@ const Registration_Fourth = ({ formData, setForm, navigation, step }) => {
                                                                             />
                                                                         </Form.Field>
                                                                     </Form.Group>
+                                                                    
                                                                 </Item.Content>
                                                             </Item>
 
@@ -134,7 +135,11 @@ const Registration_Fourth = ({ formData, setForm, navigation, step }) => {
                                                         <br />
                                                         <br />
                                                         <div>
-                                                            <Segment color='olive' size="mini">Smile and look at the camera</Segment>
+                                                        <Segment color='olive' size="mini">
+                                                                        <h3>Example of Youtube embed URL</h3>
+                                                                        <strong>https://www.youtube.com/embed/yJehMbu4MdQ</strong>
+
+                                                                    </Segment>
                                                             <Segment color='teal' size="mini">Smile and look at the camera</Segment>
                                                             <Segment color='violet' size="mini">Smile and look at the camera</Segment>
                                                             <Segment color='red' size="mini">Smile and look at the camera</Segment>

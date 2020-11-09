@@ -15,11 +15,18 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "googleapis": "^61.0.0",
     "http-proxy-middleware": "^1.0.5",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "nodemailer": "^6.4.14",
+    "open": "^7.3.0",
+    "open-new-tab": "0.0.1",
+    "opn": "^6.0.0",
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth20": "^2.0.0",
-    "pg": "^8.3.3"
+    "pg": "^8.3.3",
+    "window": "^4.2.7"
   }
 }

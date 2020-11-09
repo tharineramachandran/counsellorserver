@@ -1,6 +1,6 @@
 
-const GOOGLE_CLIENT_SECRET = "DfjMBcf1hABnBARSS1O3yL4T";
-const GOOGLE_CLIENT_ID = "832395632131-793qhigg4jombn8nscf7sobua3dcagpa.apps.googleusercontent.com";
+const GOOGLE_CLIENT_SECRET = "qeqwnpnIyhtEGPnKKxUqH6mH";
+const GOOGLE_CLIENT_ID = "372290496331-gtol72os2aha6loa609ov1ft12p801ne.apps.googleusercontent.com";
 
 module.exports = {
     google: {

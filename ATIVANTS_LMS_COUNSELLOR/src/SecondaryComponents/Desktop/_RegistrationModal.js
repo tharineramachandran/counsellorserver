@@ -3,7 +3,11 @@ import {
     Header, Icon, Form, Image, Message,
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Checkbox, Divider, List, Label
 } from 'semantic-ui-react';
-import RegistrationMultiStepForm from './RegistrationComponents/_RegistrationMultiStepForm';
+import Counsellor_Registration from './_Counsellor_Registration';
+
+
+
+import ChangePassword from "./UserDashboard/layout/ChangePasswordModel"
 import { Authorize } from "../../MainComponents/DesktopComponent";
 import axios from '../../Store/_AxiosInstance';
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,7 +19,10 @@ const _RegistrationModal = props => {
     const [defHeight, setHeight] = useState(window.innerWidth);
     const [ModalLogin, setModalLogin] = useState(true);
     const [ModalConsellorTypeSingup, setModalConsellorTypeSingup] = useState(false);
+    const [openPassword, setPasswordOpen] = useState(false)
     const [ModalStudentSignUp, setModalStudentSignUp] = useState(false);
+    const [ ModalPassword, setModalPassword] = useState(false);
+     
     const [inputs, setInputs] = useState({
         TX_USER_NAME: "",
         TX_USER_EMAIL: "",
@@ -62,23 +69,32 @@ const _RegistrationModal = props => {
             console.log("registration data", parseRes)
 
             if (parseRes.jwtToken) {
-                localStorage.setItem("jwtToken", parseRes.jwtToken)
+                await    localStorage.setItem("jwtToken", parseRes.jwtToken)
+                await    localStorage.setItem("isCounsellor", parseRes.isCounsellor)
+                await  localStorage.setItem("userID", parseRes.userID); 
+
+                
+
+
+
+
+
+
                 setAuth(true);
-                toast.success('login successfull!', {
+                toast.success('login successful!', {
                     position: "top-right",
                     autoClose: 3000,
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: false,
                     draggable: true,
                     progress: '',
                 });
-                // toast.success("login successfully!")
             }
             else {
                 setErrorSignUpMessage(parseRes);
-                setAuth(false);
-            }
+              setAuth(false);
+            } 
 
         } catch (error) {
             console.log(error.message);
@@ -109,13 +125,23 @@ const _RegistrationModal = props => {
             });
 
             const parseRes = await response.json()
+
+
+
+
+
+
+
+            
             if (parseRes.jwtToken) {
                 localStorage.setItem("jwtToken", parseRes.jwtToken)
+                localStorage.setItem("isCounsellor", parseRes.isCounsellor)
+                localStorage.setItem("userID", parseRes.userID); 
                 setAuth(true);
                 toast.success('login successfull!', {
                     position: "top-right",
                     autoClose: 3000,
-                    hideProgressBar: false,
+                    hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: false,
                     draggable: true,
@@ -125,7 +151,7 @@ const _RegistrationModal = props => {
             }
             else {
                 setErrorLoginMessage(parseRes);
-                setAuth(false);
+                 setAuth(false);
             }
 
 
@@ -152,14 +178,18 @@ const _RegistrationModal = props => {
         setModalLogin(false)
         setModalConsellorTypeSingup(true)
     }
-
+    const PasswordSignUp = () => {
+        setModalLogin(false)
+        setModalConsellorTypeSingup(false)
+        setModalPassword(true)
+    }
     const close = () => {
         setOpen(false);
         props.onCloseModal();
     }
 
     const _handleGoogleSignInClick = async () => {
-        window.open("http://localhost:5000/socialauth/google", "_self");
+        window.open("http://localhost:5000/socialauth/google/0", "_self");
     }
 
     console.log(rememberMe);
@@ -266,6 +296,24 @@ const _RegistrationModal = props => {
                                             <a href='#'>Sign Up as a Student</a>&nbsp;&nbsp;
                                         </span > |
                                         <span onClick={CounsellorSignUp}>&nbsp;&nbsp;<a href='#'>Sign Up as a Counsellor</a></span>
+                                        <br/>
+                                        <span onClick={PasswordSignUp}>&nbsp;&nbsp;<a href='#'>Forgot Password</a></span>
+
+
+                                        {/* <Modal
+      onClose={() => setPasswordOpen(false)}
+      onOpen={() => setPasswordOpen(true)} 
+      open={openPassword}
+      trigger={      <span  >&nbsp;&nbsp;<a href='#' >Change Password </a></span>                     }
+    >
+      <Modal.Header>Change Password</Modal.Header>
+      <Modal.Content  >
+      <ChangePassword 
+           
+         /> 
+         
+      </Modal.Content> 
+    </Modal> */}
                                     </Message>
 
                                 </Grid.Column>
@@ -290,14 +338,34 @@ const _RegistrationModal = props => {
                         <Modal.Content scrolling>
                             <Grid>
                                 <Grid.Column style={{ maxWidth: '100%', backgroundColor: 'white' }}>
-                                    <RegistrationMultiStepForm />
+                                    <Counsellor_Registration />
                                 </Grid.Column>
                             </Grid>
                         </Modal.Content>
                     </Modal>
                 </>
             }
-
+ {ModalPassword &&
+                <>
+                    <Modal
+                        closeIcon
+                        size="large"
+                        centered={false}
+                        open={open}
+                        onClose={() => close()}
+                        closeOnEscape={false}
+                        closeOnDimmerClick={false}
+                    >
+                        <Modal.Content scrolling>
+                            <Grid>
+                                <Grid.Column style={{ maxWidth: '100%', backgroundColor: 'white' }}>
+                                    <ChangePassword/>
+                                </Grid.Column>
+                            </Grid>
+                        </Modal.Content>
+                    </Modal>
+                </>
+            }
 
             {ModalStudentSignUp &&
                 <>

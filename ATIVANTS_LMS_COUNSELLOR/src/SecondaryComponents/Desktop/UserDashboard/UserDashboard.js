@@ -20,38 +20,52 @@ import {
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
 
-import ViewProfile from './layout/ViewProfile'
+import ViewProfile from './layout/ViewCounsellorProfile'
 import Search from './layout/Search'
-import DisplayProfiles from './layout/DisplayProfiles'
-import Test from './layout/test'
+import DisplayProfiles from './layout/ViewUserDisplayProfiles' 
+import ViewMessages from'./layout/ViewMessages'
+import ViewChangeRequest from './layout/ViewUserChangeRequest'
+import ViewAccepted from './layout/ViewUserAccepted';
+import ViewRequest from './layout/ViewUserRequest';
 
-
+ 
+ 
+const axios = require('axios');
 toast.configure();
 
 const UserDashboard = (props) => {
 
-
     const setAuth = useContext(Authorize);
-    const [userDetails, setUserDetails] = useState({ name: '', email: '' });
+     
+    const [userDetails, setUserDetails] = useState({ name: '', email: '' ,isCounsellor :''});
     const [isProfileSelected, setIsProfileSelected] = useState(false);
-    const { name, email } = userDetails;
+    const [isRequestAcceptSelected, setIsRequestAcceptSelected] = useState(false);
+    const [isRequestChangeSelected, setIsRequestChangeSelected] = useState(false);
+     
+    const [isMessagesSelected, setIsMessagesSelected] = useState(false);
+    const [isRequestSelected, setIsRequestSelected] = useState(false);
 
-
+    const { name, email , isCounsellor } = userDetails;
+    var user =[];
     async function getName() {
         try {
-            // const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
-            const response = await fetch("http://localhost:5000/dashboard/", {
-                method: "GET",
-                headers: { jwtToken: localStorage.jwtToken }
-            });
-
-            const parseRes = await response.json()
-            console.log("useDetails", parseRes);
-
-            setUserDetails({
-                name: parseRes.TX_USER_NAME,
-                email: parseRes.TX_USER_EMAIL
+            axios.get('http://localhost:5000/Counsellor/GetSingleCounsellorDetails/'+localStorage.userID, {
+                headers: {
+                  jwtToken:localStorage.jwtToken
+                }
+              })
+            .then(function (response) {
+                console.log(response);
+                 user = response.data.counsellor;
+                 setUserDetails({
+            name: response.data.counsellor.user_details[0].TX_USER_NAME,
+            email: response.data.counsellor.user_details[0].TX_USER_EMAIL,
+            isCounsellor: response.data.counsellor.user_details[0].IS_COUNSELLOR
+        })
             })
+            .catch(function (error) {
+                console.log(error);
+            });
 
         } catch (error) {
             console.log(error.message);
@@ -62,11 +76,15 @@ const UserDashboard = (props) => {
         getName();
     }, [])
 
-
     const logout = async () => {
-        localStorage.removeItem("jwtToken");
-        setAuth(false);
+        
         window.open("http://localhost:5000/socialauth/logout", "_self");
+        
+        localStorage.removeItem("userID");
+        localStorage.removeItem("isCounsellor");
+        localStorage.removeItem("jwtToken");
+        
+        setAuth(false);
     }
 
     const style = {
@@ -77,8 +95,6 @@ const UserDashboard = (props) => {
 
     var users = `This is just an amazing website. Isn't it...?? `;
 
-    console.log(props);
-
     return (
         <>
             <Grid.Row>
@@ -88,17 +104,28 @@ const UserDashboard = (props) => {
                             <List horizontal >
                                 <List.Item as='a' style={{ color: 'black' }}>
                                     <Label color='blue' horizontal>
-                                        Hello {name}
+                                        Hello  {name}
                                     </Label>
                                 </List.Item>
                             </List>
                         </div>
                         <div style={{ float: 'right' }}>
 
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={e => setIsProfileSelected(!isProfileSelected)}>
-                                {isProfileSelected ? "Home" : "View Profile"}
+                            <Label as='a' style={{ marginRight: '10px' }} onClick= {() => { setIsMessagesSelected(false);  setIsRequestSelected(false);   setIsRequestChangeSelected(false)  ;  setIsProfileSelected(!isProfileSelected)  ;                setIsRequestAcceptSelected(false)  ;       }    }>
+                                Home 
                             </Label>
+                            
 
+                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {    setIsMessagesSelected(false);  setIsRequestSelected(false);   setIsRequestChangeSelected(!isRequestAcceptSelected);   setIsProfileSelected(false)  ; setIsRequestAcceptSelected(false)  ;   } }>
+                                 View Change Request 
+                            </Label>
+                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {   setIsMessagesSelected(false);  setIsRequestSelected(!isRequestAcceptSelected);  setIsRequestChangeSelected(false)  ;    setIsProfileSelected(false)  ; setIsRequestAcceptSelected(false)  ;   } }>
+                                 View Requests  
+                            </Label>
+                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {    setIsMessagesSelected(!isMessagesSelected);    setIsRequestSelected(false);    setIsRequestChangeSelected(false)  ;    setIsProfileSelected(false)  ; setIsRequestAcceptSelected(false)  ;   } }>
+                                 View Messages
+                            </Label>
+                             
                             <Popup content={users}
                                 trigger={
                                     <Label as='a' circular style={{ marginRight: '10px' }}>
@@ -123,24 +150,24 @@ const UserDashboard = (props) => {
 
                         </div>
                     </Container>
-
                     <Container clearing style={{
                         backgroundColor: 'transparent',
                         width: "100%",
                         marginTop: '5rem',
                         padding: '0rem 7rem 0rem 3rem'
                     }}>
-
                     </Container>
-
                 </Grid.Column >
-
             </Grid.Row >
-
-            {isProfileSelected && <ViewProfile />}
+            {isRequestChangeSelected && <ViewChangeRequest />}
+            
+            {isRequestAcceptSelected && <ViewAccepted />}
+            {isMessagesSelected && <ViewMessages />}
+            {isRequestSelected && <ViewRequest />}
+            {/* {isProfileSelected && <ViewProfile />}  */}
             {/* {!isProfileSelected && <Search />} */}
             {/* {!isProfileSelected && <DisplayProfiles />} */}
-            {!isProfileSelected && <Test />}
+            {isProfileSelected && <Search />}
         </>
     )
 }

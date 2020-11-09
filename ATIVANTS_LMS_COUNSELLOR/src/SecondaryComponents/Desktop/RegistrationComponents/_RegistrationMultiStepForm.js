@@ -9,8 +9,6 @@ import Registration_Fourth from './_Registration_Fourth';
 import Registration_Fifth from './_Registration_Fifth';
 import Registration_Sixth from './_Registration_Sixth';
 
-
-
 const defaultData = {
 
     //FIRST REGISTRATION PAGE
@@ -19,7 +17,6 @@ const defaultData = {
     COUNSELLOR_EMAIL: "",
     COUNSELLOR_PHONE_NUMBER: "",
     COUNSELLOR_COUNTRY_CODE: "",
-
 
     COUNSELLOR_COUNSELLING_SUBJECT_ID: "",
     COUNSELLOR_COUNSELLING_LEVEL_CODE: "",

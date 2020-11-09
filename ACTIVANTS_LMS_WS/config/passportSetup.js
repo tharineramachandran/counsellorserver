@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20');
-const keys = require('../config/keys');
+const keys = require('./keys');
 const pool = require("../database/Db_Connection")
 
 //create cookie and send to browser
@@ -31,16 +31,21 @@ passport.use(new GoogleStrategy({
                 done(null, user.rows[0])
             }
             else {
+                
+            console.log("--------------         normal user             ---------------");
+            console.log(profile);
+            console.log(profile.emails[0].value);
                 let newUser = await pool.query(
-                    'INSERT INTO "T_USER" ("TX_USER_NAME","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE", "TX_GOOGLE_ID") VALUES ($1,$2,$3,$4,$5) RETURNING *',
-                    [profile.displayName, 1, datetime.toISOString().slice(0, 10), 1, profile.id]
+                    'INSERT INTO "T_USER" ("TX_USER_NAME","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE", "TX_GOOGLE_ID", "TX_USER_EMAIL","IS_COUNSELLOR") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
+                    [profile.displayName, 1, datetime.toISOString().slice(0, 10), 1,  profile.id,  profile.emails[0].value,3]
                 );
                 done(null, newUser);
             }
 
-        } catch (err) {
+        } catch (err) { 
             console.log("-----------------------------");
             console.error(err.message);
         }
     }
 ));
+ 

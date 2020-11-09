@@ -1,5 +1,5 @@
 import React from 'react';
-import ViewProfile from "./ViewProfile";
+import ViewProfile from "./ViewCounsellorProfile";
 import _Promos from '../../_Promos'
 import { Grid, Label, Icon, Container, List, Popup }
     from 'semantic-ui-react'

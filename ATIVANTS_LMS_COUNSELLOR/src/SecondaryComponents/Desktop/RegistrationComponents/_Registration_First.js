@@ -9,7 +9,7 @@ import _AxiosInstance from '../../../Store/_AxiosInstance'
 const Registration_First = ({ formData, setForm, navigation, step }) => {
 
     const {
-        //FIRST REGISTRATION PAGE
+        //FIRST REGISTRATION PAGE 
         COUNSELLOR_FIRST_NAME,
         COUNSELLOR_LAST_NAME,
         COUNSELLOR_EMAIL,

@@ -179,83 +179,83 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
             }
         }
 
-        function validate(sTime, eTime, checkIndex, list) {
+            function validate(sTime, eTime, checkIndex, list) {
 
-            var isNotOverlapping = true;
-            var sTimedate = new Date();
-            var eTimedate = new Date();
-            var isdateTrue = true;
-            var isNotSameDate = true;
+                var isNotOverlapping = true;
+                var sTimedate = new Date();
+                var eTimedate = new Date();
+                var isdateTrue = true;
+                var isNotSameDate = true;
 
-            if ((sTime.includes(":")) && (eTime.includes(":"))) {
+                if ((sTime.includes(":")) && (eTime.includes(":"))) {
 
-                // init date values 
-                var sTime_t = sTime.split(":");
-                sTimedate.setHours(parseInt(sTime_t[0]));
-                sTimedate.setMinutes(parseInt(sTime_t[1]));
+                    // init date values 
+                    var sTime_t = sTime.split(":");
+                    sTimedate.setHours(parseInt(sTime_t[0]));
+                    sTimedate.setMinutes(parseInt(sTime_t[1]));
 
-                var eTime_t = eTime.split(":");
-                eTimedate.setHours(parseInt(eTime_t[0]));
-                eTimedate.setMinutes(parseInt(eTime_t[1]));
-                console.log(sTimedate);
-                console.log(eTimedate);
+                    var eTime_t = eTime.split(":");
+                    eTimedate.setHours(parseInt(eTime_t[0]));
+                    eTimedate.setMinutes(parseInt(eTime_t[1]));
+                    console.log(sTimedate);
+                    console.log(eTimedate);
 
-                if (eTimedate > sTimedate) {
-                    isdateTrue = false;
-                }
-                if (sTimedate.getTime() === eTimedate.getTime()) {
-                    isNotSameDate = false;
-                }
-
-            }
-
-
-            if (isdateTrue && isNotSameDate) {
-                for (var index = 0; index < list.length; index++) {
-
-                    var item = list[index];
-                    // make sure same date is not checked
-                    if ((checkIndex != index) && (item.TO.includes(":")) && (item.FROM.includes(":"))) {
-                        // init values
-                        var itemFrom = item.FROM.split(":");
-                        var startdate2 = new Date();
-                        startdate2.setHours(parseInt(itemFrom[0]));
-                        startdate2.setMinutes(parseInt(itemFrom[1]));
-
-                        var itemTo = item.TO.split(":");
-                        var enddate2 = new Date();
-                        enddate2.setHours(parseInt(itemTo[0]));
-                        enddate2.setMinutes(parseInt(itemTo[1]));
-        
-                        // check if dates overlap
-                        if (dateRangeOverlaps(sTimedate, eTimedate, startdate2, enddate2)) {
-
-                            isNotOverlapping = false;
-
-                            break;
-                        }
-                        // function to check if dates overlap 
-                        function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
-                            if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
-                            if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
-                            if (b_start < a_start && a_end < b_end) return true; // a in b
-                            return false;
-                        }
+                    if (eTimedate > sTimedate) {
+                        isdateTrue = false;
+                    }
+                    if (sTimedate.getTime() === eTimedate.getTime()) {
+                        isNotSameDate = false;
                     }
 
                 }
 
+
+                if (isdateTrue && isNotSameDate) {
+                    for (var index = 0; index < list.length; index++) {
+
+                        var item = list[index];
+                        // make sure same date is not checked
+                        if ((checkIndex != index) && (item.TO.includes(":")) && (item.FROM.includes(":"))) {
+                            // init values
+                            var itemFrom = item.FROM.split(":");
+                            var startdate2 = new Date();
+                            startdate2.setHours(parseInt(itemFrom[0]));
+                            startdate2.setMinutes(parseInt(itemFrom[1]));
+
+                            var itemTo = item.TO.split(":");
+                            var enddate2 = new Date();
+                            enddate2.setHours(parseInt(itemTo[0]));
+                            enddate2.setMinutes(parseInt(itemTo[1]));
+            
+                            // check if dates overlap
+                            if (dateRangeOverlaps(sTimedate, eTimedate, startdate2, enddate2)) {
+
+                                isNotOverlapping = false;
+
+                                break;
+                            }
+                            // function to check if dates overlap 
+                            function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
+                                if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
+                                if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
+                                if (b_start < a_start && a_end < b_end) return true; // a in b
+                                return false;
+                            }
+                        }
+
+                    }
+
+                }
+                // init result values 
+                var validateObject = {
+                    isNotOverlapping: isNotOverlapping,
+                    isdateTrue: isdateTrue,
+                    isNotSameDate: isNotSameDate,
+                    results: isNotOverlapping && isdateTrue && isNotSameDate
+                };
+                // return values
+                return validateObject;
             }
-            // init result values 
-            var validateObject = {
-                isNotOverlapping: isNotOverlapping,
-                isdateTrue: isdateTrue,
-                isNotSameDate: isNotSameDate,
-                results: isNotOverlapping && isdateTrue && isNotSameDate
-            };
-            // return values
-            return validateObject;
-        }
 
     };
 
