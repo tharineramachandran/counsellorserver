@@ -14,6 +14,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import googleLogin from "google-auth-library"
 
+import {baseURLAPI ,baseURL }from "../../Global";
+
+
+
 const _RegistrationModal = props => {
     const [open, setOpen] = useState(true);
     const [defHeight, setHeight] = useState(window.innerWidth);
@@ -59,7 +63,7 @@ const _RegistrationModal = props => {
             const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
             console.log(body);
 
-            const response = await fetch("http://localhost:5000/auth/register", {
+            const response = await fetch(baseURLAPI+"/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
@@ -118,7 +122,7 @@ const _RegistrationModal = props => {
                 localStorage.checkbox = false;
             }
             const body = { TX_USER_EMAIL, TX_USER_PASSWORD };
-            const response = await fetch("http://localhost:5000/auth/login", {
+            const response = await fetch(baseURLAPI+"/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
@@ -189,7 +193,8 @@ const _RegistrationModal = props => {
     }
 
     const _handleGoogleSignInClick = async () => {
-        window.open("http://localhost:5000/socialauth/google/0", "_self");
+        console.log(baseURLAPI);
+        window.open(baseURLAPI+"/socialauth/google/0", "_self");
     }
 
     console.log(rememberMe);

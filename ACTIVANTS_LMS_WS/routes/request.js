@@ -15,10 +15,13 @@ const window = require('window');
 const GOOGLE_CLIENT_SECRET = keys.google.clientSecret;
 const GOOGLE_CLIENT_ID = keys.google.clientID;
 
+const CLIENT_HOME_PAGE_URL = "http://ec2-18-220-253-153.us-east-2.compute.amazonaws.com";
+const CLIENT_BASEURL_PAGE_URL = "http://ec2-18-220-253-153.us-east-2.compute.amazonaws.com/graphql";
+
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  "http://localhost:5000/request/google/callback"
+  CLIENT_BASEURL_PAGE_URL+ "/request/google/callback"
 );
 
 // generate a url that asks permissions for Blogger and Google Calendar scopes

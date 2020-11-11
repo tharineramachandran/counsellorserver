@@ -6,7 +6,8 @@ const validInfo = require("../middleware/validateInfo");
 const authorization = require("../middleware/authorization");
 const passport = require('passport');
 const { route } = require('./jwtAuth');
-const CLIENT_HOME_PAGE_URL = "http://localhost:3000";
+const CLIENT_HOME_PAGE_URL = "http://ec2-18-220-253-153.us-east-2.compute.amazonaws.com";
+const CLIENT_BASEURL_PAGE_URL = "http://ec2-18-220-253-153.us-east-2.compute.amazonaws.com/graphql";
 
 //1.scope : what info you need to retrieve..  
 
@@ -38,7 +39,7 @@ router.get('/google/:id', function (req, res, next) {
 
 router.get('/google/callback', passport.authenticate('google', {
     successRedirect: CLIENT_HOME_PAGE_URL,
-    failureRedirect: "/socialauth/login/failed"
+    failureRedirect: CLIENT_BASEURL_PAGE_URL+"/socialauth/login/failed"
 }));
 
 router.get("/login/failed", (req, res) => {

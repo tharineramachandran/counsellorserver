@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {  BrowserRouter as Router,  Switch,  Route,  Redirect} from "react-router-dom";
 
+import {baseURLAPI ,baseURL }from "../Global";
 const Authorize = React.createContext();
   
 const DesktopComponent = ({ children }) => {
@@ -43,7 +44,7 @@ const DesktopComponent = ({ children }) => {
 
           if (id && localStorage.userID) {
             const response = await axios ({
-              url: "http://localhost:5000/request/userID?userID="+localStorage.userID+"&requestID="+id     ,
+              url: baseURLAPI+"/request/userID?userID="+localStorage.userID+"&requestID="+id     ,
               method: "GET"
             })
             
@@ -57,7 +58,7 @@ const DesktopComponent = ({ children }) => {
           }
 
      
-        const res = await fetch("http://localhost:5000/auth/verify/", {
+        const res = await fetch(baseURLAPI+"/auth/verify/", {
           
           method: "GET",
           headers: { jwtToken: localStorage.jwtToken }
@@ -87,7 +88,7 @@ const DesktopComponent = ({ children }) => {
         }
  
         
-          fetch("http://localhost:5000/user/"+localStorage.userID, {
+          fetch(baseURLAPI+"/user/"+localStorage.userID, {
             method: "GET",
             
           })
@@ -109,7 +110,7 @@ const DesktopComponent = ({ children }) => {
       }
       else {             
 
-        fetch("http://localhost:5000/socialauth/login/success", {
+        fetch(baseURLAPI+"/socialauth/login/success", {
           method: "GET",
           credentials: "include",
           headers: {
@@ -128,7 +129,7 @@ const DesktopComponent = ({ children }) => {
 
 
 try { if (parseInt(localStorage.isCounsellor) == 3 ){    
-              fetch("http://localhost:5000/user/"+responseJson.userID, {
+              fetch(baseURLAPI+"/user/"+responseJson.userID, {
                 method: "GET",
                 
               })
@@ -163,7 +164,7 @@ try { if (parseInt(localStorage.isCounsellor) == 3 ){
             localStorage.setItem("jwtToken", responseJson.jwtToken); 
             localStorage.setItem("userID", responseJson.userID); 
 
-            const res = fetch("http://localhost:5000/auth/verify/", {
+            const res = fetch(baseURLAPI+"/auth/verify/", {
               method: "GET",
               headers: { jwtToken: localStorage.jwtToken }
             });
@@ -191,7 +192,7 @@ try { if (parseInt(localStorage.isCounsellor) == 3 ){
       console.log(["------------SET--  sdfasdff ----------" ,     localStorage.userID,localStorage.isCounsellor             ]); 
      
 
-        fetch("http://localhost:5000/user/"+localStorage.userID, {
+        fetch(baseURLAPI+"/user/"+localStorage.userID, {
         method: "GET",
         
       })
