@@ -6,8 +6,7 @@ const fs = require('fs');
 const readline = require('readline');
 const keys = require('../config/keys');
 const opn = require('opn');
-
-const CLIENT_HOME_PAGE_URL = "http://localhost:3000";
+ 
 const { google } = require('googleapis');
 const passport = require('passport');
 
@@ -15,8 +14,10 @@ const window = require('window');
 const GOOGLE_CLIENT_SECRET = keys.google.clientSecret;
 const GOOGLE_CLIENT_ID = keys.google.clientID;
 
-const CLIENT_HOME_PAGE_URL = "http://ec2-18-220-253-153.us-east-2.compute.amazonaws.com";
-const CLIENT_BASEURL_PAGE_URL = "http://ec2-18-220-253-153.us-east-2.compute.amazonaws.com/graphql";
+const { baseURLAPI ,baseURL   } = require('../Global');
+
+const CLIENT_HOME_PAGE_URL = baseURL;
+const CLIENT_BASEURL_PAGE_URL = baseURLAPI            ;
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
