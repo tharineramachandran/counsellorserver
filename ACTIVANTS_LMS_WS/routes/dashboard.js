@@ -10,7 +10,7 @@ router.get("/", authorization, async (req, res) => {
         console.log(req.user);
         const user = await pool.query('SELECT "TX_USER_NAME","TX_USER_EMAIL" FROM "T_USER" WHERE "ID_USER_UUID" = $1',
         [req.user]);
-        console.log("-------vnbvnbvnbvnbvnbvnvnbvnv-------", user.rows[0]);
+        console.log("-------dashboard-------", user.rows[0]);
         res.json(user.rows[0]);
         
     } catch (error) {

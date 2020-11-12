@@ -2,7 +2,10 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20');
 const keys = require('./keys');
 const pool = require("../database/Db_Connection")
+const { baseURLAPI ,baseURL   } = require('../Global');
 
+const CLIENT_HOME_PAGE_URL = baseURL;
+const CLIENT_BASEURL_PAGE_URL = baseURLAPI ;
 //create cookie and send to browser
 passport.serializeUser((user, done) => {
     console.log("serialise user", user);
@@ -19,7 +22,7 @@ passport.deserializeUser((user, done) => {
 passport.use(new GoogleStrategy({
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret,
-    callbackURL: "/socialauth/google/callback"
+    callbackURL: CLIENT_BASEURL_PAGE_URL +"/socialauth/google/callback"
 },
     async (accessToken, refreshToken, profile, done) => {
         //4.called by custom callback, fires back again to the custom call back  
