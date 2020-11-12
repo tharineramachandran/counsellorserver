@@ -14,6 +14,7 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
+import {baseURLAPI ,baseURL }from "../../../../Global"; 
 const axios = require('axios');
 
 var daysNotAvailableList = [];
@@ -56,7 +57,7 @@ class UserChangeSession extends React.Component {
         jwtToken: localStorage.jwtToken
       }
 
-      axios.post(`http://localhost:5000/session/user/acceptChange`, data, {
+      axios.post( baseURLAPI+'/session/user/acceptChange', data, {
         headers: headers
       })
         .then(res => {

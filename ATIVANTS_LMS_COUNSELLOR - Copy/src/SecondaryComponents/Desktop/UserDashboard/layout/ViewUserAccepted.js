@@ -15,6 +15,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 // import interactionPlugin from '@fullcalendar/interaction'
 // import timeGridPlugin from ' ullcalendar/timegrid'
  
+import {baseURLAPI ,baseURL }from "../../../../Global";
 const axios = require('axios'); 
 
 
@@ -29,7 +30,7 @@ class ViewAccepted extends React.Component {
        this.setTable();
     }
     setTable = ( ) => {
-        axios.get('http://localhost:5000/session/user/accepted/'+localStorage.userID, {
+        axios.get(baseURLAPI+'/session/user/accepted/'+localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -121,7 +122,7 @@ class ViewAccepted extends React.Component {
                 jwtToken: localStorage.jwtToken,
             }
         };
-        axios.get('http://localhost:5000/request/google/get',
+        axios.get(baseURLAPI+'/request/google/get',
             {
                 params: {
                     requestID: requestID,

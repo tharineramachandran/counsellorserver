@@ -11,13 +11,14 @@ import {
 } from "semantic-ui-react";
 const axios = require('axios');
 
+import {baseURLAPI ,baseURL }from "../../../../Global";
 
 class DisplayProfiles extends React.Component {
     state = {
         persons: []
     }
     componentDidMount() {
-        axios.get(`http://localhost:5000/Counsellor/GetCounsellorDetails`)
+        axios.get(baseURLAPI+'/Counsellor/GetCounsellorDetails')
             .then(res => {
                 console.log(res);
                 const persons = res.data.counsellor;

@@ -8,6 +8,7 @@ import {
 
 import { ToastContainer, toast } from 'react-toastify';
 
+import {baseURLAPI ,baseURL }from "../../../../Global";
 import UserChangeSession from './UserChangeSessionModel'
 
 const axios = require('axios');
@@ -17,7 +18,7 @@ class ViewChangeRequest extends React.Component {
         openModel: false
     }
     componentDidMount() {
-        axios.get('http://localhost:5000/session/getUserChangeRequests/' + localStorage.userID, {
+        axios.get(baseURLAPI+'/session/getUserChangeRequests/' + localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             }

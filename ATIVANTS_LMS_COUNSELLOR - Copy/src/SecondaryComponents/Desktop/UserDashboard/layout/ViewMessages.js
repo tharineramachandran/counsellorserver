@@ -6,6 +6,7 @@ import {
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
 import { ToastContainer, toast } from 'react-toastify';
+import {baseURLAPI ,baseURL }from "../../../../Global";
 const axios = require('axios');
 
 
@@ -29,7 +30,7 @@ class ViewMessages extends React.Component {
         setInterval(this.getData, 5000);  
     }
     getData = () => {
-        axios.get('http://localhost:5000/messages/getTotalChats/' + localStorage.userID, {
+        axios.get(baseURLAPI+'/messages/getTotalChats/' + localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -52,7 +53,7 @@ class ViewMessages extends React.Component {
 
     }
     setTable = () => {
-        axios.get('http://localhost:5000/messages/getChats/' + localStorage.userID, {
+        axios.get(baseURLAPI+'/messages/getChats/' + localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -82,7 +83,7 @@ class ViewMessages extends React.Component {
             chatID: this.state.chatID,
             userID: localStorage.userID
         }
-        axios.post('http://localhost:5000/messages/createMessages', data, {
+        axios.post(baseURLAPI+'/messages/createMessages', data, {
             headers: headers
         })
             .then((res) => {
@@ -95,7 +96,7 @@ class ViewMessages extends React.Component {
     }
 
     getNewMessages = (chatID) => {
-        axios.get('http://localhost:5000/messages/getMessages/' + chatID, {
+        axios.get(baseURLAPI+'/messages/getMessages/' + chatID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -122,7 +123,7 @@ class ViewMessages extends React.Component {
           
         }
 
-        axios.post('http://localhost:5000/messages/read/'+chatID, data, {
+        axios.post(baseURLAPI+'/messages/read/'+chatID, data, {
             headers: headers
         })
             .then((res) => {

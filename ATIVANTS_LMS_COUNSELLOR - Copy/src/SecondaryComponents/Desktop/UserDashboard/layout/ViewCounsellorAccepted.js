@@ -11,6 +11,7 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import {baseURLAPI ,baseURL }from "../../../../Global";
 const axios = require('axios');
 class ViewAccepted extends React.Component {
     state = {
@@ -20,7 +21,7 @@ class ViewAccepted extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/session/accepted/'+localStorage.userID, {
+        axios.get(baseURLAPI+'/session/accepted/'+localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },

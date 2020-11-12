@@ -15,6 +15,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
 const axios = require('axios'); 
+
+import {baseURLAPI ,baseURL }from "../../../../Global";
 var daysNotAvailableList = [];
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -51,7 +53,7 @@ class ChangePassword extends React.Component {
 
 
             
-            axios.post(`http://localhost:5000/password/requestChange`, data ) 
+            axios.post(baseURLAPI+`/password/requestChange`, data ) 
       .then(res => {
           console.log(res);
           console.log(res.data);
@@ -86,7 +88,7 @@ class ChangePassword extends React.Component {
 
             console.log(data) 
 
-            axios.post(`http://localhost:5000/password/reset`, data ) 
+            axios.post(baseURLAPI+'/password/reset', data ) 
       .then(res => {
          
          var parseRes = res.data
@@ -105,22 +107,15 @@ class ChangePassword extends React.Component {
                 draggable: true,
                 progress: '',
             });
-
-
-
-            
-        window.location="http://localhost:3000/dashboard";
+ 
+        window.location=baseURLAPI+ "/dashboard";
         }
         else {
         
           this.results(true,"Invalid password change code ","","red"); 
         } 
           
-
-
  
-
-
       }).catch((error) => {
         this.results(true,"Invalid password change code ","","red"); 
 
@@ -133,12 +128,7 @@ class ChangePassword extends React.Component {
     }
   }; 
 
-
-
-
-
-
-
+  
   results = ( body,catagory      ,subject    ,color       )=> {
     console.log("this.state");
     this.setState({body :body ,catagory : catagory,subject:subject,color:color})
@@ -196,8 +186,7 @@ class ChangePassword extends React.Component {
         <button class="ui button" onClick={this.submitCode}>Submit</button>
 
     </Form>
-
-
+ 
         ) :
         
         (  <Form  >  
@@ -217,17 +206,8 @@ class ChangePassword extends React.Component {
           < br />
           <button class="ui button" onClick={this.submitRequest}>Submit</button>
   
-          </Form>
-        
-             
-    )
-        
-        
-        
-        
-        
-        
-        
+          </Form> 
+    ) 
         }
  
      

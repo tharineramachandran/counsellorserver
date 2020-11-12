@@ -16,6 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
 const axios = require('axios');
 
+import {baseURLAPI ,baseURL }from "../../../../Global"; 
 var daysNotAvailableList = [];
 class CreateSession extends React.Component {
   constructor(props) {
@@ -68,7 +69,7 @@ class CreateSession extends React.Component {
       daysNotAvailableList.push(6);
     }
     console.log(this.props.CounsellorID);
-    axios.get(`http://localhost:5000/Counsellor/GetSingleCounsellorDetails/` + this.state.CounsellorID
+    axios.get(baseURLAPI+'/Counsellor/GetSingleCounsellorDetails/' + this.state.CounsellorID
     )
       .then(res => {
         console.log(res);
@@ -113,7 +114,7 @@ var sessionDetails = undefined ;
        
 
 
-axios.post(`http://localhost:5000/addevent`, data)
+axios.post( baseURLAPI+'/addevent', data)
 .then(res => {
     console.log(res);
     console.log(res.data);

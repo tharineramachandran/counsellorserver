@@ -7,6 +7,7 @@ import {
 } from "semantic-ui-react";
 import { ToastContainer, toast } from 'react-toastify';
 import UserChangeSession from './UserChangeSessionModel'
+import {baseURLAPI ,baseURL }from "../../../../Global";
 const axios = require('axios');
 class ViewCounsellorChangeRequest extends React.Component {
     state = {
@@ -17,7 +18,7 @@ class ViewCounsellorChangeRequest extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/session/counsellor/ChangeRequests/', {
+        axios.get(baseURLAPI+'/session/counsellor/ChangeRequests/', {
             headers: {
                 jwtToken: localStorage.jwtToken
             }

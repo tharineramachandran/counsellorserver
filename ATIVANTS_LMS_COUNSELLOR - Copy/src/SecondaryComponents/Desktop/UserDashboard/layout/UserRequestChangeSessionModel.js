@@ -14,6 +14,7 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
+import {baseURLAPI ,baseURL }from "../../../../Global"; 
 const axios = require('axios');
 
 var daysNotAvailableList = [];
@@ -43,7 +44,7 @@ class ChangeSession extends React.Component {
       { key: 'al', value: 'al', text: 'Albania' },
       { key: 'dz', value: 'dz', text: 'Algeria' },
     ]
-    axios.get(`http://localhost:5000/Counsellor/GetSingleCounsellorDetails/` + this.props.CounsellorID
+    axios.get(baseURLAPI+'/Counsellor/GetSingleCounsellorDetails/' + this.props.CounsellorID
     )
       .then(res => {
         console.log(res);
@@ -182,7 +183,7 @@ class ChangeSession extends React.Component {
       requestID: this.props.RequestID,
       session: this.state.addedSessions
     }
-    axios.post('http://localhost:5000/session/user/sessionchange',  data, {
+    axios.post(baseURLAPI+'/session/user/sessionchange',  data, {
       headers: headers
     })
       .then((res) => {

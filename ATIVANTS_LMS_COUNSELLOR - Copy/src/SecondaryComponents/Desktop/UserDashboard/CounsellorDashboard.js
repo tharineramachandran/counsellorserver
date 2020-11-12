@@ -32,6 +32,7 @@ import Search from './layout/Search'
 import RegistrationMultiStepForm from '../RegistrationComponents/_RegistrationMultiStepForm'; 
   
    
+import {baseURLAPI ,baseURL }from "../../../Global"; 
 const axios = require('axios');
 toast.configure();
 
@@ -56,7 +57,7 @@ const CounsellorDashboard = (props) => {
    
     async function getName() {
         try {
-            axios.get('http://localhost:5000/Counsellor/GetSingleCounsellorDetails/' + localStorage.userID
+            axios.get(baseURLAPI+'/Counsellor/GetSingleCounsellorDetails/' + localStorage.userID
 
 
                 , {
@@ -97,7 +98,7 @@ const CounsellorDashboard = (props) => {
     }, [])
 
     const logout = async () => {
-        window.open("http://localhost:5000/socialauth/logout", "_self");
+        window.open(baseURLAPI+"/socialauth/logout", "_self");
         setAuth(false);
 
         localStorage.removeItem("userID");

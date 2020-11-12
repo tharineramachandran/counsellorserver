@@ -7,6 +7,7 @@ import {
 } from "semantic-ui-react";
 import { ToastContainer, toast } from 'react-toastify';
 import ChangeSession from "./CounsellorChangeSessionModel"
+import {baseURLAPI ,baseURL }from "../../../../Global";
 const axios = require('axios');
 class ViewRequest extends React.Component {
     state = {
@@ -24,7 +25,7 @@ class ViewRequest extends React.Component {
         
         if (Number.isInteger(parseInt(localStorage.userID) )){  
             
-            axios.get('http://localhost:5000/request/getTotalCounsellorRequests/'+localStorage.userID, {
+            axios.get(baseURLAPI+'/request/getTotalCounsellorRequests/'+localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -54,7 +55,7 @@ class ViewRequest extends React.Component {
 
     setTable = ( ) => {
         if (Number.isInteger(parseInt(localStorage.userID) )){  
-        axios.get('http://localhost:5000/request/getCounsellorRequests/'+localStorage.userID, {
+        axios.get(baseURLAPI+'/request/getCounsellorRequests/'+localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -125,7 +126,7 @@ class ViewRequest extends React.Component {
                 jwtToken: localStorage.jwtToken,
             }
         };
-        axios.get('http://localhost:5000/request/google/get',
+        axios.get(baseURLAPI+'/request/google/get',
             {
                 params: {
                     requestID: requestID,

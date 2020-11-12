@@ -16,6 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
 const axios = require('axios');
 
+import {baseURLAPI ,baseURL }from "../../../../Global";  
 var daysNotAvailableList = [];
 class CreateMessage extends React.Component {
   constructor(props) {
@@ -73,7 +74,7 @@ class CreateMessage extends React.Component {
               jwtToken: localStorage.jwtToken
             }
       
-            axios.post(`http://localhost:5000/messages/createChats`, data, {
+            axios.post(baseURLAPI+'/messages/createChats', data, {
               headers: headers
             }) 
       .then(res => {

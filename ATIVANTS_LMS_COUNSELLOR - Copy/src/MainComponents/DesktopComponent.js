@@ -35,13 +35,11 @@ const DesktopComponent = ({ children }) => {
  
 
     if (localStorage.jwtToken) {
-
-      console.log("-------------------------[hiojhl         ")
+ 
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);        
         const id = urlParams.get('id');
-        
-
+         
           if (id && localStorage.userID) {
             const response = await axios ({
               url: baseURLAPI+"/request/userID?userID="+localStorage.userID+"&requestID="+id     ,
@@ -101,12 +99,8 @@ const DesktopComponent = ({ children }) => {
             console.log(["------------------------",parseResponse]); 
              localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
               localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
-
-
-
-          });
-  
-          
+ 
+          }); 
       }
       else {             
 
@@ -137,10 +131,7 @@ try { if (parseInt(localStorage.isCounsellor) == 3 ){
                 if (response.status === 200) return response.json();
                 throw new Error("failed to authenticate user");
               })
-              .then(parseResponse => {
-                  console.log(["------------------------",parseResponse.IS_COUNSELLOR]); 
-                  console.log(["------------------------",parseResponse.user.IS_COUNSELLOR]); 
-                  
+              .then(parseResponse => { 
                 console.log(["------------------------",parseResponse]); 
 
                   localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);

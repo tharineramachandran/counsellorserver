@@ -5,6 +5,7 @@ import {    Button,    Form,    Header,    Image,    Input,
     Table, Label, Container, List, Popup} from "semantic-ui-react";
     
 import { ToastContainer, toast } from 'react-toastify';
+import {baseURLAPI ,baseURL }from "../../../../Global";
 const axios = require('axios');
 class ViewDeclined extends React.Component {
     state = {
@@ -29,7 +30,7 @@ class ViewDeclined extends React.Component {
                 jwtToken: localStorage.jwtToken,
             }
           };
-        axios.get('http://localhost:5000/request/google/get',  
+        axios.get(baseURLAPI+'/request/google/get',  
         { params: { requestID: requestID,
             response: response,
             counsellorID: localStorage.userID } })
@@ -68,7 +69,7 @@ class ViewDeclined extends React.Component {
     };
 
     setTabledata = ( ) => {
-        axios.get('http://localhost:5000/session/counsellor/declined', {
+        axios.get(baseURLAPI+'/session/counsellor/declined', {
             headers: {
                 jwtToken: localStorage.jwtToken
             },

@@ -15,6 +15,7 @@ import CreateSession from "./CounsellorCreateSessionModel"
 
 import CreateMessage from "./CounsellorCreateMessageModel"
  
+import {baseURLAPI ,baseURL }from "../../../../Global"; 
 import { Slider } from "react-semantic-ui-range";
 const axios = require('axios');
 const dayOptions = [
@@ -166,7 +167,7 @@ class Search extends React.Component {
 
     componentDidMount() {
         var counsellingSubjectNameOptions = [{ key: '00', text: 'Any Subject', value: '00' }];
-        axios.get(`http://localhost:5000/Counsellor/GetCounsellorDetails`)
+        axios.get(baseURLAPI+'/Counsellor/GetCounsellorDetails')
             .then(res => {
                 const persons = res.data.counsellor;
                 const minValue = 0;
@@ -183,7 +184,7 @@ class Search extends React.Component {
                 });
             })
 
-        axios.get(`http://localhost:5000/form/list`)
+        axios.get(baseURLAPI+'/form/list')
             .then(res => {
                 var counsellingSubjectNameOptionsArray = res.data.COUNSELLING_SUBJECTS;
 

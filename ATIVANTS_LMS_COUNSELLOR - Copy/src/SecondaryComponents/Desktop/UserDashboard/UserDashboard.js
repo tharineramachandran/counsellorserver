@@ -27,7 +27,7 @@ import ViewMessages from'./layout/ViewMessages'
 import ViewChangeRequest from './layout/ViewUserChangeRequest'
 import ViewAccepted from './layout/ViewUserAccepted';
 import ViewRequest from './layout/ViewUserRequest';
-
+import {baseURLAPI ,baseURL }from "../../../Global";
  
  
 const axios = require('axios');
@@ -49,7 +49,7 @@ const UserDashboard = (props) => {
     var user =[];
     async function getName() {
         try {
-            axios.get('http://localhost:5000/Counsellor/GetSingleCounsellorDetails/'+localStorage.userID, {
+            axios.get(baseURLAPI+'/Counsellor/GetSingleCounsellorDetails/'+localStorage.userID, {
                 headers: {
                   jwtToken:localStorage.jwtToken
                 }
@@ -78,7 +78,7 @@ const UserDashboard = (props) => {
 
     const logout = async () => {
         
-        window.open("http://localhost:5000/socialauth/logout", "_self");
+        window.open(baseURLAPI+"/socialauth/logout", "_self");
         
         localStorage.removeItem("userID");
         localStorage.removeItem("isCounsellor");
