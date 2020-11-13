@@ -14,9 +14,9 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
-const axios = require('axios');
-
 import {baseURLAPI ,baseURL }from "../../../../Global";  
+const axios = require('axios');
+ 
 var daysNotAvailableList = [];
 class CreateMessage extends React.Component {
   constructor(props) {

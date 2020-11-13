@@ -9,9 +9,10 @@ import {
     Segment, Card, Img, Icon,
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
-const axios = require('axios');
 
 import {baseURLAPI ,baseURL }from "../../../../Global";
+const axios = require('axios');
+ 
 
 class DisplayProfiles extends React.Component {
     state = {

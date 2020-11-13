@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import axios from 'axios';
 
 
+import {baseURLAPI ,baseURL }from "../../../Global"; 
 const Registration_Second = ({ formData, setForm, navigation }) => {
 
     const { COUNSELLOR_NAME, COUNSELLOR_AGE } = formData;
@@ -19,7 +20,7 @@ const Registration_Second = ({ formData, setForm, navigation }) => {
 
     const onSubmit = data => {
         const jsonData = { COUNSELLOR_NAME, COUNSELLOR_AGE };
-        axios.post('http://localhost:5000/Counsellor', JSON.stringify(jsonData), {
+        axios.post( baseURLAPI+'/Counsellor', JSON.stringify(jsonData), {
             headers: {
                 'Content-Type': 'application/json',
             }

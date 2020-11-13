@@ -11,12 +11,12 @@ import {
   Table, Label, Container, List, Popup
 } from "semantic-ui-react";
  
+import {baseURLAPI ,baseURL }from "../../../../Global";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
 const axios = require('axios'); 
 
-import {baseURLAPI ,baseURL }from "../../../../Global";
 var daysNotAvailableList = [];
 class ChangePassword extends React.Component {
   constructor(props) {
