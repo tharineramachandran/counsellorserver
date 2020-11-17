@@ -331,32 +331,31 @@ class Search extends React.Component {
                         <Container>
                             {this.state.post.map((person, index) =>
                                 <div class="ui card" style={{ width: '100%' }}>
-                                    <Card style={{ width: '100%' }} >
-                                        <Card.Content>
-                                        <Button onClick={() => this.messageModel(person)}   >Message</Button>
+                                 
+                                        
                                         <Modal
-      onClose={() => this.setState({ showMessage:false}) }
-      onOpen={() =>  this.setState({ showMessage:true})   }
-      open={this.state.showMessage}
+                                        onClose={() => this.setState({ showMessage:false}) }
+                                        onOpen={() =>  this.setState({ showMessage:true})   }
+                                        open={this.state.showMessage}
       
-    > 
-      <Modal.Header>Message to counsellor</Modal.Header>
-      <Modal.Content image>
+                                        > 
+                                        <Modal.Header>Message to counsellor</Modal.Header>
+                                        <Modal.Content  >
                                             
-        <Modal.Description>
+                                        <Modal.Description>
           
-          <CreateMessage 
-          CounsellorID = {this.state.messageCounsellorID} 
-          person = {this.state.messagePerson } 
-          UserID = {this.state.userID}   
-        /> 
+                                        <CreateMessage 
+                                        CounsellorID = {this.state.messageCounsellorID} 
+                                        person = {this.state.messagePerson } 
+                                        UserID = {this.state.userID}   
+                                        /> 
 
  
-        </Modal.Description>
-      </Modal.Content>
+                                        </Modal.Description>
+                                        </Modal.Content>
      
-    </Modal>
-    <Button onClick={() => this.sessionModel(person)}   >Session</Button>
+                                        </Modal>
+                                       
 
 <Modal
       onClose={() => this.setState({ show:false}) }
@@ -366,7 +365,7 @@ class Search extends React.Component {
     > 
       
       <Modal.Header>Create a session request</Modal.Header>
-      <Modal.Content image>
+      <Modal.Content  >
                               
    {/* <Image style={{ padding: '5%' }} size='medium' src={person.counselling_introduction[0].ct_counsellor_photo} wrapped /> */}
         <Modal.Description>          
@@ -378,21 +377,55 @@ class Search extends React.Component {
  
         </Modal.Description>
       </Modal.Content>     
-    </Modal> 
+    </Modal>    <Card style={{ width: '100%' }} >
+                                   
+
+                                        <Card.Content>
+                                      
+
                                             <Image width='100px' style={{ padding: '5%', float: 'left' }} src={person.counselling_introduction[0].ct_counsellor_photo} wrapped ui={true} />
-                                            <div style={{ float: 'left', width: '50%', textAlign: 'left' }} >
+                                            <div   style={{ width: '20%',float:'right' }}>
+                                          
+                                          <Table  floated ="right" basic='very'   collapsing   >
+                                              <Table.Body>
+                                                  <Table.Row>
+                                                       
+                                                      
+                                                      <Table.Cell>
+                                                          <p>  <Rating icon='star' defaultRating={person.counselling_average_review}  maxRating={5} />        {person.counselling_total_review} reviews  </p>
+                                                      </Table.Cell>
+                                                      <Table.Cell>
+                                                          <p> <Icon size='big' name='money bill alternate' /><strong> S$ {person.counselling_average_price} </strong> average per hour </p>
+                                                      </Table.Cell>
+                                                  </Table.Row>
+                                                  <Table.Row>
+                                                  <Table.Cell colspan="2"> <Button style={{  width: '100%'}}   onClick={() => this.sessionModel(person)}   >Session </Button>
+                                                         </Table.Cell>
+                                                              </Table.Row>
+                                                          <Table.Row >
+                                                              <Table.Cell colspan="2"><Button   style={{  width: '100%'}}  onClick={() => this.messageModel(person)}   >Message </Button>
+                                                          </Table.Cell>
+                                                          
+                                                          </Table.Row>
+                                              </Table.Body>
+                                          </Table></div>
+                                          <div style={{ float: 'left', width: '50%', textAlign: 'left' }} >
                                                 <Card.Header > {person.counsellor_details[0].CT_FIRST_NAME}   {person.counsellor_details[0].CT_LAST_NAME}  </Card.Header>
                                                 <Card.Description>
+                                               
                                                     <strong >My Counselling Group(s)</strong>
+
+                                                    
                                                     {person.counselling_details.map((details, index) => (
                                                         <p>
-                                                            <span> {details.ct_counselling_level_name} ------- {details.ct_counselling_subject_name}  ------- {details.ct_counsellor_hourly_rate}  </span>
+                                                            <span> {details.ct_counselling_level_name} -  {details.ct_counselling_subject_name} -   S${details.ct_counsellor_hourly_rate}  </span>
                                                         </p>
+  
                                                     ))}
                                                     <strong >My Qualification</strong>
                                                     {person.counselling_education.map((details, index) => (
                                                         <p>
-                                                            <span> {details.ct_qualification_name} ------- {details.ct_institute_name}  </span>
+                                                            <span> {details.ct_qualification_name} -  {details.ct_institute_name} </span>
                                                         </p>
                                                     ))}
                                                     <strong  >{person.counselling_introduction[0].ct_counsellor_headline}</strong >

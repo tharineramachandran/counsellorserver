@@ -129,14 +129,7 @@ const _RegistrationModal = props => {
             });
 
             const parseRes = await response.json()
-
-
-
-
-
-
-
-            
+ 
             if (parseRes.jwtToken) {
                 localStorage.setItem("jwtToken", parseRes.jwtToken)
                 localStorage.setItem("isCounsellor", parseRes.isCounsellor)
@@ -194,6 +187,7 @@ const _RegistrationModal = props => {
 
     const _handleGoogleSignInClick = async () => {
         console.log(baseURLAPI);
+        localStorage.setItem("isCounsellor", 0);
         window.open(baseURLAPI+"/socialauth/google/0", "_self");
     }
 

@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
     Header, Icon, Form, Image, Message,
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Checkbox, Divider, List, Label
-} from 'semantic-ui-react'; 
+} from 'semantic-ui-react';
 import { Authorize } from "../../MainComponents/DesktopComponent";
 import axios from '../../Store/_AxiosInstance';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import googleLogin from "google-auth-library"
-import {baseURLAPI ,baseURL }from "../../Global";
+import { baseURLAPI, baseURL } from "../../Global";
 const Counsellor_Registration = props => {
     const [open, setOpen] = useState(true);
     const [defHeight, setHeight] = useState(window.innerWidth);
@@ -27,7 +27,7 @@ const Counsellor_Registration = props => {
 
     const { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD } = inputs;
     const setAuth = useContext(Authorize);
-const setCount = useContext(Authorize);
+    const setCount = useContext(Authorize);
     useEffect(() => {
         if (localStorage.checkbox && localStorage.username !== "") {
             setRememberMe(localStorage.checkbox);
@@ -51,25 +51,25 @@ const setCount = useContext(Authorize);
             const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
             console.log(body);
 
-            const response = await fetch(baseURLAPI+"/auth/counsellor/register", {
+            const response = await fetch(baseURLAPI + "/auth/counsellor/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
- 
+
 
 
             const parseRes = await response.json();
-            
 
 
-            
+
+
             console.log("registration data", parseRes);
 
-            if (parseRes.jwtToken) { 
-              await  localStorage.setItem("jwtToken", parseRes.jwtToken);
-              await    localStorage.setItem("isCounsellor", parseRes.isCounsellor);
-              await    localStorage.setItem("userID", parseRes.userID);  
+            if (parseRes.jwtToken) {
+                await localStorage.setItem("jwtToken", parseRes.jwtToken);
+                await localStorage.setItem("isCounsellor", parseRes.isCounsellor);
+                await localStorage.setItem("userID", parseRes.userID);
 
                 setAuth(true);
                 toast.success('login successful!', {
@@ -81,28 +81,28 @@ const setCount = useContext(Authorize);
                     draggable: true,
                     progress: '',
                 });
-                
-
-             
 
 
 
-                
+
+
+
+
                 // toast.success("login successfully!")
             }
             else {
                 setErrorSignUpMessage(parseRes);
                 setAuth(false);
                 setCount(false);
-                
-            } 
+
+            }
 
         } catch (error) {
             console.log(error.message);
         }
     }
 
- 
+
     useEffect(() => {
         const setHeightofScreen = () => setHeight(window.innerHeight)
         window.addEventListener('resize', setHeightofScreen)
@@ -127,91 +127,92 @@ const setCount = useContext(Authorize);
     }
 
     const _handleGoogleSignInClick = async () => {
-        window.open(baseURLAPI+"/socialAuth/google/1", "_self");
+        localStorage.setItem("isCounsellor", 1);
+        window.open(baseURLAPI + "/socialAuth/google/1", "_self");
     }
 
     console.log(rememberMe);
 
     return (
         <React.Fragment>
-           <Grid textAlign='center' verticalAlign='middle'>
-                                <Grid.Column style={{ maxWidth: 450 }}>
-                                    <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
-                                        Sign up for counsellor 
+            <Grid textAlign='center' verticalAlign='middle'>
+                <Grid.Column style={{ maxWidth: 450 }}>
+                    <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
+                        Sign up for counsellor
                             </Header>
-                                    <Form size='large' >
-                                        <List divided relaxed>
-                                            
-                                            <List.Item>
-                                                <Button color='red' onClick={_handleGoogleSignInClick}>
-                                                    <Icon name='google' /> Sign up with Google &nbsp;&nbsp;
-                                    </Button> &nbsp;&nbsp;&nbsp;
-                                  
-                                            </List.Item>
-                                        </List>
-                                    </Form>
-                                    <br /> 
- 
-                                </Grid.Column>
-                            </Grid>
-  <Form size='small' onSubmit={onSubmitStudentSignUpForm}>
-                                        <Segment stacked>
-                                            <Form.Group widths='equal'>
+                    <Form size='large' >
+                        <List divided relaxed>
 
-                                                <Form.Field className="CustomForm">
-                                                    <Icon name="user" className="customIconsAlign" />
+                            <List.Item>
+                                <Button color='red' onClick={_handleGoogleSignInClick}>
+                                    <Icon name='google' /> Sign up with Google &nbsp;&nbsp;
+                                    </Button> &nbsp;&nbsp;&nbsp;
+
+                                            </List.Item>
+                        </List>
+                    </Form>
+                    <br />
+
+                </Grid.Column>
+            </Grid>
+            <Form size='small' onSubmit={onSubmitStudentSignUpForm}>
+                <Segment stacked>
+                    <Form.Group widths='equal'>
+
+                        <Form.Field className="CustomForm">
+                            <Icon name="user" className="customIconsAlign" />
                                                         &nbsp;&nbsp;&nbsp;
                                                         <input
-                                                        placeholder='Enter your Name'
-                                                        type='text'
-                                                        name="TX_USER_NAME"
-                                                        onChange={e => onChangeOfForm(e)}
-                                                        value={TX_USER_NAME}
-                                                    />
-                                                </Form.Field>
-                                            </Form.Group>
-                                            <Form.Group widths='equal'>
-                                                <Form.Field className="CustomForm">
-                                                    <Icon name="user" className="customIconsAlign" />
+                                placeholder='Enter your Name'
+                                type='text'
+                                name="TX_USER_NAME"
+                                onChange={e => onChangeOfForm(e)}
+                                value={TX_USER_NAME}
+                            />
+                        </Form.Field>
+                    </Form.Group>
+                    <Form.Group widths='equal'>
+                        <Form.Field className="CustomForm">
+                            <Icon name="user" className="customIconsAlign" />
                                                         &nbsp;&nbsp;&nbsp;
                                                         <input
-                                                        placeholder='Enter your Email Id'
-                                                        type='text'
-                                                        name="TX_USER_EMAIL"
-                                                        onChange={e => onChangeOfForm(e)}
-                                                        value={TX_USER_EMAIL}
-                                                    />
-                                                </Form.Field>
-                                            </Form.Group>
-                                            <Form.Group widths='equal'>
-                                                <Form.Field className="CustomForm">
-                                                    <Icon name="user" className="customIconsAlign" />
+                                placeholder='Enter your Email Id'
+                                type='text'
+                                name="TX_USER_EMAIL"
+                                onChange={e => onChangeOfForm(e)}
+                                value={TX_USER_EMAIL}
+                            />
+                        </Form.Field>
+                    </Form.Group>
+                    <Form.Group widths='equal'>
+                        <Form.Field className="CustomForm">
+                            <Icon name="user" className="customIconsAlign" />
                                                         &nbsp;&nbsp;&nbsp;
                                                         <input
-                                                        placeholder='Enter password'
-                                                        type='password'
-                                                        name="TX_USER_PASSWORD"
-                                                        onChange={e => onChangeOfForm(e)}
-                                                        value={TX_USER_PASSWORD}
-                                                    />
-                                                </Form.Field>
-                                            </Form.Group>
-                                            {errorSignUpMessage && (
-                                                <Form.Group widths='equal'>
-                                                    <Form.Field className="CustomForm">
-                                                        <Message negative style={{ padding: '0.5rem' }}>
-                                                            {errorSignUpMessage}
-                                                        </Message>
-                                                    </Form.Field>
-                                                </Form.Group>
-                                            )
-                                            }
-                                    
-                                            <Button color='teal' fluid size='large'>
-                                                Sign up
+                                placeholder='Enter password'
+                                type='password'
+                                name="TX_USER_PASSWORD"
+                                onChange={e => onChangeOfForm(e)}
+                                value={TX_USER_PASSWORD}
+                            />
+                        </Form.Field>
+                    </Form.Group>
+                    {errorSignUpMessage && (
+                        <Form.Group widths='equal'>
+                            <Form.Field className="CustomForm">
+                                <Message negative style={{ padding: '0.5rem' }}>
+                                    {errorSignUpMessage}
+                                </Message>
+                            </Form.Field>
+                        </Form.Group>
+                    )
+                    }
+
+                    <Button color='teal' fluid size='large'>
+                        Sign up
                                             </Button>
-                                        </Segment>
-                                    </Form>
+                </Segment>
+            </Form>
 
         </React.Fragment >
     )

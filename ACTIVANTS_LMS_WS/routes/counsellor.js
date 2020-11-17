@@ -11,7 +11,7 @@ router.get("/GetCounsellorDetails", async (req, res) => {
     try {
 
         var details = [];
-        var final_details = [];     
+        var final_details = [];
 
         const query = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" ');
 
@@ -28,17 +28,28 @@ router.get("/GetCounsellorDetails", async (req, res) => {
 
             var counselling_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_COUNSELLING_DETAILS" where "ct_counsellor_id" = $1', [item]);
             var counselling_introduction = await pool.query('SELECT * FROM "CT_COUNSELLOR_INTRODUCTION" where "ct_counsellor_id" = $1', [item]);
-            
+
             var counselling_monday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_MONDAY" where "ct_counsellor_id" = $1', [item]);
             var counselling_tuesday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_TUESDAY" where "ct_counsellor_id" = $1', [item]);
             var counselling_wednesday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_WEDNESDAY" where "ct_counsellor_id" = $1', [item]);
             var counselling_thursday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_THURSDAY" where "ct_counsellor_id" = $1', [item]);
             var counselling_friday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_FRIDAY" where "ct_counsellor_id" = $1', [item]);
             var counselling_saturday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_SATURDAY" where "ct_counsellor_id" = $1', [item]);
-            
+
             var counselling_education = await pool.query('SELECT * FROM "CT_COUNSELLOR_QUALIFICATION_INSTITUTE" where "ct_counsellor_id" = $1', [item]);
 
             var counselling_edu_values = [];
+
+
+            var counselling_total_review = 0;
+            for (let x = 0; x < counsellor_review.rowCount; x++) {
+
+                counselling_total_review += parseInt(counsellor_review.rows[x].ct_counsellor_stars);
+
+            }
+
+            var counselling_average_review = counselling_total_review / counsellor_review.rowCount;
+
 
             for (let x = 0; x < counselling_education.rowCount; x++) {
 
@@ -52,6 +63,8 @@ router.get("/GetCounsellorDetails", async (req, res) => {
             }
 
             var counselling_details_values = [];
+            var counselling_total_price = 0;
+
             for (let x = 0; x < counselling_details.rowCount; x++) {
 
                 var counsellingLevelName = await getName.getCounsellingLevelName(counselling_details.rows[x].ct_counselling_level_code);
@@ -59,8 +72,12 @@ router.get("/GetCounsellorDetails", async (req, res) => {
                 var counsellingSubjectsName = await getName.getCounsellingSubjectsName(counselling_details.rows[x].ct_counselling_subject_code);
                 counselling_details.rows[x].ct_counselling_subject_name = counsellingSubjectsName;
                 counselling_details_values.push(counselling_details.rows[x]);
-            }
 
+                counselling_total_price += parseInt(counselling_details.rows[x].ct_counsellor_hourly_rate);
+            } 
+            var counselling_average_price = counselling_total_price / counselling_details.rowCount; 
+            var counselling_average_review = counselling_total_review / counsellor_review.rowCount;
+ 
             var account = {
                 counsellor_details: counsellor_details.rows,
                 counsellor_review: counsellor_review.rows,
@@ -69,7 +86,10 @@ router.get("/GetCounsellorDetails", async (req, res) => {
                 counselling_education: counselling_edu_values,
                 counselling_monday: counselling_monday.rows, counselling_tuesday: counselling_tuesday.rows,
                 counselling_wednesday: counselling_wednesday.rows, counselling_thursday: counselling_thursday.rows,
-                counselling_friday: counselling_friday.rows, counselling_saturday: counselling_saturday.rows
+                counselling_friday: counselling_friday.rows, counselling_saturday: counselling_saturday.rows,
+                counselling_average_review:  Math.floor(counselling_average_review)    ,
+                counselling_average_price:  Math.floor(counselling_average_price)   ,
+                counselling_total_review : counsellor_review.rowCount
             };
 
             final_details.push(account);
@@ -77,13 +97,13 @@ router.get("/GetCounsellorDetails", async (req, res) => {
         res.json({ counsellor: final_details });
     } catch (error) {
         console.log(error.message);
-        res.send(500).json("Server Error");
+        res.status(400).json("Server Error");
     }
 });
 
 
 //create counsellor
-router.post("/createCounsellor", createCounsellorValidation , async (req, res) => {
+router.post("/createCounsellor", createCounsellorValidation, async (req, res) => {
 
     try {
         var { COUNSELLOR_FIRST_NAME,
@@ -207,10 +227,10 @@ router.post("/createCounsellor", createCounsellorValidation , async (req, res) =
 
                 COUNSELLOR_AVAILABILITY_SATURDAY.forEach(insertConsellorSaturday);
 
-               
-                    function insertConsellorSaturday(item, index) {
-                     if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {    
-                         
+
+                function insertConsellorSaturday(item, index) {
+                    if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
+
                         pool.query(
                             'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_SATURDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
                             [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
@@ -218,13 +238,13 @@ router.post("/createCounsellor", createCounsellorValidation , async (req, res) =
                 }
             }
             res.json("success");
-        }  
-        
-        
-        res.json(      [{error : "User not found " ,message : "User not found"}]  );
+        }
+
+
+        res.json([{ error: "User not found ", message: "User not found" }]);
     } catch (error) {
         console.error(error.message);
-        res.status(400).json(      [{error : "Duplicate account  found " ,message : "Duplicate account  found"}]  );
+        res.status(400).json([{ error: "Duplicate account  found ", message: "Duplicate account  found" }]);
     }
 })
 
@@ -251,63 +271,63 @@ router.get("/form/list", async (req, res) => {
 })
 
 
-router.get('/GetSingleCounsellorDetails/:id',async (req, res) => {
+router.get('/GetSingleCounsellorDetails/:id', async (req, res) => {
 
-    const item =req.params.id;
+    const item = req.params.id;
 
     try {
-if (item ) {
-    console.log(item);
-        var counsellor_details =  await  pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_ID" = $1', [item]);
-        var counsellor_review =await pool.query('SELECT "CT_COUNSELLOR_REVIEW"."id", "CT_COUNSELLOR_REVIEW"."ct_counsellor_review","CT_COUNSELLOR_REVIEW"."ct_counsellor_stars", "CT_COUNSELLOR_REVIEW"."ct_counsellor_date","CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" ,"T_USER"."TX_USER_NAME" FROM public."CT_COUNSELLOR_REVIEW" INNER JOIN public."T_USER" ON  CAST("CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" AS INTEGER) = "T_USER"."ID_USER_UUID" WHERE  "CT_COUNSELLOR_REVIEW"."ct_counsellor_id" = $1', [item]);
-        var counselling_details =    await  pool.query('SELECT * FROM "CT_COUNSELLOR_COUNSELLING_DETAILS" where "ct_counsellor_id" = $1', [item]);
-        var counselling_introduction =   await pool.query('SELECT * FROM "CT_COUNSELLOR_INTRODUCTION" where "ct_counsellor_id" = $1', [item]);
-        var counselling_monday = await  pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_MONDAY" where "ct_counsellor_id" = $1', [item]);
-        var counselling_tuesday =   await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_TUESDAY" where "ct_counsellor_id" = $1', [item]);
-        var counselling_wednesday = await  pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_WEDNESDAY" where "ct_counsellor_id" = $1', [item]);
-        var counselling_thursday = await  pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_THURSDAY" where "ct_counsellor_id" = $1', [item]);
-        var counselling_friday = await  pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_FRIDAY" where "ct_counsellor_id" = $1', [item]);
-        var counselling_saturday =  await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_SATURDAY" where "ct_counsellor_id" = $1', [item]);
-        var counselling_education = await  pool.query('SELECT * FROM "CT_COUNSELLOR_QUALIFICATION_INSTITUTE" where "ct_counsellor_id" = $1', [item]);
-        var user_details = await   pool.query('SELECT * FROM "T_USER" where "ID_USER_UUID" = $1', [item]);
-        var counselling_edu_values = [];
+        if (item) {
+            console.log(item);
+            var counsellor_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_ID" = $1', [item]);
+            var counsellor_review = await pool.query('SELECT "CT_COUNSELLOR_REVIEW"."id", "CT_COUNSELLOR_REVIEW"."ct_counsellor_review","CT_COUNSELLOR_REVIEW"."ct_counsellor_stars", "CT_COUNSELLOR_REVIEW"."ct_counsellor_date","CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" ,"T_USER"."TX_USER_NAME" FROM public."CT_COUNSELLOR_REVIEW" INNER JOIN public."T_USER" ON  CAST("CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" AS INTEGER) = "T_USER"."ID_USER_UUID" WHERE  "CT_COUNSELLOR_REVIEW"."ct_counsellor_id" = $1', [item]);
+            var counselling_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_COUNSELLING_DETAILS" where "ct_counsellor_id" = $1', [item]);
+            var counselling_introduction = await pool.query('SELECT * FROM "CT_COUNSELLOR_INTRODUCTION" where "ct_counsellor_id" = $1', [item]);
+            var counselling_monday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_MONDAY" where "ct_counsellor_id" = $1', [item]);
+            var counselling_tuesday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_TUESDAY" where "ct_counsellor_id" = $1', [item]);
+            var counselling_wednesday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_WEDNESDAY" where "ct_counsellor_id" = $1', [item]);
+            var counselling_thursday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_THURSDAY" where "ct_counsellor_id" = $1', [item]);
+            var counselling_friday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_FRIDAY" where "ct_counsellor_id" = $1', [item]);
+            var counselling_saturday = await pool.query('SELECT * FROM "CT_COUNSELLOR_AVAILABILITY_SATURDAY" where "ct_counsellor_id" = $1', [item]);
+            var counselling_education = await pool.query('SELECT * FROM "CT_COUNSELLOR_QUALIFICATION_INSTITUTE" where "ct_counsellor_id" = $1', [item]);
+            var user_details = await pool.query('SELECT * FROM "T_USER" where "ID_USER_UUID" = $1', [item]);
+            var counselling_edu_values = [];
 
-        for (let x = 0; x < counselling_education.rowCount; x++) {
+            for (let x = 0; x < counselling_education.rowCount; x++) {
 
-            var instituteName =   getName.getInstituteName(counselling_education.rows[x].ct_institute_code);
-            counselling_education.rows[x].ct_institute_name = instituteName;
+                var instituteName = getName.getInstituteName(counselling_education.rows[x].ct_institute_code);
+                counselling_education.rows[x].ct_institute_name = instituteName;
 
-            var qualificationName =   getName.getQualificationsName(counselling_education.rows[x].ct_qualification_code);
-            counselling_education.rows[x].ct_qualification_name = qualificationName;
+                var qualificationName = getName.getQualificationsName(counselling_education.rows[x].ct_qualification_code);
+                counselling_education.rows[x].ct_qualification_name = qualificationName;
 
-            counselling_edu_values.push(counselling_education.rows[x]);
-        }
+                counselling_edu_values.push(counselling_education.rows[x]);
+            }
 
-        var counselling_details_values = [];
-        for (let x = 0; x < counselling_details.rowCount; x++) {
+            var counselling_details_values = [];
+            for (let x = 0; x < counselling_details.rowCount; x++) {
 
-            var counsellingLevelName =   getName.getCounsellingLevelName(counselling_details.rows[x].ct_counselling_level_code);
-            counselling_details.rows[x].ct_counselling_level_name = counsellingLevelName;
+                var counsellingLevelName = getName.getCounsellingLevelName(counselling_details.rows[x].ct_counselling_level_code);
+                counselling_details.rows[x].ct_counselling_level_name = counsellingLevelName;
 
-            var counsellingSubjectsName =   getName.getCounsellingSubjectsName(counselling_details.rows[x].ct_counselling_subject_code);
-            counselling_details.rows[x].ct_counselling_subject_name = counsellingSubjectsName;
+                var counsellingSubjectsName = getName.getCounsellingSubjectsName(counselling_details.rows[x].ct_counselling_subject_code);
+                counselling_details.rows[x].ct_counselling_subject_name = counsellingSubjectsName;
 
-            counselling_details_values.push(counselling_details.rows[x]);
-        }
-        var account = {
-            counsellor_details: counsellor_details.rows,
-            user_details: user_details.rows,
-            counsellor_review: counsellor_review.rows,
-            counselling_details: counselling_details_values,
-            counselling_introduction: counselling_introduction.rows,
-            counselling_education: counselling_edu_values,
-            counselling_monday: counselling_monday.rows, counselling_tuesday: counselling_tuesday.rows,
-            counselling_wednesday: counselling_wednesday.rows, counselling_thursday: counselling_thursday.rows,
-            counselling_friday: counselling_friday.rows, counselling_saturday: counselling_saturday.rows
-        };
-        console.log(account);
-        res.json({ counsellor: account });
-    }    res.json("no id provided");
+                counselling_details_values.push(counselling_details.rows[x]);
+            }
+            var account = {
+                counsellor_details: counsellor_details.rows,
+                user_details: user_details.rows,
+                counsellor_review: counsellor_review.rows,
+                counselling_details: counselling_details_values,
+                counselling_introduction: counselling_introduction.rows,
+                counselling_education: counselling_edu_values,
+                counselling_monday: counselling_monday.rows, counselling_tuesday: counselling_tuesday.rows,
+                counselling_wednesday: counselling_wednesday.rows, counselling_thursday: counselling_thursday.rows,
+                counselling_friday: counselling_friday.rows, counselling_saturday: counselling_saturday.rows
+            };
+            console.log(account);
+            res.json({ counsellor: account });
+        } else { res.json("no id provided"); }
     } catch (error) {
         console.log(error.message);
         res.json("Server Error");
