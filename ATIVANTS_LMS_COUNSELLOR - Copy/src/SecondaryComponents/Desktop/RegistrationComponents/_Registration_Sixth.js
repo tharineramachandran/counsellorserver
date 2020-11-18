@@ -9,7 +9,9 @@ import demoPicture from '../../../Static/Images/demoPicture.png'
 import amazingPhoto from '../../../Static/Images/amazingPhoto.png'
 import 'react-image-crop/dist/ReactCrop.css'
 import ReactCrop from 'react-image-crop';
+ 
 
+import FileBase64 from 'react-file-base64';
 const Registration_Second = ({ formData, setForm, navigation, step }) => {
 
     const { COUNSELLOR_DOCUMENT_IMAGE } = formData;
@@ -72,6 +74,18 @@ const Registration_Second = ({ formData, setForm, navigation, step }) => {
         setForm(e);
     }, [result])
 
+  // Callback~
+     const getFiles = files =>    {
+console.log(files);
+        setFileName({ file:files }); 
+        const e = {
+            target: {
+                name: "COUNSELLOR_FILES",
+                value: files
+            }
+        };
+        setForm(e);
+  }
     return (
 
         <Grid>
@@ -162,6 +176,12 @@ const Registration_Second = ({ formData, setForm, navigation, step }) => {
                                                             hidden
                                                             onChange={handleFileChange}
                                                         />
+
+<FileBase64
+        multiple={ true }
+        onDone={ getFiles } />
+
+
                                                     </Form.Field>
                                                 </Card.Description>
                                                 <Card.Meta className="customCarContent">

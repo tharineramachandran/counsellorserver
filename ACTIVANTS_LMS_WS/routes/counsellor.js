@@ -3,7 +3,7 @@ const router = require("express").Router();
 const pool = require("../database/Db_Connection");
 const authorization = require("../middleware/authorization");
 const getName = require("../functions/names");
-
+const awsS3 = require("../functions/awsS3");
 const createCounsellorValidation = require("../middleware/createCounsellorValidation");
 
 router.get("/GetCounsellorDetails", async (req, res) => {
@@ -108,7 +108,7 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
     try {
         var { COUNSELLOR_FIRST_NAME,
             COUNSELLOR_LAST_NAME,
-            COUNSELLOR_EMAIL,
+            COUNSELLOR_EMAIL,COUNSELLOR_FILES,
             COUNSELLOR_PHONE_NUMBER,
             COUNSELLOR_COUNTRY_CODE,
             COUNSELLOR_COUNSELLING_SUBJECT_ID,
@@ -119,17 +119,31 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
             COUNSELLOR_VIDEO_URL,
             COUNSELLOR_TIME_ZONE_CODE, COUNSELLOR_AVAILABILITY_MONDAY, COUNSELLOR_AVAILABILITY_TUESDAY, COUNSELLOR_AVAILABILITY_WEDNESDAY,
             COUNSELLOR_AVAILABILITY_THURSDAY, COUNSELLOR_AVAILABILITY_FRIDAY, COUNSELLOR_AVAILABILITY_SATURDAY,
-            COUNSELLOR_DOCUMENT_IMAGE, } = req.body.formData;
+            COUNSELLOR_DOCUMENT_IMAGE, } =   req.body.formData      ;
         const COUNSELLORID = req.body.COUNSELLORID;
-        console.log(req.body);
+     
         const user = await pool.query('SELECT * FROM "T_USER" WHERE "ID_USER_UUID" = $1', [
             COUNSELLORID]);
+            var uploadtoS3   = false;
+            var filestring =  [];
+            for (var file in COUNSELLOR_FILES ){ 
+               
+                file.name = COUNSELLORID +"-"+  Math.floor(Math.random() * (1000000 - 1) + 1);  ;
+                filestring.push( file.name);
+            }
+  
 
-        if (user.rows.length == 1) {
+            if (user.rows.length == 1) {
+                  uploadtoS3   = await  awsS3.uploadtoS3(COUNSELLOR_FILES , "counsellorverify");
+
+            }
+
+            console.log(filestring);
+        if (user.rows.length == 1 && uploadtoS3) {
 
             const newCounsellorDetails = await pool.query(
-                'INSERT INTO "CT_COUNSELLOR_DETAILS" ("CT_EMAIL", "CT_FIRST_NAME", "CT_LAST_NAME", "CT_PHONE_NUMBER", "CT_COUNTRY_CODE", "CT_COUNSELLOR_ID") VALUES($1,$2,$3,$4,$5,$6) RETURNING *',
-                [COUNSELLOR_EMAIL, COUNSELLOR_FIRST_NAME, COUNSELLOR_LAST_NAME, COUNSELLOR_PHONE_NUMBER, COUNSELLOR_COUNTRY_CODE, COUNSELLORID]);
+                'INSERT INTO "CT_COUNSELLOR_DETAILS" ("CT_EMAIL", "CT_FIRST_NAME", "CT_LAST_NAME", "CT_PHONE_NUMBER", "CT_COUNTRY_CODE", "CT_COUNSELLOR_ID","CT_COUNSELLOR_VERIFY") VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *',
+                [COUNSELLOR_EMAIL, COUNSELLOR_FIRST_NAME, COUNSELLOR_LAST_NAME, COUNSELLOR_PHONE_NUMBER, COUNSELLOR_COUNTRY_CODE, COUNSELLORID,filestring.toString()]);
 
             const newCounsellorIntroductionDetails = await pool.query(
                 'INSERT INTO "CT_COUNSELLOR_INTRODUCTION" (   ct_counsellor_about_description, ct_counsellor_photo, ct_counsellor_headline, ct_counsellor_video_url, ct_counsellor_id) VALUES($1,$2,$3,$4,$5) RETURNING *',
@@ -237,7 +251,8 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
                     }
                 }
             }
-            res.json("success");
+            res.json([{ error: "User not found ", message: "User not found" }]);
+            //  res.json("success");
         }
 
 

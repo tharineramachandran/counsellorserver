@@ -12,11 +12,12 @@ const keys = require('./config/keys');
 const cookieParser = require("cookie-parser"); 
 require('./config/passportSetup');
 const fs = require('fs'); 
-var open = require('open')
- 
+var open = require('open');
+const { options } = require("./routes/socialAuth");
+const bodyParser = require('body-parser');
 
-//app.use(cors());
-app.use(express.json());
+//app.use(cors()); 
+app.use(express.json({limit: '500mb'})); 
 app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000,
   keys: [keys.session.cookieKey]
@@ -36,6 +37,11 @@ app.use(
   })
 );
 
+
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 }))
+
+
+
 //routes
 
 
@@ -50,7 +56,7 @@ app.use("/request", require("./routes/request"));
 app.use("/session", require("./routes/session"));
 app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
 
-
+ 
 //get All counsellor
 app.get("/user/:id", async (req, res) => {
   try { 
@@ -126,6 +132,39 @@ app.post("/email", async  (req, res) => {
 })
 
 
+
+// Add event 
+app.post("/upload",   async (req, res) => {
+  try { 
+    const AWS = require('aws-sdk')
+  //  AWS.config.update({  accessKeyId: keys.awsS3.accessKeyId, secretAccessKey: keys.awsS3.secretAccessKey   });
+    
+    const s3 = new AWS.S3({
+      accessKeyId: keys.awsS3.accessKeyId, secretAccessKey: keys.awsS3.secretAccessKey  
+  });
+var file =   req.body.file; 
+
+
+buf = Buffer.from(file ,'base64')
+var data = { 
+  Body: buf,
+  Key: 'drt' ,
+  Bucket:   'counsellorverify',
+   
+};
+s3.upload(data, function(err, data){
+    if (err) { 
+      console.log(err);
+      console.log('Error uploading data: ', data); 
+    } else {
+      console.log('successfully uploaded the image!');
+    }
+});
+   
+  } catch (error) {
+    console.log(["-----------S3 upload Error--------------",error.message]);
+  }
+})
 
 
 
