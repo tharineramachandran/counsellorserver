@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import {
   Button,
   Form,
-  Header,
+  Header,Checkbox,
   Image,
   Input, Dropdown, Grid,
   Message,
@@ -29,7 +29,10 @@ class CreateMessage extends React.Component {
     subject: '',
     catagory: '',
     formWarning: '',
-    slotOptions: []
+    slotOptions: [],
+    allowContact : false,
+    checked: false,
+    CheckedallowContact : false
   }
 
   componentDidMount() {
@@ -50,7 +53,7 @@ class CreateMessage extends React.Component {
   submitRequest = () => {
     var sessionDetails = undefined;
 
-    console.log([this.state.catagory, this.state.body, this.state.subject]);
+    console.log([this.state.checked]);
     if (this.state.catagory && this.state.body && this.state.subject) {
      
       console.log([
@@ -64,7 +67,9 @@ class CreateMessage extends React.Component {
               user2:  this.props.CounsellorID  ,
               catagory:this.state.catagory   ,
               message:this.state.body ,
-              subject :this.state.subject
+              subject :this.state.subject,
+              
+              checked : this.state.checked
             };
 
             console.log(data)
@@ -144,13 +149,26 @@ class CreateMessage extends React.Component {
     this.setState({ body: value });
   };
 
+  handleCheckChange = e => {   
+ 
+    this.setState((prevState) => ({ checked: !prevState.checked }))
+ 
+  };
+
   render() {
     return (
 
       <Container> <Segment>
-
- 
-        <Form  > < Form.Group widths='equal'>
+ <div   class="ui center aligned container" > 
+        <Image width='200px' style={{ padding: '1%'}} src={this.props.person.counselling_introduction[0].ct_counsellor_photo} wrapped ui={true} />
+                                            
+                                            <h3 > {this.props.person.counsellor_details[0].CT_FIRST_NAME}   {this.props.person.counsellor_details[0].CT_LAST_NAME}  </h3>
+                                            <p>
+                                                           Tell the counsellor about yourself and needs
+                                                        </p>
+                                                        
+                                              </div>
+         <Form style={{ width: '100%' }} > < Form.Group widths='equal'>
 
           <Form.Select   placeholder='Add catagory'
             label="Catagory"
@@ -178,9 +196,22 @@ class CreateMessage extends React.Component {
               id="s"
               placeholder="message"
             />
+
+<br />
+
+<Form.Checkbox 
+type="checkbox"
+  
+  value={this.state.checked }
+  label='Allow other consellors to contact me '
+  onClick={this.handleCheckChange} 
+   
+/>
+      
+
           </Form.Group>
         </Form>
-      </Segment>  
+</Segment>  
         <p style={{ color: 'red' }}>{this.state.formWarning}</p>
         < br />
         <button class="ui button" onClick={this.submitRequest}>Submit</button>

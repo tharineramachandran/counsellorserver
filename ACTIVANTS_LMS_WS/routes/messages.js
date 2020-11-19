@@ -128,9 +128,9 @@ router.get("/getChats/:id", authorization, async (req, res) => {
   try { 
    var id = req.params.id;
     
-      const chats1  = await pool.query('SELECT      ct_catagory ,id,ct_subject, ct_latest ,ct_unread, ct_user1, ct_user2, "TX_USER_NAME", "ID_USER_UUID",        "TX_USER_EMAIL" FROM "CT_USER_CHAT" INNER JOIN "T_USER" ON CAST("CT_USER_CHAT"."ct_user1" AS int) = "T_USER"."ID_USER_UUID" where "CT_USER_CHAT"."ct_user2" = $1  ',
+      const chats1  = await pool.query('SELECT      ct_catagory ,id,ct_subject, ct_latest ,ct_unread, ct_user1, ct_user2, "TX_USER_NAME", "ID_USER_UUID",   "TX_PICTURE"   ,     "TX_USER_EMAIL" FROM "CT_USER_CHAT" INNER JOIN "T_USER" ON CAST("CT_USER_CHAT"."ct_user1" AS int) = "T_USER"."ID_USER_UUID" where "CT_USER_CHAT"."ct_user2" = $1  ',
       [id ]);
-      const chats2  = await pool.query('SELECT ct_catagory,id,ct_subject, ct_latest ,ct_unread, ct_user1, ct_user2, "TX_USER_NAME", "ID_USER_UUID", "TX_USER_EMAIL" FROM "CT_USER_CHAT" INNER JOIN "T_USER" ON CAST("CT_USER_CHAT"."ct_user2" AS int) = "T_USER"."ID_USER_UUID" where "CT_USER_CHAT"."ct_user1" = $1  ',
+      const chats2  = await pool.query('SELECT ct_catagory,id,ct_subject, ct_latest ,ct_unread, ct_user1, ct_user2, "TX_USER_NAME", "ID_USER_UUID", "TX_PICTURE"   ,"TX_USER_EMAIL" FROM "CT_USER_CHAT" INNER JOIN "T_USER" ON CAST("CT_USER_CHAT"."ct_user2" AS int) = "T_USER"."ID_USER_UUID" where "CT_USER_CHAT"."ct_user1" = $1  ',
       [id ]);
       var chats1chats = chats1.rows ;
       var chats2chats = chats2.rows ;

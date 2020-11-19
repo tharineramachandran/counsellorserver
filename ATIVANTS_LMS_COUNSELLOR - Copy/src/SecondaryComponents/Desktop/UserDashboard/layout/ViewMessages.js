@@ -6,7 +6,7 @@ import {
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
 import { ToastContainer, toast } from 'react-toastify';
-import {baseURLAPI ,baseURL }from "../../../../Global";
+import { baseURLAPI, baseURL } from "../../../../Global";
 const axios = require('axios');
 
 
@@ -21,16 +21,17 @@ class ViewMessages extends React.Component {
         receiverName: '',
         receiverEmail: '',
         viewNotiMessage: false,
-        totalChats : 0
+        totalChats: 0,
+        receiverImage: ''
     }
 
     componentDidMount() {
         this.setTable();
         this.getData();
-        setInterval(this.getData, 5000);  
+        setInterval(this.getData, 5000);
     }
     getData = () => {
-        axios.get(baseURLAPI+'/messages/getTotalChats/' + localStorage.userID, {
+        axios.get(baseURLAPI + '/messages/getTotalChats/' + localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -39,10 +40,10 @@ class ViewMessages extends React.Component {
             }
         })
             .then((res) => {
-            
-                if (parseInt(res.data)  != this.state.totalChats) {
+
+                if (parseInt(res.data) != this.state.totalChats) {
                     this.setTable();
-                    this.setState({totalChats :parseInt(res.data)   })
+                    this.setState({ totalChats: parseInt(res.data) })
 
                 }
 
@@ -53,7 +54,7 @@ class ViewMessages extends React.Component {
 
     }
     setTable = () => {
-        axios.get(baseURLAPI+'/messages/getChats/' + localStorage.userID, {
+        axios.get(baseURLAPI + '/messages/getChats/' + localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -83,7 +84,7 @@ class ViewMessages extends React.Component {
             chatID: this.state.chatID,
             userID: localStorage.userID
         }
-        axios.post(baseURLAPI+'/messages/createMessages', data, {
+        axios.post(baseURLAPI + '/messages/createMessages', data, {
             headers: headers
         })
             .then((res) => {
@@ -96,7 +97,7 @@ class ViewMessages extends React.Component {
     }
 
     getNewMessages = (chatID) => {
-        axios.get(baseURLAPI+'/messages/getMessages/' + chatID, {
+        axios.get(baseURLAPI + '/messages/getMessages/' + chatID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -113,17 +114,17 @@ class ViewMessages extends React.Component {
     }
 
 
-    viewMessages = (chatID, receiverID, receiverName, receiverEmail) => {
+    viewMessages = (chatID, receiverID, receiverName, receiverEmail, receiverImage) => {
         const headers = {
             jwtToken: localStorage.jwtToken
         }
         const data = {
-            
+
             chatID: chatID
-          
+
         }
 
-        axios.post(baseURLAPI+'/messages/read/'+chatID, data, {
+        axios.post(baseURLAPI + '/messages/read/' + chatID, data, {
             headers: headers
         })
             .then((res) => {
@@ -136,12 +137,12 @@ class ViewMessages extends React.Component {
 
 
 
-        console.log([chatID, receiverID]);
+        console.log([chatID, receiverImage]);
         var viewNotiMessage = true;
-        
-        this.setState({ chatID, receiverID, receiverName, receiverEmail, viewNotiMessage });
+
+        this.setState({ chatID, receiverID, receiverName, receiverEmail, viewNotiMessage, receiverImage });
         this.getNewMessages(chatID);
-        this.setTable ();
+        this.setTable();
     };
     backToMessages = () => {
 
@@ -173,23 +174,39 @@ class ViewMessages extends React.Component {
                                     <Table.Body>
                                         <Table.Row>
                                             <Table.Cell>
+                                                <Image src={this.state.receiverImage} size='tiny' circular />
                                                 <strong> {this.state.receiverName}</strong>
                                                 <p> {this.state.receiverEmail}</p>
                                             </Table.Cell>
                                         </Table.Row>
                                         {this.state.messages.length > 0 ? (
                                             this.state.messages.map((details, index) => (
+
                                                 <Table.Row>
-                                                    {/* <Table.Cell>
-                                                    {details.ct_sender}
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {details.ct_receiver}
-                                                </Table.Cell> */}
+
                                                     <Table.Cell>
-                                                        {details.ct_message}
+
+                                                        {this.state.receiverID == parseInt(details.ct_sender) ? (
+                                                            <  div  >
+
+                                                                <Image src={this.state.receiverImage} avatar />
+                                                                <Label  basic     size ='large'color='teal' pointing='left' > {details.ct_message}</Label>
+                                                         
+                                                            </div>
+                                                        )
+                                                            : (  <  div  >
+                                                        < Label  basic    size ='large'  color='grey' pointing='right'>{details.ct_message}</Label>
+                                                        <Image src={this.state.userImage} avatar /></div>
+                                                            )
+                                                        }
                                                     </Table.Cell>
-                                                </Table.Row>))
+                                                </Table.Row>
+
+
+
+
+
+                                            ))
                                         ) :
                                             (
                                                 <Table.Row>
@@ -223,33 +240,33 @@ class ViewMessages extends React.Component {
                                 <h1>Inbox</h1>
                                 {this.state.requests.length > 0 ? (
                                     this.state.requests.map((details, index) => (
-                                        <Card style={{ width: '100%',padding:'2%' }} onClick={() => this.viewMessages(details.id, details.ID_USER_UUID, details.TX_USER_NAME, details.TX_USER_EMAIL)} >
-                                            {details.ct_unread == '1' ? (     < div>
-                                            <Icon style={{ float: "right", width: '10%' }} color='blue' name='circle' />
-                                                <Card.Content style={{ float: "left", width: '80%' }}  >     
-                                                
+                                        <Card style={{ width: '100%', padding: '2%' }} onClick={() => this.viewMessages(details.id, details.ID_USER_UUID, details.TX_USER_NAME, details.TX_USER_EMAIL, details.TX_PICTURE)} >
+                                            {details.ct_unread == '1' ? (< div>
+                                                <Icon style={{ float: "right", width: '10%' }} color='blue' name='circle' />
+                                                <Card.Content style={{ float: "left", width: '80%' }}  >
+
                                                     <Card.Description>
-                                                    {details.TX_USER_NAME}
+                                                        {details.TX_USER_NAME}  {details.TX_PICTURE}
                                                     </Card.Description>
                                                     <p><strong>Subject : </strong>{details.ct_subject} </p>
                                                     <p><strong>Catagory :   </strong>{details.ct_catagory} </p>
-                                                     
+
                                                 </Card.Content  >
-                                                </div>
-                                                
-                                                )
+                                            </div>
+
+                                            )
                                                 :
-                                                ( < div>
-                                                 <Icon style={{ float: "right", width: '10%' }} color='grey' name='circle outline' />    
-                                                <Card.Content style={{ float: "left", width: '80%' }}  >                                                          
-                                                    <Card.Description>
-                                                    {details.TX_USER_NAME}
-                                                    </Card.Description>
-                                                    <p><strong>Subject : </strong>{details.ct_subject} </p>
-                                                    <p><strong>Catagory :   </strong>{details.ct_catagory} </p>
-                                                     
-                                                </Card.Content> </div>
-                                                
+                                                (< div>
+                                                    <Icon style={{ float: "right", width: '10%' }} color='grey' name='circle outline' />
+                                                    <Card.Content style={{ float: "left", width: '80%' }}  >
+                                                        <Card.Description>
+                                                            {details.TX_USER_NAME}
+                                                        </Card.Description>
+                                                        <p><strong>Subject : </strong>{details.ct_subject} </p>
+                                                        <p><strong>Catagory :   </strong>{details.ct_catagory} </p>
+
+                                                    </Card.Content> </div>
+
                                                 )
                                             }
 

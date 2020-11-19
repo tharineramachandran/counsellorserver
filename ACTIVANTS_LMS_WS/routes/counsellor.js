@@ -126,19 +126,25 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
             COUNSELLORID]);
             var uploadtoS3   = false;
             var filestring =  [];
-            for (var file in COUNSELLOR_FILES ){ 
-               
+             
+            for (i = 0; i < COUNSELLOR_FILES.length; i++) {
+               var file  = COUNSELLOR_FILES[i]  ;
                 file.name = COUNSELLORID +"-"+  Math.floor(Math.random() * (1000000 - 1) + 1);  ;
-                filestring.push( file.name);
-            }
-  
+                filestring.push(file.name);
+                console.log( file.name);
+                console.log(filestring);
+
+
+              }
+              
+         
 
             if (user.rows.length == 1) {
                   uploadtoS3   = await  awsS3.uploadtoS3(COUNSELLOR_FILES , "counsellorverify");
 
             }
 
-            console.log(filestring);
+            console.log(uploadtoS3);
         if (user.rows.length == 1 && uploadtoS3) {
 
             const newCounsellorDetails = await pool.query(
@@ -251,12 +257,12 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
                     }
                 }
             }
-            res.json([{ error: "User not found ", message: "User not found" }]);
-            //  res.json("success");
+           // res.status(400).json([{ error: "User not found ", message: "User not found" }]);
+           res.status(200).json("success");
         }
 
 
-        res.json([{ error: "User not found ", message: "User not found" }]);
+        res.status(400).json([{ error: "User not found ", message: "User not found" }]);
     } catch (error) {
         console.error(error.message);
         res.status(400).json([{ error: "Duplicate account  found ", message: "Duplicate account  found" }]);

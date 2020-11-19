@@ -13,14 +13,14 @@
 
         function objectsS3(item, index) {
                       
-          console.log(item);
-          console.log(item.base64);
+      
+          console.log(item.base64.substring(0, 34  )   );
 
           var base64 = item.base64.split(',')
     buf = Buffer.from(base64[1] ,'base64')
     var data = { 
       Body: buf,
-      Key: file.name ,
+      Key: item.name ,
       Bucket:   bucket  ,
        
     };
@@ -36,7 +36,8 @@
         } 
       } catch (error) {
         console.log(error.message);
+        return false;
       }
-      return false;
+      return true;
 }
 module.exports = { uploadtoS3 }
