@@ -190,13 +190,13 @@ class ViewMessages extends React.Component {
                                                             <  div  >
 
                                                                 <Image src={this.state.receiverImage} avatar />
-                                                                <Label  basic     size ='large'color='teal' pointing='left' > {details.ct_message}</Label>
+                                                                 <Label  basic     size ='large'color='teal' pointing='left' > {details.ct_message}</Label>
                                                          
                                                             </div>
                                                         )
                                                             : (  <  div  >
                                                         < Label  basic    size ='large'  color='grey' pointing='right'>{details.ct_message}</Label>
-                                                        <Image src={this.state.userImage} avatar /></div>
+                                                       </div>
                                                             )
                                                         }
                                                     </Table.Cell>
@@ -246,7 +246,7 @@ class ViewMessages extends React.Component {
                                                 <Card.Content style={{ float: "left", width: '80%' }}  >
 
                                                     <Card.Description>
-                                                        {details.TX_USER_NAME}  {details.TX_PICTURE}
+                                                        {details.TX_USER_NAME}  
                                                     </Card.Description>
                                                     <p><strong>Subject : </strong>{details.ct_subject} </p>
                                                     <p><strong>Catagory :   </strong>{details.ct_catagory} </p>
@@ -304,7 +304,7 @@ class ViewMessages extends React.Component {
                                         <Card style={{ width: '100%' }} >
                                             <Card.Content>
                                                 <Card.Header>
-                                                    No Messages Yet..</Card.Header>
+                                                  Loading..</Card.Header>
                                             </Card.Content>
                                         </Card>
                                     )

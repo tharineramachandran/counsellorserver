@@ -125,18 +125,31 @@ const UserDashboard = (props) => {
                             <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {    setIsMessagesSelected(!isMessagesSelected);    setIsRequestSelected(false);    setIsRequestChangeSelected(false)  ;    setIsProfileSelected(false)  ; setIsRequestAcceptSelected(false)  ;   } }>
                                  View Messages
                             </Label>
+                          
+
+
+ 
+  <Popup
+          trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
+          <Icon name='mail' style={{ margin: '0px' }} />
+      </Label>}
+           
+          position='top right'
+     on='click'
+    popper={{ id: 'popper-container' }}
+    // trigger={<Button>View Message</Button>}
+   > 
+    <Popup.Content>
+    <ViewMessages />
+    </Popup.Content>
+  </Popup>
+
+
+
+
+ 
+
                              
-                            <Popup content={users}
-                                trigger={
-                                    <Label as='a' circular style={{ marginRight: '10px' }}>
-                                        <Icon name='question' style={{ margin: '0px' }} />
-                                    </Label>
-                                }
-                                style={style}
-                            />
-                            <Label as='a' circular style={{ marginRight: '10px' }}>
-                                <Icon name='mail' style={{ margin: '0px' }} />
-                            </Label>
                             <Label as='a' circular style={{ marginRight: '10px' }}>
                                 <Icon name='alarm' style={{ margin: '0px' }} />
                             </Label>
