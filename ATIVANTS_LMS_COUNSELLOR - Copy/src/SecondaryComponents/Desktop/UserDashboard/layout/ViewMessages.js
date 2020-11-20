@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Button, Form, Header, Image, Input,
-    Dropdown, Grid, Modal,
+    Dropdown, Grid, Modal, Tab,
     Message, Segment, Card, Img, Icon,
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
@@ -22,7 +22,13 @@ class ViewMessages extends React.Component {
         receiverEmail: '',
         viewNotiMessage: false,
         totalChats: 0,
-        receiverImage: ''
+        receiverImage: '',
+        panes: [],
+        read: [],
+        unread: [],
+        date: "",
+        loadingChats: "Loading chats",
+        loadingMessages: "Loading Messages"
     }
 
     componentDidMount() {
@@ -65,11 +71,93 @@ class ViewMessages extends React.Component {
             .then((res) => {
                 const requests = res.data;
                 const openModel = false;
+                console.log(["--requests---", requests])
+
+                var unread = [];
+                var read = [];
+                for (var i = 0; i < requests.length; i++) {
+                    var item = requests[i];
+                    read.push(item);
+                    if (item.ct_unread_user1) {
+                        if (item.ct_unread_user1 == 1) {
+                            unread.push(item);
+
+                        }
+                    } else {
+
+                        if (item.ct_unread_user2 == 1) {
+                            unread.push(item);
+
+                        }
+                    }
+                    var loadingChats = "No chats "
+                    this.setState({ read, unread, loadingChats })
+                }
                 this.setState({ requests, openModel });
             })
             .catch(function (error) {
                 console.log(error);
             });
+        console.log(["-----", this.state.read])
+        console.log(["-----", this.state.unread])
+        var panes =
+
+            [
+                {
+                    menuItem: 'All', render: () => <Tab.Pane>
+                        {this.state.read.length > 0 ? (
+                            this.state.read.map((details, index) => (
+                                <Card style={{ width: '100%', padding: '2%' }} onClick={() => this.viewMessages(details.id, details.ID_USER_UUID, details.TX_USER_NAME, details.TX_USER_EMAIL, details.TX_PICTURE)} >
+                                    <Card.Content style={{ float: "left", width: '80%' }}  >
+                                        <Card.Description>
+                                            {details.TX_USER_NAME}
+                                        </Card.Description>
+                                        <p><strong>Subject : </strong>{details.ct_subject} </p>
+                                        <p><strong>Catagory :   </strong>{details.ct_catagory} </p>
+                                    </Card.Content  >
+                                </Card>
+                            ))
+                        ) :
+                            (
+                                <Card style={{ width: '100%' }} >
+                                    <Card.Content>
+                                        <Card.Header>
+                                            {this.state.loadingChats} </Card.Header>
+                                    </Card.Content>
+                                </Card>
+                            )
+                            }
+                    </Tab.Pane>
+                },
+                {
+                    menuItem: 'Unread', render: () => <Tab.Pane>
+                        {this.state.unread.length > 0 ? (
+                            this.state.unread.map((details, index) => (
+                                <Card style={{ width: '100%', padding: '2%' }} onClick={() => this.viewMessages(details.id, details.ID_USER_UUID, details.TX_USER_NAME, details.TX_USER_EMAIL, details.TX_PICTURE)} >
+                                    <Card.Content style={{ float: "left", width: '80%' }}  >
+                                        <Card.Description>
+                                            {details.TX_USER_NAME}
+                                        </Card.Description>
+                                        <p><strong>Subject : </strong>{details.ct_subject} </p>
+                                        <p><strong>Catagory :   </strong>{details.ct_catagory} </p>
+
+                                    </Card.Content  >
+                                </Card>
+                            ))
+                        ) :
+                            (
+                                <Card style={{ width: '100%' }} >
+                                    <Card.Content>
+                                        <Card.Header>
+                                            {this.state.loadingChats}  </Card.Header>
+                                    </Card.Content>
+                                </Card>
+                            )
+                        }
+                    </Tab.Pane>
+                    },
+            ];
+        this.setState({ panes })
     }
 
     sendMessage = () => {
@@ -106,7 +194,10 @@ class ViewMessages extends React.Component {
             }
         })
             .then((res) => {
-                this.setState({ messages: res.data })
+
+                if (res.data.length == 0) {
+                    this.setState({ messages: res.data, loadingMessages: "No messages found" })
+                } else { this.setState({ messages: res.data }) }
             })
             .catch(function (error) {
                 console.log(error);
@@ -120,8 +211,8 @@ class ViewMessages extends React.Component {
         }
         const data = {
 
-            chatID: chatID
-
+            chatID: chatID,
+            userID: localStorage.userID
         }
 
         axios.post(baseURLAPI + '/messages/read/' + chatID, data, {
@@ -136,10 +227,8 @@ class ViewMessages extends React.Component {
             });
 
 
-
         console.log([chatID, receiverImage]);
         var viewNotiMessage = true;
-
         this.setState({ chatID, receiverID, receiverName, receiverEmail, viewNotiMessage, receiverImage });
         this.getNewMessages(chatID);
         this.setTable();
@@ -151,26 +240,29 @@ class ViewMessages extends React.Component {
 
     };
 
+    renderDate = (date) => {
+        var Date = date.split("T");
+        var dayofdate = Date[0];
+        var timeofdate = Date[1].substring(0, 5);
+        return (
+            <p>{dayofdate} , {timeofdate} </p>
+        )
+    };
+
     _onKeyUp = e => {
         var value = e.target.value.toLowerCase();
         this.setState({ message: value });
     };
     render() {
         return (
-            <Grid columns='equal' divided>
-
-
-
+            <Grid style={{ height: '400px' }} columns='equal' divided>
                 {this.state.viewNotiMessage ? (
-
                     <Grid.Row>
-                        <Grid.Column >
-                            < Container style={{ padding: "5px" }}> <Button onClick={this.backToMessages} style={{ float: 'left' }}   >    <Icon color='black' name='angle left' /> Back to inbox</Button>
-                                <br />
-                                <br />
+                        <Grid.Column    >
+                            < Container > <Button onClick={this.backToMessages} icon="angle left" style={{ float: 'left' }} />
                             </Container>
                             < Container  >
-                                <Table basic='very' celled collapsing>
+                                <Table style={{ borderColor: '#FFFFFF', borderBottomColor: '#FFFFFF', borderBottom: '0px', borderTop: '0px', width: '450px', height: '200px', overflowY: 'scroll' }} collapsing>
                                     <Table.Body>
                                         <Table.Row>
                                             <Table.Cell>
@@ -178,66 +270,100 @@ class ViewMessages extends React.Component {
                                                 <strong> {this.state.receiverName}</strong>
                                                 <p> {this.state.receiverEmail}</p>
                                             </Table.Cell>
-                                        </Table.Row>
-                                        {this.state.messages.length > 0 ? (
-                                            this.state.messages.map((details, index) => (
+                                        </Table.Row><Table.Row>
 
-                                                <Table.Row>
-
-                                                    <Table.Cell>
-
-                                                        {this.state.receiverID == parseInt(details.ct_sender) ? (
-                                                            <  div  >
-
-                                                                <Image src={this.state.receiverImage} avatar />
-                                                                 <Label  basic     size ='large'color='teal' pointing='left' > {details.ct_message}</Label>
-                                                         
-                                                            </div>
-                                                        )
-                                                            : (  <  div  >
-                                                        < Label  basic    size ='large'  color='grey' pointing='right'>{details.ct_message}</Label>
-                                                       </div>
+                                            <Table.Cell>< div>
+                                                {this.state.messages.length > 0 ? (
+                                                    this.state.messages.map((details, index) => (
+                                                        <List>
+                                                            {this.state.receiverID == parseInt(details.ct_sender) ? (
+                                                                <List.Item style={{ width: '400px' }}>
+                                                                    <List.Content floated='left' >
+                                                                        <Image src={this.state.receiverImage} avatar />
+                                                                        <Label basic size='large' color='teal' pointing='left' > {details.ct_message}</Label>
+                                                                        {this.renderDate(details.ct_date)}
+                                                                    </List.Content>
+                                                                </List.Item>
                                                             )
-                                                        }
-                                                    </Table.Cell>
-                                                </Table.Row>
+                                                                : (<  List.Item style={{ width: '400px' }}   >
+                                                                    <List.Content floated='right'    >
+                                                                        < Label basic size='large' color='grey' pointing='right'>{details.ct_message}</Label>
+                                                                        <br />
+                                                                        {this.renderDate(details.ct_date)}
+                                                                    </List.Content>
+                                                                </List.Item>
+                                                                )
+                                                            }
 
+                                                        </List>
 
+                                                    )
+                                                    )
+                                                ) :
+                                                    (
+                                                        <div>
+                                                            {this.state.loadingMessages}
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                            </Table.Cell>
+                                        </Table.Row><Table.Row>
 
+                                            <Table.Cell>
 
+                                                {/* < List >
+                                                    <List.Item  >
+                                                        
+                                                    <List.Content floated='right'>
+                                                    <Button style ={{width:"100px"}} onClick={() => this.sendMessage()}>  Send </Button>
+      </List.Content>
+       
+      <List.Content>   */}
+          {/* <Input style ={{width:"300px"}} 
+                                                                type="Message"
+                                                                onChange={this._onKeyUp}
+                                                                name="m"
+                                                                id="m"
+                                                                placeholder="Message"
+                                                            />
+                                                             */}
+                                                            <Form  >
+        <Form.Group>
+          <Form.Input
+           style ={{width:"300px"}} 
+           type="Message"
+           onChange={this._onKeyUp}
+           name="m"
+           id="m"
+           placeholder="Message"
+       
+          />
+        
+          <Form.Button style ={{width:"100px"}} onClick={() => this.sendMessage()}>  Send </Form.Button>
+        </Form.Group>
+      </Form>           
+{/*                                                             
+                                                            </List.Content>
+    </List.Item>
 
-                                            ))
-                                        ) :
-                                            (
-                                                <Table.Row>
-                                                    <Table.Cell>
-                                                        No Messages found for you
-                                        </Table.Cell>
-                                                </Table.Row>
-                                            )
-                                        }
+                                                </List > */}
+                                            </Table.Cell>
+                                        </Table.Row>
                                     </Table.Body>
                                 </Table>
-                                <Segment>
-                                    <Input
-                                        type="Message"
-                                        onChange={this._onKeyUp}
-                                        name="m"
-                                        id="m"
-                                        placeholder="Message"
-                                    /> <Button onClick={() => this.sendMessage()}>  Send </Button>
-                                </Segment>
                             </Container>
                         </Grid.Column>
-
                     </Grid.Row>
 
                 )
                     :
                     (< Grid.Row >
                         <Grid.Column>
-                            <Container style={{ padding: '5%' }}>
-                                <h1>Inbox</h1>
+
+                            <Tab menu={{ color: "teal", attached: false, tabular: false }} panes={this.state.panes} />
+                            {/* <Container style={{ padding: '5%' }}>
+                                <p>Messages</p>
                                 {this.state.requests.length > 0 ? (
                                     this.state.requests.map((details, index) => (
                                         <Card style={{ width: '100%', padding: '2%' }} onClick={() => this.viewMessages(details.id, details.ID_USER_UUID, details.TX_USER_NAME, details.TX_USER_EMAIL, details.TX_PICTURE)} >
@@ -246,7 +372,7 @@ class ViewMessages extends React.Component {
                                                 <Card.Content style={{ float: "left", width: '80%' }}  >
 
                                                     <Card.Description>
-                                                        {details.TX_USER_NAME}  
+                                                        {details.TX_USER_NAME}
                                                     </Card.Description>
                                                     <p><strong>Subject : </strong>{details.ct_subject} </p>
                                                     <p><strong>Catagory :   </strong>{details.ct_catagory} </p>
@@ -275,41 +401,18 @@ class ViewMessages extends React.Component {
                                         </Card>
 
 
-
-
-
-                                        //                                 <Card  style={{ width: '100%' }}  onClick={() => this.viewMessages(details.id, details.ID_USER_UUID, details.TX_USER_NAME, details.TX_USER_EMAIL)} >
-
-                                        // <Card.Content  > {details.ct_unread  == '1'? (   
-
-                                        //                                                  <Icon    floated='right' color='blue' name='circle' /> 
-
-                                        //                                             )
-                                        //                                             :
-                                        //                                             ( 
-                                        //                                                  <Icon   floated='right'  color='grey' name='circle outline' /> 
-                                        //                                             )
-                                        // }
-                                        //                                         <Card.Description>
-                                        //                                             {details.TX_USER_NAME}</Card.Description>
-                                        //                                             <p>
-                                        //                                             {details.ct_subject } </p>
-                                        //                                             </Card.Content>
-
-
-                                        //                                 </Card>
                                     ))
                                 ) :
                                     (
                                         <Card style={{ width: '100%' }} >
                                             <Card.Content>
                                                 <Card.Header>
-                                                  Loading..</Card.Header>
+                                                    Loading..</Card.Header>
                                             </Card.Content>
                                         </Card>
                                     )
                                 }
-                            </Container>
+                            </Container> */}
                         </Grid.Column>
                     </Grid.Row >
                     )

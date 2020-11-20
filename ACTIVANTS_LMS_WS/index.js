@@ -60,9 +60,8 @@ app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
 //get All counsellor
 app.get("/user/:id", async (req, res) => {
   try { 
-var   userId   = req.params.id;
-
-const user = await pool.query('SELECT * FROM "T_USER" WHERE "ID_USER_UUID" = $1', [userId]);
+var   userId   = req.params.id; 
+const user = await pool.query('SELECT "TX_PICTURE",   "IS_COUNSELLOR" , "ID_USER_UUID" , "TX_USER_EMAIL" , "TX_USER_NAME"      FROM "T_USER" WHERE "ID_USER_UUID" = $1', [userId]);
 
 
     res.json({

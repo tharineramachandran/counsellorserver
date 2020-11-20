@@ -32,7 +32,7 @@ import {baseURLAPI ,baseURL }from "../../../Global";
  
 const axios = require('axios');
 toast.configure();
-
+ 
 const UserDashboard = (props) => {
 
     const setAuth = useContext(Authorize);
@@ -87,11 +87,7 @@ const UserDashboard = (props) => {
         setAuth(false);
     }
 
-    const style = {
-        borderRadius: 10,
-        padding: '1em',
-        width: '10rem'
-    }
+    
 
     var users = `This is just an amazing website. Isn't it...?? `;
 
@@ -122,31 +118,34 @@ const UserDashboard = (props) => {
                             <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {   setIsMessagesSelected(false);  setIsRequestSelected(!isRequestAcceptSelected);  setIsRequestChangeSelected(false)  ;    setIsProfileSelected(false)  ; setIsRequestAcceptSelected(false)  ;   } }>
                                  View Requests  
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {    setIsMessagesSelected(!isMessagesSelected);    setIsRequestSelected(false);    setIsRequestChangeSelected(false)  ;    setIsProfileSelected(false)  ; setIsRequestAcceptSelected(false)  ;   } }>
-                                 View Messages
-                            </Label>
-                          
-
-
+                            
  
   <Popup
           trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
           <Icon name='mail' style={{ margin: '0px' }} />
       </Label>}
-           
+        size='mini'
           position='top right'
      on='click'
-    popper={{ id: 'popper-container' }}
+     flowing hoverable
+   // popper={{ id: 'popper-container' }}
     // trigger={<Button>View Message</Button>}
-   > 
-    <Popup.Content>
-    <ViewMessages />
-    </Popup.Content>
+     > 
+   <Popup.Content  >
+   
+  <Grid     style={{width: '500px' , height :'400px',  overflowY: 'scroll', marginBottom: "15px"   }}    >
+      <Grid.Column  >
+      <ViewMessages  
+ 
+  />
+      </Grid.Column>
+    </Grid>  
+  </Popup.Content> 
+
   </Popup>
 
-
-
-
+   
+ 
  
 
                              
@@ -175,7 +174,7 @@ const UserDashboard = (props) => {
             {isRequestChangeSelected && <ViewChangeRequest />}
             
             {isRequestAcceptSelected && <ViewAccepted />}
-            {isMessagesSelected && <ViewMessages />}
+            {/* {isMessagesSelected && <ViewMessages />} */}
             {isRequestSelected && <ViewRequest />}
             {/* {isProfileSelected && <ViewProfile />}  */}
             {/* {!isProfileSelected && <Search />} */}

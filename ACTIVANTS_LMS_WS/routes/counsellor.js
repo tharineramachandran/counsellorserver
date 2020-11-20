@@ -131,8 +131,8 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
                var file  = COUNSELLOR_FILES[i]  ;
                 file.name = COUNSELLORID +"-"+  Math.floor(Math.random() * (1000000 - 1) + 1);  ;
                 filestring.push(file.name);
-                console.log( file.name);
-                console.log(filestring);
+              
+                
 
 
               }
@@ -144,7 +144,8 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
 
             }
 
-            console.log(uploadtoS3);
+          
+            
         if (user.rows.length == 1 && uploadtoS3) {
 
             const newCounsellorDetails = await pool.query(

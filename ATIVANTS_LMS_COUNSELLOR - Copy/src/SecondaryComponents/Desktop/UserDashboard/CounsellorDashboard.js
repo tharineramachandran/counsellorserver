@@ -39,7 +39,7 @@ toast.configure();
 const CounsellorDashboard = (props) => {
 
     const setAuth = useContext(Authorize);
-    const [userDetails, setUserDetails] = useState({ name: '', email: '', isCounsellor: '', isDetailsProvided: '' });
+    const [userDetails, setUserDetails] = useState({ name: '', email: '', isCounsellor: '', isDetailsProvided: true });
     const [isProfileSelected, setIsProfileSelected] = useState(false); 
     const [isRequestSelected, setisRequestSelected] = useState(false);
     const [isViewDeclineSelected, setViewDeclineSelected] = useState(false); 
@@ -148,20 +148,30 @@ const CounsellorDashboard = (props) => {
                             <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {     setIsMessagesSelected(false);   setViewChangeSelected(!isViewChangeSelected);        setViewAcceptSelected(false);        setViewDeclineSelected(false)  ;               setIsProfileSelected(false);             } }>
                                  View Change Request 
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {    setIsMessagesSelected(!isMessagesSelected);    setViewChangeSelected(false);        setViewAcceptSelected(false);        setViewDeclineSelected(false)  ;               setIsProfileSelected(false);          } }>
-                                 View Messages
-                            </Label>
-                            <Popup content={users}
-                                trigger={
-                                    <Label as='a' circular style={{ marginRight: '10px' }}>
-                                        <Icon name='question' style={{ margin: '0px' }} />
-                                    </Label>
-                                }
-                                style={style}
-                            />
-                            <Label as='a' circular style={{ marginRight: '10px' }}>
-                                <Icon name='mail' style={{ margin: '0px' }} />
-                            </Label>
+                            <Popup
+          trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
+          <Icon name='mail' style={{ margin: '0px' }} />
+      </Label>}
+        size='mini'
+          position='top right'
+     on='click'
+     flowing hoverable
+   // popper={{ id: 'popper-container' }}
+    // trigger={<Button>View Message</Button>}
+     > 
+   <Popup.Content  >
+   
+  <Grid     style={{width: '500px' , height :'400px',  overflowY: 'scroll', marginBottom: "15px"   }}    >
+      <Grid.Column  >
+      <ViewMessages  
+ 
+  />
+      </Grid.Column>
+    </Grid>  
+  </Popup.Content> 
+
+  </Popup>
+
                             <Label as='a' circular style={{ marginRight: '10px' }}>
                                 <Icon name='alarm' style={{ margin: '0px' }} />
                             </Label>
@@ -189,7 +199,7 @@ const CounsellorDashboard = (props) => {
             <Grid.Row><Grid.Column>
             {isDetailsProvided ? (  
             
-           <h3>Welcome Back</h3>
+           <h3> </h3>
              
             ):(
              

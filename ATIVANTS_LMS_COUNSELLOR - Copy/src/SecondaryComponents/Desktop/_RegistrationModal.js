@@ -383,7 +383,27 @@ const _RegistrationModal = props => {
                                     <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
                                         Sign up for Students
                             </Header>
-                                    <br />
+                                    <br />    <Form size='large' >
+                                        <List divided relaxed>
+                                            <List.Item>
+                                                <Button color='SingPass'>
+                                                    <Icon name='SingPass' /> Log In with SingPass
+                                    </Button> &nbsp;&nbsp;&nbsp;
+
+                                        <Button color='facebook'>
+                                                    <Icon name='facebook' /> Log In with Facebook
+                                    </Button>
+                                            </List.Item>
+                                            <List.Item>
+                                                <Button color='red' onClick={_handleGoogleSignInClick}>
+                                                    <Icon name='google' /> Log In with Google &nbsp;&nbsp;
+                                    </Button> &nbsp;&nbsp;&nbsp;
+                                    <Button color='linkedin'>
+                                                    <Icon name='linkedin' /> Log In with LinkedIn &nbsp;&nbsp;
+                                    </Button>
+                                            </List.Item>
+                                        </List>
+                                    </Form>
                                     <Divider horizontal>Or</Divider>
                                     <Form size='small' onSubmit={onSubmitStudentSignUpForm}>
                                         <Segment stacked>

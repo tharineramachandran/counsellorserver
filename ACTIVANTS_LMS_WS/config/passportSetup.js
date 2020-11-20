@@ -24,8 +24,9 @@ passport.use(new GoogleStrategy({
     clientSecret: keys.google.clientSecret,
     callbackURL: CLIENT_BASEURL_PAGE_URL +"/socialauth/google/callback"
 },
-    async (accessToken, refreshToken, profile, done) => {
+async (accessToken, refreshToken, profile, done) => {
         //4.called by custom callback, fires back again to the custom call back  
+         
         try {
             const user = await pool.query('SELECT * FROM "T_USER" WHERE "TX_GOOGLE_ID" = $1', [profile.id]);
             var datetime = new Date();
@@ -36,8 +37,7 @@ passport.use(new GoogleStrategy({
             else {
                 
             console.log("--------------         normal user             ---------------");
-            console.log(profile);
-            console.log(profile.emails[0].value);
+           
                 let newUser = await pool.query(
                     'INSERT INTO "T_USER" ("TX_USER_NAME","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE", "TX_GOOGLE_ID", "TX_USER_EMAIL","IS_COUNSELLOR") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
                     [profile.displayName, 1, datetime.toISOString().slice(0, 10), 1,  profile.id,  profile.emails[0].value,3]
@@ -47,7 +47,7 @@ passport.use(new GoogleStrategy({
 
         } catch (err) { 
             console.log("-----------------------------");
-            console.error(err.message);
+         
         }
     }
 ));

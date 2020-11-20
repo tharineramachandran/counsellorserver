@@ -17,18 +17,13 @@ const Authorize = React.createContext();
 const DesktopComponent = ({ children }) => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
-  const [isCounsellor, setIsCounsellor] = useState(0); 
+   
   const setAuth = (boolean) => {
 
     setIsAuthenticated(boolean);
 
   } 
-
-  const setCount = (boolean) => {
-
-    setIsCounsellor(boolean);
-
-  } 
+ 
 
   const checkAuthenticated = async () => {
     try {
@@ -38,11 +33,11 @@ const DesktopComponent = ({ children }) => {
  
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);        
-        const id = urlParams.get('id');
+        const CalendarId = urlParams.get('id');
          
-          if (id && localStorage.userID) {
+          if (CalendarId && localStorage.userID) {
             const response = await axios ({
-              url: baseURLAPI+"/request/userID?userID="+localStorage.userID+"&requestID="+id     ,
+              url: baseURLAPI+"/request/userID?userID="+localStorage.userID+"&requestID="+CalendarId     ,
               method: "GET"
             })
             
@@ -74,7 +69,7 @@ const DesktopComponent = ({ children }) => {
           localStorage.clear();
 
           setIsAuthenticated(false);
-          toast.error("An error occured, Try again", {
+          toast.error("Your session expired.Login again", {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: true,
@@ -95,11 +90,12 @@ const DesktopComponent = ({ children }) => {
             throw new Error("failed to authenticate user");
           })
           .then(parseResponse => {
-          
-            console.log(["------------------------",parseResponse]); 
+           
+            localStorage.setItem("email", parseResponse.user.TX_USER_EMAIL);
              localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
-              localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
- 
+             localStorage.setItem("image", parseResponse.user.TX_PICTURE);
+             localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
+             localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
           }); 
       }
       else {             
@@ -117,43 +113,15 @@ const DesktopComponent = ({ children }) => {
             if (response.status === 200) return response.json();
             throw new Error("failed to authenticate user");
           })
-          .then(responseJson => {
-            console.log("responseJson is -====", responseJson);            
-            localStorage.setItem("isCounsellor", responseJson.isCounsellor);
-
-
-try { if (parseInt(localStorage.isCounsellor) == 3 ){    
-              fetch(baseURLAPI+"/user/"+responseJson.userID, {
-                method: "GET",
-                
-              })
-              .then(response => {
-                if (response.status === 200) return response.json();
-                throw new Error("failed to authenticate user");
-              })
-              .then(parseResponse => { 
-                console.log(["------------------------",parseResponse]); 
-
-                  localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
-                 localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
-                 if (parseInt(localStorage.isCounsellor)    == 1){
-                  console.log(["------------SET------------" ]); 
-                  setIsCounsellor(true);
+          .then(parseResponse => {
+            console.log("responseJson is -====", parseResponse);           
+            localStorage.setItem("jwtToken", parseResponse.jwtToken)
             
-                }else {
-                   
-                  console.log(["------------SET------------" ]); 
-                  setIsCounsellor(false);
-                } 
-
-              });
-
-            }
- }catch(err){console.log(err);}
-           
- 
-            localStorage.setItem("jwtToken", responseJson.jwtToken); 
-            localStorage.setItem("userID", responseJson.userID); 
+            localStorage.setItem("email", parseResponse.user.TX_USER_EMAIL);
+            localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
+            localStorage.setItem("image", parseResponse.user.TX_PICTURE);
+            localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
+            localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
 
             const res = fetch(baseURLAPI+"/auth/verify/", {
               method: "GET",
@@ -176,49 +144,13 @@ try { if (parseInt(localStorage.isCounsellor) == 3 ){
   };
    
   useEffect(() => {
-     checkAuthenticated();
-     
-    
-       
-      console.log(["------------SET--  sdfasdff ----------" ,     localStorage.userID,localStorage.isCounsellor             ]); 
-     
-
-        fetch(baseURLAPI+"/user/"+localStorage.userID, {
-        method: "GET",
+     checkAuthenticated(); 
         
-      })
-      .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error("failed to authenticate user");
-      })
-      .then(parseResponse => {
      
-        console.log(["------------------------",parseResponse]); 
-        if(parseResponse){ 
-         localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR); 
-         localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
-        }
-         console.log(["------------SET  C------------",localStorage.isCounsellor ]); 
-
-         if (parseInt(localStorage.isCounsellor)    == 1){
-           console.log(["------------SET------------" ]); 
-           setIsCounsellor(true);
      
-         }else {
-            
-           console.log(["------------SET------------" ]); 
-           setIsCounsellor(false);
-         } 
-      });
-
-     
-
-
-
   }, []);
 
- 
-
+  
 
   return (
     <Responsive getWidth={GetWidthOfComponent} minWidth={Responsive.onlyTablet.minWidth}>
