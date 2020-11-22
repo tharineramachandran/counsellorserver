@@ -24,12 +24,12 @@ router.post("/register", validInfo, async (req, res) => {
     var datetime = new Date();
 
     let newUser = await pool.query(
-      'INSERT INTO "T_USER" ("TX_USER_NAME","TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
-      [TX_USER_NAME, TX_USER_EMAIL, bcryptPassword, 0, datetime.toISOString().slice(0, 10), 0,0]
+      'INSERT INTO "T_USER" ("TX_USER_NAME", "TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR","TX_IS_COMPLETED") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
+      [TX_USER_NAME, TX_USER_EMAIL, bcryptPassword, 0, datetime.toISOString().slice(0, 10), 0,0,0]
     );
 
     const jwtToken = jwtGenerator(newUser.rows[0].ID_USER_UUID);
-    res.json({ jwtToken : jwtToken,   isCounsellor :  newUser.rows[0].IS_COUNSELLOR,      userID    :newUser.rows[0].ID_USER_UUID                            });
+    res.json({ jwtToken : jwtToken,    user    :newUser.rows[0]                            });
 
   } catch (err) {
     console.log(err);
@@ -44,7 +44,7 @@ router.post("/login", validInfo, async (req, res) => {
   try {
 
     const { TX_USER_EMAIL, TX_USER_PASSWORD } = req.body;
-    const user = await pool.query('SELECT * FROM "T_USER" WHERE "TX_USER_EMAIL" = $1',
+    const user = await pool.query('SELECT "TX_USER_NAME","ID_USER_UUID" ,  "TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR","TX_IS_COMPLETED" FROM "T_USER" WHERE "TX_USER_EMAIL" = $1',
       [TX_USER_EMAIL]);
 
     if (user.rows.length === 0) {
@@ -58,7 +58,7 @@ router.post("/login", validInfo, async (req, res) => {
     }
 
     const jwtToken = jwtGenerator(user.rows[0].ID_USER_UUID);
-    res.json({ jwtToken, isCounsellor : user.rows[0].IS_COUNSELLOR , userID : user.rows[0].ID_USER_UUID     });
+    res.json({ jwtToken,  user : user.rows[0]     });
 
 
   } catch (error) {
@@ -96,8 +96,8 @@ router.post("/counsellor/register", validInfo, async (req, res) => {
     var datetime = new Date();
 
     let newUser = await pool.query(
-      'INSERT INTO "T_USER" ("TX_USER_NAME","TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
-      [TX_USER_NAME, TX_USER_EMAIL, bcryptPassword, 0, datetime.toISOString().slice(0, 10), 0,1]
+      'INSERT INTO "T_USER" ("TX_USER_NAME","TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR","TX_IS_COMPLETED") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
+      [TX_USER_NAME, TX_USER_EMAIL, bcryptPassword, 0, datetime.toISOString().slice(0, 10), 0,1,0]
     );
 
     const jwtToken = jwtGenerator(newUser.rows[0].ID_USER_UUID);

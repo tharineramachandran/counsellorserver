@@ -39,8 +39,8 @@ async (accessToken, refreshToken, profile, done) => {
             console.log("--------------         normal user             ---------------");
            
                 let newUser = await pool.query(
-                    'INSERT INTO "T_USER" ("TX_USER_NAME","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE", "TX_GOOGLE_ID", "TX_USER_EMAIL","IS_COUNSELLOR") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
-                    [profile.displayName, 1, datetime.toISOString().slice(0, 10), 1,  profile.id,  profile.emails[0].value,3]
+                    'INSERT INTO "T_USER" ("TX_USER_NAME","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE", "TX_GOOGLE_ID", "TX_USER_EMAIL","IS_COUNSELLOR","TX_IS_COMPLETED") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
+                    [profile.displayName, 1, datetime.toISOString().slice(0, 10), 1,  profile.id,  profile.emails[0].value,3,0]
                 );
                 done(null, newUser);
             }

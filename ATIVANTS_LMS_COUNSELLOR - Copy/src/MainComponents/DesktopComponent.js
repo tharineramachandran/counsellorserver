@@ -96,6 +96,8 @@ const DesktopComponent = ({ children }) => {
              localStorage.setItem("image", parseResponse.user.TX_PICTURE);
              localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
              localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
+             localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
+              
           }); 
       }
       else {             
@@ -121,7 +123,9 @@ const DesktopComponent = ({ children }) => {
             localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
             localStorage.setItem("image", parseResponse.user.TX_PICTURE);
             localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
-            localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
+            localStorage.setItem("name", parseResponse.user.TX_USER_NAME);  
+             localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
+
 
             const res = fetch(baseURLAPI+"/auth/verify/", {
               method: "GET",

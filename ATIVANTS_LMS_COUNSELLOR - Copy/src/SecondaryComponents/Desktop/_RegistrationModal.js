@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import googleLogin from "google-auth-library"
 
-import {baseURLAPI ,baseURL }from "../../Global";
+import { baseURLAPI, baseURL } from "../../Global";
 
 
 
@@ -25,8 +25,8 @@ const _RegistrationModal = props => {
     const [ModalConsellorTypeSingup, setModalConsellorTypeSingup] = useState(false);
     const [openPassword, setPasswordOpen] = useState(false)
     const [ModalStudentSignUp, setModalStudentSignUp] = useState(false);
-    const [ ModalPassword, setModalPassword] = useState(false);
-     
+    const [ModalPassword, setModalPassword] = useState(false);
+
     const [inputs, setInputs] = useState({
         TX_USER_NAME: "",
         TX_USER_EMAIL: "",
@@ -63,25 +63,23 @@ const _RegistrationModal = props => {
             const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
             console.log(body);
 
-            const response = await fetch(baseURLAPI+"/auth/register", {
+            const response = await fetch(baseURLAPI + "/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
 
-            const parseRes = await response.json()
-            console.log("registration data", parseRes)
+            const parseResponse = await response.json()
+            console.log("registration data", parseResponse)
 
-            if (parseRes.jwtToken) {
-                await    localStorage.setItem("jwtToken", parseRes.jwtToken)
-                await    localStorage.setItem("isCounsellor", parseRes.isCounsellor)
-                await  localStorage.setItem("userID", parseRes.userID); 
-
-                
-
-
-
-
+            if (parseResponse.jwtToken) {
+                await localStorage.setItem("jwtToken", parseResponse.jwtToken)
+                await localStorage.setItem("email", parseResponse.user.TX_USER_EMAIL);
+                await localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
+                await localStorage.setItem("image", parseResponse.user.TX_PICTURE);
+                await localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
+                await localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
+                await localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
 
 
                 setAuth(true);
@@ -96,9 +94,9 @@ const _RegistrationModal = props => {
                 });
             }
             else {
-                setErrorSignUpMessage(parseRes);
-              setAuth(false);
-            } 
+                setErrorSignUpMessage(parseResponse);
+                setAuth(false);
+            }
 
         } catch (error) {
             console.log(error.message);
@@ -122,18 +120,25 @@ const _RegistrationModal = props => {
                 localStorage.checkbox = false;
             }
             const body = { TX_USER_EMAIL, TX_USER_PASSWORD };
-            const response = await fetch(baseURLAPI+"/auth/login", {
+            const response = await fetch(baseURLAPI + "/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
 
             const parseRes = await response.json()
- 
+            console.log(["--------------------------------ss",parseRes]);
             if (parseRes.jwtToken) {
-                localStorage.setItem("jwtToken", parseRes.jwtToken)
-                localStorage.setItem("isCounsellor", parseRes.isCounsellor)
-                localStorage.setItem("userID", parseRes.userID); 
+                
+
+                   localStorage.setItem("jwtToken", parseRes.jwtToken)
+                  localStorage.setItem("email", parseRes.user.TX_USER_EMAIL);
+                  localStorage.setItem("isCounsellor", parseRes.user.IS_COUNSELLOR);
+                  localStorage.setItem("image", parseRes.user.TX_PICTURE);
+                  localStorage.setItem("userID", parseRes.user.ID_USER_UUID);
+                  localStorage.setItem("name", parseRes.user.TX_USER_NAME);
+                  localStorage.setItem("isCompleted", parseRes.user.TX_IS_COMPLETED);
+
                 setAuth(true);
                 toast.success('login successfull!', {
                     position: "top-right",
@@ -148,7 +153,7 @@ const _RegistrationModal = props => {
             }
             else {
                 setErrorLoginMessage(parseRes);
-                 setAuth(false);
+                setAuth(false);
             }
 
 
@@ -188,7 +193,7 @@ const _RegistrationModal = props => {
     const _handleGoogleSignInClick = async () => {
         console.log(baseURLAPI);
         localStorage.setItem("isCounsellor", 0);
-        window.open(baseURLAPI+"/socialauth/google/0", "_self");
+        window.open(baseURLAPI + "/socialauth/google/0", "_self");
     }
 
     console.log(rememberMe);
@@ -295,7 +300,7 @@ const _RegistrationModal = props => {
                                             <a href='#'>Sign Up as a Student</a>&nbsp;&nbsp;
                                         </span > |
                                         <span onClick={CounsellorSignUp}>&nbsp;&nbsp;<a href='#'>Sign Up as a Counsellor</a></span>
-                                        <br/>
+                                        <br />
                                         <span onClick={PasswordSignUp}>&nbsp;&nbsp;<a href='#'>Forgot Password</a></span>
 
 
@@ -344,7 +349,7 @@ const _RegistrationModal = props => {
                     </Modal>
                 </>
             }
- {ModalPassword &&
+            {ModalPassword &&
                 <>
                     <Modal
                         closeIcon
@@ -358,7 +363,7 @@ const _RegistrationModal = props => {
                         <Modal.Content scrolling>
                             <Grid>
                                 <Grid.Column style={{ maxWidth: '100%', backgroundColor: 'white' }}>
-                                    <ChangePassword/>
+                                    <ChangePassword />
                                 </Grid.Column>
                             </Grid>
                         </Modal.Content>

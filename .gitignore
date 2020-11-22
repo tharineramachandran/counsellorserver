@@ -1,3 +1,6 @@
 
-*.json
 *.gz
+ 
+ACTIVANTS_LMS_WS/node_modules/*
+ATIVANTS_LMS_COUNSELLOR - Copy/node_modules/*
+.gitignore

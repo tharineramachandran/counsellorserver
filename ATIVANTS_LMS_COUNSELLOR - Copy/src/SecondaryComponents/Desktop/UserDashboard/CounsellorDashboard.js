@@ -53,7 +53,7 @@ const CounsellorDashboard = (props) => {
     const { name, email, isCounsellor, isDetailsProvided } = userDetails;
     var user = [];
      
-    const [open, setOpen] = React.useState(false) 
+    const [open, setOpen] = useState(false) 
    
     async function getName() {
         try {

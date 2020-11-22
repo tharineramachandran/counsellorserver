@@ -52,6 +52,9 @@ app.use("/dashboard", require("./routes/dashboard"));
 app.use("/socialauth", socialAuth);
 app.use("/profile", profileAuth)
 app.use("/Counsellor", require("./routes/counsellor"));
+app.use("/Counsellee", require("./routes/counsellee"));
+
+ 
 app.use("/request", require("./routes/request"));
 app.use("/session", require("./routes/session"));
 app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
