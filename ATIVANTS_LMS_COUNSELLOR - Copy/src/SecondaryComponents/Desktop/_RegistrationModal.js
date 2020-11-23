@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-    Header, Icon, Form, Image, Message,Container,
+    Header, Icon, Form, Image, Message, Container,
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Checkbox, Divider, List, Label
 } from 'semantic-ui-react';
 import Counsellor_Registration from './_Counsellor_Registration';
@@ -8,7 +8,7 @@ import Counsellor_Registration from './_Counsellor_Registration';
 
 import ReCAPTCHA from "react-google-recaptcha";
 import keys from "../../env";
-
+import UserRegisteration from "./userRegistrationModel/UserRegisteration"
 import ChangePassword from "./UserDashboard/layout/ChangePasswordModel"
 import { Authorize } from "../../MainComponents/DesktopComponent";
 import axios from '../../Store/_AxiosInstance';
@@ -21,8 +21,8 @@ import { baseURLAPI, baseURL } from "../../Global";
 
 
 const _RegistrationModal = props => {
-     
-    const [ TermsOpen, setTermsOpen] = useState(false);
+
+    const [TermsOpen, setTermsOpen] = useState(false);
     const [open, setOpen] = useState(true);
     const [defHeight, setHeight] = useState(window.innerWidth);
     const [ModalLogin, setModalLogin] = useState(true);
@@ -30,6 +30,8 @@ const _RegistrationModal = props => {
     const [openPassword, setPasswordOpen] = useState(false)
     const [ModalStudentSignUp, setModalStudentSignUp] = useState(false);
     const [ModalPassword, setModalPassword] = useState(false);
+    const [wrongPassword, setWrongPassword] = useState(0)
+
 
     const [inputs, setInputs] = useState({
         TX_USER_NAME: "",
@@ -62,50 +64,64 @@ const _RegistrationModal = props => {
 
     const onSubmitStudentSignUpForm = async (e) => {
         e.preventDefault();
-        if (  recapcha.value) {
-        try {
-            const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
-            console.log(body);
-
-            const response = await fetch(baseURLAPI + "/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
-            });
-
-            const parseResponse = await response.json()
-            console.log("registration data", parseResponse)
-
-            if (parseResponse.jwtToken) {
-                await localStorage.setItem("jwtToken", parseResponse.jwtToken)
-                await localStorage.setItem("email", parseResponse.user.TX_USER_EMAIL);
-                await localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
-                await localStorage.setItem("image", parseResponse.user.TX_PICTURE);
-                await localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
-                await localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
-                await localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
+        if (recapcha.value) {
+            try {
+                if (rememberMe) {
+                    localStorage.username = TX_USER_EMAIL;
+                    localStorage.password = TX_USER_PASSWORD;
+                    localStorage.checkbox = rememberMe;
+                }
+                else {
+                    localStorage.username = "";
+                    localStorage.password = "";
+                    localStorage.checkbox = false;
+                }
 
 
-                setAuth(true);
-                toast.success('login successful!', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-                    progress: '',
+                const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
+                console.log(body);
+
+                const response = await fetch(baseURLAPI + "/auth/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
                 });
-            }
-            else {
-                setErrorSignUpMessage(parseResponse);
-                setAuth(false);
-            }
 
-        } catch (error) {
-            console.log(error.message);
+                const parseResponse = await response.json()
+                console.log("registration data", parseResponse)
+
+                if (parseResponse.jwtToken) {
+                    await localStorage.setItem("jwtToken", parseResponse.jwtToken)
+                    await localStorage.setItem("email", parseResponse.user.TX_USER_EMAIL);
+                    await localStorage.setItem("isCounsellor", parseResponse.user.IS_COUNSELLOR);
+                    await localStorage.setItem("image", parseResponse.user.TX_PICTURE);
+                    await localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
+                    await localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
+                    await localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
+                    await localStorage.setItem("verificationStatus", parseResponse.user.TX_VERIFICATION_STATUS);
+
+
+
+                    setAuth(true);
+                    toast.success('login successful!', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: '',
+                    });
+                }
+                else {
+                    setErrorSignUpMessage(parseResponse);
+                    setAuth(false);
+                }
+
+            } catch (error) {
+                console.log(error.message);
+            }
         }
-    }
         else {
             setErrorSignUpMessage("Check Recapcha before submit");
             setAuth(false);
@@ -138,18 +154,18 @@ const _RegistrationModal = props => {
             });
 
             const parseRes = await response.json()
-            console.log(["--------------------------------ss",parseRes]);
+            console.log(["--------------------------------ss", parseRes]);
             if (parseRes.jwtToken) {
-                
 
-                   localStorage.setItem("jwtToken", parseRes.jwtToken)
-                  localStorage.setItem("email", parseRes.user.TX_USER_EMAIL);
-                  localStorage.setItem("isCounsellor", parseRes.user.IS_COUNSELLOR);
-                  localStorage.setItem("image", parseRes.user.TX_PICTURE);
-                  localStorage.setItem("userID", parseRes.user.ID_USER_UUID);
-                  localStorage.setItem("name", parseRes.user.TX_USER_NAME);
-                  localStorage.setItem("isCompleted", parseRes.user.TX_IS_COMPLETED);
 
+                localStorage.setItem("jwtToken", parseRes.jwtToken)
+                localStorage.setItem("email", parseRes.user.TX_USER_EMAIL);
+                localStorage.setItem("isCounsellor", parseRes.user.IS_COUNSELLOR);
+                localStorage.setItem("image", parseRes.user.TX_PICTURE);
+                localStorage.setItem("userID", parseRes.user.ID_USER_UUID);
+                localStorage.setItem("name", parseRes.user.TX_USER_NAME);
+                localStorage.setItem("isCompleted", parseRes.user.TX_IS_COMPLETED);
+                localStorage.setItem("verificationStatus", parseRes.user.TX_VERIFICATION_STATUS);
                 setAuth(true);
                 toast.success('login successfull!', {
                     position: "top-right",
@@ -164,6 +180,9 @@ const _RegistrationModal = props => {
             }
             else {
                 setErrorLoginMessage(parseRes);
+
+                setWrongPassword(wrongPassword + 1);
+                console.log(wrongPassword);
                 setAuth(false);
             }
 
@@ -184,33 +203,50 @@ const _RegistrationModal = props => {
     })
     const [recapcha, setrecapcha] = useState([]);
 
-    
 
-  const  handleChange = async (value) =>    {
+
+    const handleChange = async (value) => {
         console.log("Captcha value:", value);
         setrecapcha({ value });
         // if value is null recaptcha expired
         if (value === null) this.setState({ expired: "true" });
-      };
-    
-    const  asyncScriptOnLoad = async () => {
+    };
+
+    const asyncScriptOnLoad = async () => {
+
+
+
         setrecapcha({ callback: "called!" });
-        console.log("scriptLoad - reCaptcha Ref-" );
-      };
-     
+        console.log("scriptLoad - reCaptcha Ref-");
+    };
+
     const StudentSignUp = () => {
         setModalLogin(false)
         setModalStudentSignUp(true)
+        setModalPassword(false)
+        setModalConsellorTypeSingup(false)
     }
     const CounsellorSignUp = () => {
         setModalLogin(false)
+        setModalStudentSignUp(false)
+        setModalPassword(false)
         setModalConsellorTypeSingup(true)
     }
     const PasswordSignUp = () => {
         setModalLogin(false)
+        setModalStudentSignUp(false)
         setModalConsellorTypeSingup(false)
         setModalPassword(true)
     }
+
+    const LoginModelUp = () => {
+        setModalLogin(true)
+        setModalConsellorTypeSingup(false)
+        setModalStudentSignUp(false)
+        setModalPassword(false)
+    }
+
+
     const close = () => {
         setOpen(false);
         props.onCloseModal();
@@ -230,7 +266,8 @@ const _RegistrationModal = props => {
                 <>
                     <Modal
                         closeIcon
-                        size={'small'}
+                        size={'large'}
+
                         closeOnEscape={false}
                         closeOnDimmerClick={false}
                         dimmer="blurring"
@@ -299,10 +336,7 @@ const _RegistrationModal = props => {
                                                     &nbsp;&nbsp;&nbsp;
                                                         <Checkbox name="rememberMe" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} label='Remember me' />
                                                 </Form.Field>
-                                                <Form.Field className="CustomForm">
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <Label as="a">Forgot password?</Label>
-                                                </Form.Field>
+                                            
                                             </Form.Group>
                                             {errorLoginMessage && (
                                                 <Form.Group widths='equal'>
@@ -314,6 +348,15 @@ const _RegistrationModal = props => {
                                                 </Form.Group>
                                             )
                                             }
+                                            {wrongPassword > 5 && (
+                                                <Form.Group widths='equal'>
+                                                    <Form.Field className="CustomForm">
+                                                        <span onClick={PasswordSignUp}>&nbsp;&nbsp;<a href='#'>Can't remember your password? click here to reset</a></span>
+                                                    </Form.Field>
+                                                </Form.Group>
+                                            )
+                                            }
+
                                             <Button color='teal' fluid size='large'>
                                                 Login
                                 </Button>
@@ -328,22 +371,6 @@ const _RegistrationModal = props => {
                                         <span onClick={CounsellorSignUp}>&nbsp;&nbsp;<a href='#'>Sign Up as a Counsellor</a></span>
                                         <br />
                                         <span onClick={PasswordSignUp}>&nbsp;&nbsp;<a href='#'>Forgot Password</a></span>
-
-
-                                        {/* <Modal
-      onClose={() => setPasswordOpen(false)}
-      onOpen={() => setPasswordOpen(true)} 
-      open={openPassword}
-      trigger={      <span  >&nbsp;&nbsp;<a href='#' >Change Password </a></span>                     }
-    >
-      <Modal.Header>Change Password</Modal.Header>
-      <Modal.Content  >
-      <ChangePassword 
-           
-         /> 
-         
-      </Modal.Content> 
-    </Modal> */}
                                     </Message>
 
                                 </Grid.Column>
@@ -359,37 +386,89 @@ const _RegistrationModal = props => {
                     <Modal
                         closeIcon
                         size="large"
-                        centered={false}
+
                         open={open}
                         onClose={() => close()}
                         closeOnEscape={false}
                         closeOnDimmerClick={false}
                     >
-                        <Modal.Content scrolling>
-                            <Grid>
-                                <Grid.Column style={{ maxWidth: '100%', backgroundColor: 'white' }}>
+                        <Modal.Content  >
+                            <Grid textAlign='center' verticalAlign='middle'>
+                                <Grid.Column style={{ maxWidth: 450 }}>
+                                    <br />
                                     <Counsellor_Registration />
+                                    <Modal
+                                        size={'large'}
+                                        open={TermsOpen}
+                                        onClose={() => setTermsOpen(false)}
+                                        onOpen={() => setTermsOpen(true)}
+                                        trigger={
+                                            <p>
+                                                By clicking Sign-up, you agree to the counselling gorilla's terms of service  and privacy policy
+                                                </p>}
+                                    >
+                                        <Modal.Header>Terms and Conditions</Modal.Header>
+                                        <Modal.Content image scrolling>
+                                            <Modal.Description>
+                                                <Container width='20%' text>
+                                                    <p>
+                                                        Welcome to Counselling LMS!
+                                                <br /> <br />
+                                                These terms and conditions outline the rules and regulations for the use of Counselling LMS's Website, located at CounsellingLMS.com.
+
+                                                By accessing this website we assume you accept these terms and conditions. Do not continue to use Counselling LMS if you do not agree to take all of the terms and conditions stated on this page.
+
+                                                The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website and compliant to the Company’s terms and conditions. "The Company", "Ourselves", "We", "Our" and "Us", refers to our Company. "Party", "Parties", or "Us", refers to both the Client and ourselves. All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.
+                                                <br />
+                                                Cookies <br />  </p>
+                                                </Container>
+                                            </Modal.Description>
+                                        </Modal.Content>
+                                        <Modal.Actions>
+                                            <Button onClick={() => setTermsOpen(false)}  >
+                                                Close
+                                                </Button>
+                                        </Modal.Actions>
+                                    </Modal>
+                                    <Message>
+                                        <span onClick={LoginModelUp}><a href='#'>Sign-In</a>&nbsp;&nbsp;</span > |
+                                            <span onClick={StudentSignUp}>&nbsp;&nbsp;<a href='#'>Sign Up as a Student</a></span>
+                                        <br />
+                                        <span onClick={PasswordSignUp}>&nbsp;&nbsp;<a href='#'>Forgot Password</a></span>
+                                    </Message>
                                 </Grid.Column>
                             </Grid>
                         </Modal.Content>
                     </Modal>
+
                 </>
             }
             {ModalPassword &&
                 <>
                     <Modal
                         closeIcon
-                        size="large"
-                        centered={false}
-                        open={open}
-                        onClose={() => close()}
+                        size={'large'}
                         closeOnEscape={false}
                         closeOnDimmerClick={false}
-                    >
-                        <Modal.Content scrolling>
-                            <Grid>
-                                <Grid.Column style={{ maxWidth: '100%', backgroundColor: 'white' }}>
+                        open={open}
+                        onClose={() => close()}>
+                        <Modal.Content>
+                            <Grid textAlign='center' verticalAlign='middle'>
+                                <Grid.Column style={{ maxWidth: 450 }}>
+                                    <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
+                                        Forgot Password
+                            </Header>
+                                    <br />
                                     <ChangePassword />
+                                    <Message>
+                                        New to us? <br />
+                                        <span onClick={StudentSignUp}>
+                                            <a href='#'>Sign Up as a Student</a>&nbsp;&nbsp;
+                                        </span > |
+                                        <span onClick={CounsellorSignUp}>&nbsp;&nbsp;<a href='#'>Sign Up as a Counsellor</a></span>
+                                        <br />
+                                        <span onClick={LoginModelUp}>&nbsp;&nbsp;<a href='#'>Sign-In</a></span>
+                                    </Message>
                                 </Grid.Column>
                             </Grid>
                         </Modal.Content>
@@ -401,10 +480,10 @@ const _RegistrationModal = props => {
                 <>
                     <Modal
                         closeIcon
-                        size={'small'}
+                        size={'large'}
                         closeOnEscape={false}
                         closeOnDimmerClick={false}
-                        dimmer="blurring"
+
                         open={open}
                         onClose={() => close()}>
 
@@ -412,7 +491,7 @@ const _RegistrationModal = props => {
                             <Grid textAlign='center' verticalAlign='middle'>
                                 <Grid.Column style={{ maxWidth: 450 }}>
                                     <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
-                                        Sign up for Students
+                                        Sign up as Student 
                             </Header>
                                     <br />    <Form size='large' >
                                         <List divided relaxed>
@@ -477,66 +556,28 @@ const _RegistrationModal = props => {
                                                         value={TX_USER_PASSWORD}
                                                     />
 
-                                                    
+
                                                 </Form.Field></Form.Group>
-                                                <Form.Group widths='equal'> 
-                                                <Form.Field>
+                                            <Form.Group widths='equal'>
+                                                <Form.Field className="CustomForm">
+                                                    &nbsp;&nbsp;&nbsp;
+                                                        <Checkbox name="rememberMe" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} label='Remember me' />
+                                                </Form.Field>
+                                            </Form.Group  >     <div   >
                                                 <ReCAPTCHA
-                            sitekey={keys.google.googleRecapcha }
+                                                    sitekey={keys.google.googleRecapcha}
 
-                            style={{ display: "inline-block" }}
-                            theme="light"
-                          
-                            onChange={handleChange}
-                            asyncScriptOnLoad={asyncScriptOnLoad}
-                        /></Form.Field></Form.Group>  <Form.Group widths='equal'> 
-                         <Form.Field> 
+                                                    style={{ display: "inline-block" }}
+                                                    theme="light"
 
-                         
-                                              
-                         <Modal
-                                                    open={TermsOpen}
-                                                    onClose= {() => setTermsOpen(false)}
-                                                    onOpen={() => setTermsOpen(true)}
-                                                    trigger={
+                                                    onChange={handleChange}
+                                                    asyncScriptOnLoad={asyncScriptOnLoad}
+                                                />
 
 
-                                                        <p>
-                                                          By clicking Sign-up, you agree to the counselling gorilla's terms of service  and privacy policy 
-    </p>}
-                                                >
-                                                    <Modal.Header>Terms and Conditions</Modal.Header>
-                                                    <Modal.Content image scrolling>
+                                            </div>
 
-                                                        <Modal.Description>
-                                                            <Container width='20%' text>
 
-                                                                <p>
-
-                                                                    Welcome to Counselling LMS!
- <br /> <br />
-These terms and conditions outline the rules and regulations for the use of Counselling LMS's Website, located at CounsellingLMS.com.
-
-By accessing this website we assume you accept these terms and conditions. Do not continue to use Counselling LMS if you do not agree to take all of the terms and conditions stated on this page.
-
-The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website and compliant to the Company’s terms and conditions. "The Company", "Ourselves", "We", "Our" and "Us", refers to our Company. "Party", "Parties", or "Us", refers to both the Client and ourselves. All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.
-<br />
-Cookies <br />  </p>
-
-                                                            </Container>
-
-                                                        </Modal.Description>
-                                                    </Modal.Content>
-                                                    <Modal.Actions>
-                                                        <Button onClick={() => setTermsOpen(false)}  >
-                                                            Close
-        </Button>
-                                                    </Modal.Actions>
-                                                </Modal>
-
-                         </Form.Field>
-
-                                            </Form.Group>
                                             {errorSignUpMessage && (
                                                 <Form.Group widths='equal'>
                                                     <Form.Field className="CustomForm">
@@ -547,27 +588,68 @@ Cookies <br />  </p>
                                                 </Form.Group>
                                             )
                                             }
-                                            {/* <Form.Group widths='equal'>
-                                                <Form.Field className="CustomForm">
-                                                    <Icon name="user" className="customIconsAlign" />
-                                                        &nbsp;&nbsp;&nbsp;
-                                                        <input
-                                                        placeholder='Re-enter password'
-                                                        type='password'
-                                                        name="USER_CONFIRM_PASSWORD"
-                                                        onChange={e => onChangeOfForm(e)}
-                                                        value={USER_CONFIRM_PASSWORD}
-                                                    />
-                                                </Form.Field>
-                                            </Form.Group> */}
-
-
-                                            {/* <Button onClick={() => setAuth(true)} color='teal' fluid size='large'> */}
                                             <Button color='teal' fluid size='large'>
                                                 Sign up
-                                            </Button>
+                                            </Button>  <Form.Group widths='equal'>
+                                                <Form.Field>
+
+
+                                                    <Modal
+                                                        size={'large'}
+                                                        open={TermsOpen}
+                                                        onClose={() => setTermsOpen(false)}
+                                                        onOpen={() => setTermsOpen(true)}
+                                                        trigger={
+
+
+                                                            <p>
+                                                                By clicking Sign-up, you agree to the counselling gorilla's terms of service  and privacy policy
+    </p>}
+                                                    >
+                                                        <Modal.Header>Terms and Conditions</Modal.Header>
+                                                        <Modal.Content image scrolling>
+
+                                                            <Modal.Description>
+                                                                <Container width='20%' text>
+
+                                                                    <p>
+
+                                                                        Welcome to Counselling LMS!
+ <br /> <br />
+These terms and conditions outline the rules and regulations for the use of Counselling LMS's Website, located at CounsellingLMS.com.
+
+By accessing this website we assume you accept these terms and conditions. Do not continue to use Counselling LMS if you do not agree to take all of the terms and conditions stated on this page.
+
+The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website and compliant to the Company’s terms and conditions. "The Company", "Ourselves", "We", "Our" and "Us", refers to our Company. "Party", "Parties", or "Us", refers to both the Client and ourselves. All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.
+<br />
+Cookies <br />  </p>
+
+                                                                </Container>
+
+                                                            </Modal.Description>
+                                                        </Modal.Content>
+                                                        <Modal.Actions>
+                                                            <Button onClick={() => setTermsOpen(false)}  >
+                                                                Close
+        </Button>
+                                                        </Modal.Actions>
+                                                    </Modal>
+
+                                                </Form.Field>
+
+                                            </Form.Group>
                                         </Segment>
                                     </Form>
+                                    <Message>
+
+                                        <span onClick={LoginModelUp}>
+                                            <a href='#'>Sign-In</a>&nbsp;&nbsp;
+                                        </span > |
+                                        <span onClick={CounsellorSignUp}>&nbsp;&nbsp;<a href='#'>Sign Up as a Counsellor</a></span>
+                                        <br />
+                                        <span onClick={PasswordSignUp}>&nbsp;&nbsp;<a href='#'>Forgot Password</a></span>
+
+                                    </Message>
                                 </Grid.Column>
                             </Grid>
                         </Modal.Content>

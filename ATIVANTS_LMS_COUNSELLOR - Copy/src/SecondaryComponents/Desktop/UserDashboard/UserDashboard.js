@@ -70,10 +70,15 @@ const UserDashboard = (props) => {
     const logout = async () => {
 
         window.open(baseURLAPI + "/socialauth/logout", "_self");
-
         localStorage.removeItem("userID");
         localStorage.removeItem("isCounsellor");
-        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("jwtToken"); 
+        localStorage.removeItem("email");
+        localStorage.removeItem("image");
+        localStorage.removeItem("name"); 
+        localStorage.removeItem("isCompleted");
+        localStorage.removeItem("verificationStatus");
+
         setAuth(false);
     }
 
@@ -119,7 +124,7 @@ const UserDashboard = (props) => {
                                     >                                        <Popup.Content  >
                                             <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
                                                 <Grid.Column  >
-                                                    <ViewMessages/>
+                                                    <ViewMessages />
                                                 </Grid.Column>
                                             </Grid>
                                         </Popup.Content>
@@ -160,6 +165,20 @@ const UserDashboard = (props) => {
             {/* {!isProfileSelected && <DisplayProfiles />} */}
             {isProfileSelected && <Search />}
 
+
+
+            {parseInt(localStorage.verificationStatus) == 1 ? (
+                <div>
+                </div>
+
+            ) : (<   div  style={{  paddingBottom:"1%" }} >
+                <div class="ui message" style={{ backgroundColor: 'teal', color: 'white'  }}  >
+                    <div class="header">
+                        Please check your mailbox for {localStorage.email} for email verification link
+</div> </div> </div>)
+            }
+
+
             {parseInt(localStorage.isCompleted) == 1 ? (
                 <div>
                 </div>
@@ -174,7 +193,7 @@ const UserDashboard = (props) => {
                             <div class="ui message" style={{ backgroundColor: '#EA3C53', color: 'white' }}  >
                                 <div class="header">
                                     Click here to complete profile set up
-</div> </div> < br /></div>
+</div> </div>  </div>
                     }
                 >
                     <Modal.Content  >

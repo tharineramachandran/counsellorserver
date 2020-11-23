@@ -64,12 +64,12 @@ router.get("/login/success", async (req, res) => {
 
         if (reqUser.user.hasOwnProperty('rows')    ) {
             const jwtToken = jwtGenerator(req.user.googleId);
-            const user = await pool.query('SELECT "TX_PICTURE",  "TX_IS_COMPLETED", "IS_COUNSELLOR" , "ID_USER_UUID" , "TX_USER_EMAIL" , "TX_USER_NAME" ,"ID_USER_UUID"   FROM "T_USER" WHERE "ID_USER_UUID" = $1', [reqUser.user.rows[0].ID_USER_UUID]);
+            const user = await pool.query('SELECT "TX_PICTURE",  "TX_VERIFICATION_STATUS","TX_IS_COMPLETED", "IS_COUNSELLOR" , "ID_USER_UUID" , "TX_USER_EMAIL" , "TX_USER_NAME" ,"ID_USER_UUID"   FROM "T_USER" WHERE "ID_USER_UUID" = $1', [reqUser.user.rows[0].ID_USER_UUID]);
             res.json({ jwtToken: jwtToken, user: user.rows[0] });
         }
         else if (reqUser.user) {
             const jwtToken = jwtGenerator(req.user.googleId);
-            const user = await pool.query('SELECT "TX_PICTURE",  "TX_IS_COMPLETED", "IS_COUNSELLOR" , "ID_USER_UUID" , "TX_USER_EMAIL" , "TX_USER_NAME" ,"ID_USER_UUID"   FROM "T_USER" WHERE "ID_USER_UUID" = $1', [reqUser.user.ID_USER_UUID]);
+            const user = await pool.query('SELECT "TX_PICTURE",  "TX_VERIFICATION_STATUS","TX_IS_COMPLETED", "IS_COUNSELLOR" , "ID_USER_UUID" , "TX_USER_EMAIL" , "TX_USER_NAME" ,"ID_USER_UUID"   FROM "T_USER" WHERE "ID_USER_UUID" = $1', [reqUser.user.ID_USER_UUID]);
             res.json({ jwtToken: jwtToken, user: user.rows[0] });
         }
         else {

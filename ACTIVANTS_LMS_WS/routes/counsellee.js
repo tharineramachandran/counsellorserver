@@ -53,15 +53,15 @@ router.post("/createCounsellee", createCounselleeValidation, async (req, res) =>
 
             }
 
-            if (COUNSELLOR_COUNSELLING_DETAILS.length > 0) {
+            // if (COUNSELLOR_COUNSELLING_DETAILS.length > 0) {
 
-                COUNSELLOR_COUNSELLING_DETAILS.forEach(insertConsellingDetails);
-                function insertConsellingDetails(item, index) {
-                    pool.query(
-                        'INSERT INTO "CT_COUNSELLEE_COUNSELLING_DETAILS" (    ct_counselling_level_code, ct_counselling_subject_code,ct_counsellee_average_hourly_rate, ct_counsellee_id ) VALUES($1,$2,$3,$4) RETURNING *',
-                        [item.CT_COUNSELLING_LEVEL_CODE, item.CT_COUNSELLING_SUBJECT_CODE, item.COUNSELLOR_HOURLY_RATE, COUNSELLORID]);
-                }
-            } 
+            //     COUNSELLOR_COUNSELLING_DETAILS.forEach(insertConsellingDetails);
+            //     function insertConsellingDetails(item, index) {
+            //         pool.query(
+            //             'INSERT INTO "CT_COUNSELLEE_COUNSELLING_DETAILS" (    ct_counselling_level_code, ct_counselling_subject_code,ct_counsellee_average_hourly_rate, ct_counsellee_id ) VALUES($1,$2,$3,$4) RETURNING *',
+            //             [item.CT_COUNSELLING_LEVEL_CODE, item.CT_COUNSELLING_SUBJECT_CODE, item.COUNSELLOR_HOURLY_RATE, COUNSELLORID]);
+            //     }
+            // } 
 
           res.status(200).json("success");
        }

@@ -443,7 +443,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                                 })}
 
                                                 <br />
-                                                <div style={{ width: '100%', textAlign: 'left' }}>
+                                                {/* <div style={{ width: '100%', textAlign: 'left' }}>
                                                     <Label as='a' color='blue' ribbon>
                                                         Counselling details
                                             </Label> 
@@ -514,7 +514,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
 
                                                         </React.Fragment>
                                                     );
-                                                })}
+                                                })} */}
                                             </center>
                                         </Segment>
                                     </center>

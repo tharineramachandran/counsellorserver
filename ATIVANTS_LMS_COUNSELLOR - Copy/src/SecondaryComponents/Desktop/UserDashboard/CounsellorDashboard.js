@@ -101,10 +101,20 @@ const CounsellorDashboard = (props) => {
         window.open(baseURLAPI+"/socialauth/logout", "_self");
         setAuth(false);
 
-        localStorage.removeItem("userID");
+        
         localStorage.removeItem("isCounsellor");
         localStorage.removeItem("jwtToken");
- 
+
+        localStorage.removeItem("email");
+        localStorage.removeItem("image");
+        localStorage.removeItem("name");
+        localStorage.removeItem("userID");
+        localStorage.removeItem("isCompleted");
+        localStorage.removeItem("verificationStatus");
+
+         
+
+        
     }
 
     const style = {
@@ -197,7 +207,7 @@ const CounsellorDashboard = (props) => {
 
             
             <Grid.Row><Grid.Column>
-            {isDetailsProvided ? (  
+            {parseInt(localStorage.isCompleted)  ==1    ? (  
             
            <h3> </h3>
              

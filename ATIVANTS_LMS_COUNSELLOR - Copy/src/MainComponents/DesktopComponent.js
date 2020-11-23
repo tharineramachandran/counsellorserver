@@ -1,3 +1,4 @@
+import { Segment,Grid, Message} from "semantic-ui-react";
 import GetWidthOfComponent from './GetWidthOfComponent'
 import React, { useState, useEffect } from 'react'
 import _NavigationItems from '../SecondaryComponents/Desktop/_NavigationItems'
@@ -6,6 +7,9 @@ import axios from 'axios'
 import { Responsive } from 'semantic-ui-react'
 import UserDashboard from '../SecondaryComponents/Desktop/UserDashboard/UserDashboard';
 import CounsellorDashboard from '../SecondaryComponents/Desktop/UserDashboard/CounsellorDashboard'; 
+ 
+ 
+
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,7 +21,7 @@ const Authorize = React.createContext();
 const DesktopComponent = ({ children }) => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
-   
+  const [message, setMessage] = useState({header:"",content:"",color :""}); 
   const setAuth = (boolean) => {
 
     setIsAuthenticated(boolean);
@@ -26,15 +30,25 @@ const DesktopComponent = ({ children }) => {
  
 
   const checkAuthenticated = async () => {
-    try {
+    try { 
+      
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString); 
  
-
+const header = urlParams.get('header');
+        const content = urlParams.get('content');
+        const color = urlParams.get('color');
+        console.log("color");
+if(content  != null){ 
+    
+  setMessage ({  header,content,color             })
+}  
     if (localStorage.jwtToken) {
  
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);        
+               
         const CalendarId = urlParams.get('id');
          
+        
           if (CalendarId && localStorage.userID) {
             const response = await axios ({
               url: baseURLAPI+"/request/userID?userID="+localStorage.userID+"&requestID="+CalendarId     ,
@@ -62,7 +76,7 @@ const DesktopComponent = ({ children }) => {
 
         if (parseRes.message){
 
-          localStorage.setItem("userID", parseRes.userID         ); 
+       
           setIsAuthenticated(true) 
 
         }else {
@@ -98,6 +112,7 @@ const DesktopComponent = ({ children }) => {
              localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
              localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
               
+               localStorage.setItem("verificationStatus", parseResponse.user.TX_VERIFICATION_STATUS);
           }); 
       }
       else {             
@@ -126,6 +141,7 @@ const DesktopComponent = ({ children }) => {
             localStorage.setItem("name", parseResponse.user.TX_USER_NAME);  
              localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
 
+               localStorage.setItem("verificationStatus", parseResponse.user.TX_VERIFICATION_STATUS);
 
             const res = fetch(baseURLAPI+"/auth/verify/", {
               method: "GET",
@@ -160,9 +176,42 @@ const DesktopComponent = ({ children }) => {
     <Responsive getWidth={GetWidthOfComponent} minWidth={Responsive.onlyTablet.minWidth}>
       <Router>
         <div className="container">
-          <Authorize.Provider value={setAuth}>
+ 
+        { message.header.length > 0 ?  ( 
+  //       <Message    width="100%" height="100px"
+  //   header={message.header}
+  //   content={message.content}
+  //   color={message.color}
+  // />
+    < div>
+  
+
+<Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+    <Grid.Column style={{ maxWidth: 600  }}>
+      
+      
+        <Segment stacked>
+        <Message   size="large"  
+header={message.header}
+content={message.content}
+color={message.color}
+/>  
+        </Segment> 
+    </Grid.Column>
+  </Grid>
+
+
+</div>
+
+):( 
+
+
+ <Authorize.Provider value={setAuth}>
             <Switch>
               <Route exact path="/dashboard" render=
+  
+
+
                 {
                   props => localStorage.isCounsellor ?
                     (
@@ -194,8 +243,15 @@ const DesktopComponent = ({ children }) => {
                     )
                 }>
               </Route>
+              
             </Switch>
           </Authorize.Provider>
+
+  )
+   
+
+          }
+         
         </div>
       </Router>
     </Responsive>

@@ -9,6 +9,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import googleLogin from "google-auth-library"
 import { baseURLAPI, baseURL } from "../../Global";
+import keys from "../../env";
+import ReCAPTCHA from "react-google-recaptcha";
 const Counsellor_Registration = props => {
     const [open, setOpen] = useState(true);
     const [defHeight, setHeight] = useState(window.innerWidth);
@@ -24,7 +26,7 @@ const Counsellor_Registration = props => {
     const [errorLoginMessage, setErrorLoginMessage] = useState('');
     const [errorSignUpMessage, setErrorSignUpMessage] = useState('');
     const [rememberMe, setRememberMe] = useState();
-
+    const [recapcha, setrecapcha] = useState([]);
     const { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD } = inputs;
     const setAuth = useContext(Authorize);
     const setCount = useContext(Authorize);
@@ -46,8 +48,20 @@ const Counsellor_Registration = props => {
 
     const onSubmitStudentSignUpForm = async (e) => {
         e.preventDefault();
-
-        try {
+        if (TX_USER_EMAIL && TX_USER_PASSWORD) {  
+        if (recapcha.value) {
+            try {
+                if (rememberMe) {
+                    localStorage.username = TX_USER_EMAIL;
+                    localStorage.password = TX_USER_PASSWORD;
+                    localStorage.checkbox = rememberMe;
+                }
+                else {
+                    localStorage.username = "";
+                    localStorage.password = "";
+                    localStorage.checkbox = false;
+                }
+        
             const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
             console.log(body);
 
@@ -67,10 +81,16 @@ const Counsellor_Registration = props => {
             console.log("registration data", parseRes);
 
             if (parseRes.jwtToken) {
-                await localStorage.setItem("jwtToken", parseRes.jwtToken);
-                await localStorage.setItem("isCounsellor", parseRes.isCounsellor);
-                await localStorage.setItem("userID", parseRes.userID);
+                await localStorage.setItem("jwtToken", parseRes.jwtToken); 
 
+                await     localStorage.setItem("email", parseRes.user.TX_USER_EMAIL);
+                await   localStorage.setItem("isCounsellor", parseRes.user.IS_COUNSELLOR);
+                    await    localStorage.setItem("image", parseRes.user.TX_PICTURE);
+                    await   localStorage.setItem("userID", parseRes.user.ID_USER_UUID);
+                    await   localStorage.setItem("name", parseRes.user.TX_USER_NAME);
+                    await   localStorage.setItem("isCompleted", parseRes.user.TX_IS_COMPLETED);
+                 
+                    await  localStorage.setItem("verificationStatus", parseRes.user.TX_VERIFICATION_STATUS);
                 setAuth(true);
                 toast.success('login successful!', {
                     position: "top-right",
@@ -96,10 +116,20 @@ const Counsellor_Registration = props => {
                 setCount(false);
 
             }
-
+         
         } catch (error) {
             console.log(error.message);
         }
+    } else {
+        setErrorSignUpMessage("Check Recapcha before submit");
+        setAuth(false);
+        setCount(false);
+    }} 
+    else {
+        setErrorSignUpMessage("Missing credencials");
+        setAuth(false);
+        setCount(false);
+    }
     }
 
 
@@ -133,12 +163,27 @@ const Counsellor_Registration = props => {
 
     console.log(rememberMe);
 
+    const handleChange = async (value) => {
+        console.log("Captcha value:", value);
+        setrecapcha({ value });
+        // if value is null recaptcha expired
+        if (value === null) this.setState({ expired: "true" });
+    };
+
+    const asyncScriptOnLoad = async () => {
+
+
+
+        setrecapcha({ callback: "called!" });
+        console.log("scriptLoad - reCaptcha Ref-");
+    };
+
     return (
         <React.Fragment>
             <Grid textAlign='center' verticalAlign='middle'>
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
-                        Sign up for counsellor
+                        Sign up as Counsellor
                             </Header>
                     <Form size='large' >
                         <List divided relaxed>
@@ -155,6 +200,7 @@ const Counsellor_Registration = props => {
 
                 </Grid.Column>
             </Grid>
+            <Divider horizontal>Or</Divider>
             <Form size='small' onSubmit={onSubmitStudentSignUpForm}>
                 <Segment stacked>
                     <Form.Group widths='equal'>
@@ -197,6 +243,26 @@ const Counsellor_Registration = props => {
                             />
                         </Form.Field>
                     </Form.Group>
+                    <Form.Group widths='equal'>
+                                                <Form.Field className="CustomForm">
+                                                    &nbsp;&nbsp;&nbsp;
+                                                        <Checkbox name="rememberMe" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} label='Remember me' />
+                                                </Form.Field>
+                                            </Form.Group  >     <div   >
+                                                <ReCAPTCHA
+                                                    sitekey={keys.google.googleRecapcha}
+
+                                                    style={{ display: "inline-block" }}
+                                                    theme="light"
+
+                                                    onChange={handleChange}
+                                                    asyncScriptOnLoad={asyncScriptOnLoad}
+                                                />
+
+
+                                            </div>
+
+
                     {errorSignUpMessage && (
                         <Form.Group widths='equal'>
                             <Form.Field className="CustomForm">

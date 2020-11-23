@@ -61,9 +61,15 @@ module.exports = (req, res, next) => {
     if (req.path === "/createCounsellee") {
         if (![COUNSELLOR_FIRST_NAME].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_FIRST_NAME", message: "No firstname provided" });
+        }else if (COUNSELLOR_FIRST_NAME.length >  50){
+            errorlist.push({ error: "COUNSELLOR_FIRST_NAME", message: "firstname not more than  50 letters" });
         }
+
+
         if (![COUNSELLOR_LAST_NAME].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_LAST_NAME", message: "No lastname provided" });
+        }else if (COUNSELLOR_LAST_NAME.length >  50){
+            errorlist.push({ error: "COUNSELLOR_LAST_NAME", message: "lastname not more than  50 letters" });
         }
 
         if (![COUNSELLOR_COUNTRY_CODE].every(Boolean)) {
@@ -85,14 +91,20 @@ module.exports = (req, res, next) => {
 
         if (![COUNSELLOR_ABOUT_DESCRIPTION].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_ABOUT_DESCRIPTION", message: "No about description provided" });
+        }else if (COUNSELLOR_ABOUT_DESCRIPTION.length > 150){
+            errorlist.push({ error: "COUNSELLOR_ABOUT_DESCRIPTION", message: "about description not more than 150 letters" });
         }
+
         if (![COUNSELLOR_PHOTO].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_PHOTO", message: "No photo provided" });
         }
 
-        if (![COUNSELLOR_HEADLINE].every(Boolean)) {
+         if (![COUNSELLOR_HEADLINE].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_HEADLINE", message: "No headline provided" });
+        }else if (COUNSELLOR_HEADLINE.length > 150){
+            errorlist.push({ error: "COUNSELLOR_HEADLINE", message: "headline not more than 30 letters" });
         }
+
 
         if (![COUNSELLOR_VIDEO_URL].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "No video URL provided" });
@@ -111,13 +123,13 @@ module.exports = (req, res, next) => {
             errorlist.push({ error: "COUNSELLOR_QUALIFICATION_INSTITUTE", message: "No qualification and institute provided" });
         }
 
-        if (COUNSELLOR_COUNSELLING_DETAILS.length > 0) {
-            if (checkCounsellingDetails(COUNSELLOR_COUNSELLING_DETAILS)) {
-                errorlist.push({ error: "COUNSELLOR_COUNSELLING_DETAILS", message: "missing conselling details information" });
-            }
-        } else {
-            errorlist.push({ error: "COUNSELLOR_COUNSELLING_DETAILS", message: "No conselling details provided" });
-        }
+        // if (COUNSELLOR_COUNSELLING_DETAILS.length > 0) {
+        //     if (checkCounsellingDetails(COUNSELLOR_COUNSELLING_DETAILS)) {
+        //         errorlist.push({ error: "COUNSELLOR_COUNSELLING_DETAILS", message: "missing conselling details information" });
+        //     }
+        // } else {
+        //     errorlist.push({ error: "COUNSELLOR_COUNSELLING_DETAILS", message: "No conselling details provided" });
+        // }
          
 
         if (errorlist.length > 0) {

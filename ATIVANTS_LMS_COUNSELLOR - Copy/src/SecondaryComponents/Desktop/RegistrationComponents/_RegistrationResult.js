@@ -13,7 +13,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
 
     const { COUNSELLOR_FIRST_NAME,
         COUNSELLOR_LAST_NAME,
-        COUNSELLOR_EMAIL,
+        COUNSELLOR_EMAIL,COUNSELLOR_FILES,
         COUNSELLOR_PHONE_NUMBER,
         COUNSELLOR_COUNTRY_CODE,
         COUNSELLOR_COUNSELLING_SUBJECT_ID,
@@ -33,7 +33,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
     const [fifthboxError, setfifthboxError] = useState([]);
     const [sixthboxError, setsixthboxError] = useState([]);
     const [seventhboxError, setseventhboxError] = useState([]);
-    const [eighthboxError, seeighthboxError] = useState([]);
+    const [eighthboxError, seteighthboxError] = useState([]);
 
 
     const [icon_name, setIcon_name] = useState('circle');
@@ -56,7 +56,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                 console.log(res);
                 console.log(res.data);
                  
-
+                localStorage.setItem("isCompleted", 1);
                     toast.success('Counsellor created successful!', {
                         position: "top-right",
                         autoClose: 3000,
@@ -93,6 +93,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                     setfifthboxError(fifthString);
                     setsixthboxError(sixthString);
                     setseventhboxError(seventhString);
+                    seteighthboxError(eightString);
                      
                     function DisplayValidation(item, index) {
 
@@ -131,6 +132,11 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                             sixthString.push(item.message);
 
                         }
+                        if (item.error == "COUNSELLOR_FILES"   ){ 
+                            eightString.push(item.message);
+
+                        }
+                         
                       
                     }
 
@@ -499,6 +505,92 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                             </div>
 
                         </Segment >
+
+                        < Segment color='red' size="mini" widths='equal' >
+                            <div style={{ width: '100%', textAlign: 'left' }}>
+                                <Label as='a' color='blue' ribbon>
+                                    Verification files
+                        </Label>
+                                <div className="appBanner" style={{ float: 'right' }}  >
+                                    <Label as='a' className="appBanner" className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
+                                        <Icon name="edit" />
+                                                    Edit&nbsp;
+                                            </Label>
+                                </div>            </div>
+                            <br />
+                            {eighthboxError.length > 0 && (
+                                            <Form.Group widths='equal'>
+                                                <Form.Field className="CustomForm">
+                                                    <Message negative style={{ padding: '0.5rem' }}>
+                                                        {eighthboxError.map((firstStringmessage, index) => (
+                                                            <p>
+                                                                {firstStringmessage}
+                                                            </p>
+                                                        ))}
+
+                                                    </Message>
+                                                </Form.Field>
+                                            </Form.Group>
+                                        )
+                                        }
+
+                            <br/>
+                            <div >
+                            {COUNSELLOR_FILES ?   (
+                                           <Table  >
+                                           <Table.Header>
+                                               <Table.Row>
+                                                   <Table.HeaderCell  >Files</Table.HeaderCell> 
+                                               </Table.Row>
+                                           </Table.Header>
+                                           <Table.Body>
+                                                        {COUNSELLOR_FILES.map((firstStringmessage, index) => (
+                                                          
+                                                             <Table.Row>
+                                                             <Table.Cell  >   <span>     {firstStringmessage.name} </span>
+                                                             </Table.Cell>
+                                                              
+                                                         </Table.Row>
+                                                        ))}
+
+                                                     </Table.Body>
+                                </Table> 
+                                        ) :(<p  style = {{ color : 'red'}} >No files was provided</p> ) 
+                                        }
+                            {/* <Table  >
+                                    <Table.Header>
+                                        <Table.Row>
+                                            <Table.HeaderCell  >Files</Table.HeaderCell> 
+                                        </Table.Row>
+                                    </Table.Header>
+                                    <Table.Body>
+                                        {COUNSELLOR_FILES.map((details, index) => (
+                                           
+
+                                                    <Table.Row>
+                                                        <Table.Cell  >   <span> {details.name}  </span>
+                                                        </Table.Cell>
+                                                         
+                                                    </Table.Row>
+ 
+                                        ))}
+                                    </Table.Body>
+                                </Table> */}
+
+                            </div>
+
+                        </Segment >
+
+
+
+
+
+
+                      
+
+
+
+
                         < Segment color='yellow' size="mini" widths='equal' >
                             <div style={{ width: '100%', textAlign: 'left' }}>
                                 <Label as='a' color='blue' ribbon>

@@ -53,8 +53,7 @@ app.use("/socialauth", socialAuth);
 app.use("/profile", profileAuth)
 app.use("/Counsellor", require("./routes/counsellor"));
 app.use("/Counsellee", require("./routes/counsellee"));
-
- 
+app.use("/emailVerify", require("./routes/emailVerify"));
 app.use("/request", require("./routes/request"));
 app.use("/session", require("./routes/session"));
 app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
@@ -64,7 +63,7 @@ app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
 app.get("/user/:id", async (req, res) => {
   try { 
 var   userId   = req.params.id; 
-const user = await pool.query('SELECT "TX_PICTURE",   "IS_COUNSELLOR" , "ID_USER_UUID" , "TX_USER_EMAIL" , "TX_USER_NAME"      FROM "T_USER" WHERE "ID_USER_UUID" = $1', [userId]);
+const user = await pool.query('SELECT "TX_VERIFICATION_STATUS" , "TX_PICTURE", "IS_COUNSELLOR" , "ID_USER_UUID" , "TX_USER_EMAIL" , "TX_USER_NAME"   ,"TX_VERIFICATION_STATUS"   FROM "T_USER" WHERE "ID_USER_UUID" = $1', [userId]);
 
 
     res.json({

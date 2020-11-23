@@ -5,7 +5,7 @@ const authorization = require("../middleware/authorization");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const email = require('../functions/email');
-router.post("/requestChange", async (req, res) => {
+router.post("/confirmEmail", async (req, res) => {
   try {
     const data = req.body.email;
 
@@ -65,7 +65,7 @@ router.post("/reset", async (req, res) => {
       user.rows[0].ID_USER_UUID
     ]);
     const jwtToken = jwtGenerator(user.rows[0].ID_USER_UUID);
-    res.status(200).json({ jwtToken: jwtToken, isCounsellor: user.rows[0].IS_COUNSELLOR, userID: user.rows[0].ID_USER_UUID });
+    res.status(200).json({ jwtToken: jwtToken, user: user.rows[0]  });
 
   } catch (err) {
     res.status(400).json("An error occured");

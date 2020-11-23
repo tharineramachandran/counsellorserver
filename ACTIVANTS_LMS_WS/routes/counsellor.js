@@ -139,14 +139,23 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
               
          
 
-            if (user.rows.length == 1) {
+            if (user.rows.length == 1 && COUNSELLOR_FILES.length >0 ) {
                   uploadtoS3   = await  awsS3.uploadtoS3(COUNSELLOR_FILES , "counsellorverify");
 
-            }
+            }else {  uploadtoS3   = true } 
 
           
             
         if (user.rows.length == 1 && uploadtoS3) {
+            
+
+
+            let newUser = pool.query(
+                'UPDATE   "T_USER" SET  "TX_IS_COMPLETED" = $1  WHERE "ID_USER_UUID" = $2', [
+                1, user.rows[0].ID_USER_UUID
+            ])
+
+
 
             const newCounsellorDetails = await pool.query(
                 'INSERT INTO "CT_COUNSELLOR_DETAILS" ("CT_EMAIL", "CT_FIRST_NAME", "CT_LAST_NAME", "CT_PHONE_NUMBER", "CT_COUNTRY_CODE", "CT_COUNSELLOR_ID","CT_COUNSELLOR_VERIFY") VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *',

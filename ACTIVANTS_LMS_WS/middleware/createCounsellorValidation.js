@@ -1,7 +1,7 @@
 module.exports = (req, res, next) => {
     const { COUNSELLOR_FIRST_NAME,
         COUNSELLOR_LAST_NAME,
-        COUNSELLOR_EMAIL,
+        COUNSELLOR_EMAIL,COUNSELLOR_FILES,
         COUNSELLOR_PHONE_NUMBER,
         COUNSELLOR_COUNTRY_CODE,
         COUNSELLOR_COUNSELLING_SUBJECT_ID,
@@ -140,9 +140,15 @@ module.exports = (req, res, next) => {
     if (req.path === "/createCounsellor") {
         if (![COUNSELLOR_FIRST_NAME].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_FIRST_NAME", message: "No firstname provided" });
+        }else if (COUNSELLOR_FIRST_NAME.length >  50){
+            errorlist.push({ error: "COUNSELLOR_FIRST_NAME", message: "firstname not more than  50 letters" });
         }
+
+
         if (![COUNSELLOR_LAST_NAME].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_LAST_NAME", message: "No lastname provided" });
+        }else if (COUNSELLOR_LAST_NAME.length >  50){
+            errorlist.push({ error: "COUNSELLOR_LAST_NAME", message: "lastname not more than  50 letters" });
         }
 
         if (![COUNSELLOR_COUNTRY_CODE].every(Boolean)) {
@@ -160,17 +166,30 @@ module.exports = (req, res, next) => {
         } else if (!validEmail(COUNSELLOR_EMAIL)) {
             errorlist.push({ error: "COUNSELLOR_EMAIL", message: "Invalid email provided" });
         }
+         
+        if (![COUNSELLOR_FILES].every(Boolean)) {
+            errorlist.push({ error: "COUNSELLOR_FILES", message: "No file provided" });
+        } else if (!COUNSELLOR_FILES) {
+            errorlist.push({ error: "COUNSELLOR_FILES", message: "Invalid file provided" });
+        }
 
 
         if (![COUNSELLOR_ABOUT_DESCRIPTION].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_ABOUT_DESCRIPTION", message: "No about description provided" });
+        }else if (COUNSELLOR_ABOUT_DESCRIPTION.length > 150){
+            errorlist.push({ error: "COUNSELLOR_ABOUT_DESCRIPTION", message: "about description not more than 150 letters" });
         }
+
+
+
         if (![COUNSELLOR_PHOTO].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_PHOTO", message: "No photo provided" });
         }
 
         if (![COUNSELLOR_HEADLINE].every(Boolean)) {
             errorlist.push({ error: "COUNSELLOR_HEADLINE", message: "No headline provided" });
+        }else if (COUNSELLOR_HEADLINE.length > 150){
+            errorlist.push({ error: "COUNSELLOR_HEADLINE", message: "headline not more than 30 letters" });
         }
 
         if (![COUNSELLOR_VIDEO_URL].every(Boolean)) {
@@ -180,7 +199,7 @@ module.exports = (req, res, next) => {
         } else if (!COUNSELLOR_VIDEO_URL.includes("youtube.com")) {
             errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "Invalid Youtube URL provided" });
         }
-
+       
 
         if (COUNSELLOR_QUALIFICATION_INSTITUTE.length > 0) {
             if (checkQualification(COUNSELLOR_QUALIFICATION_INSTITUTE)) {
