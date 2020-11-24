@@ -72,7 +72,8 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                     console.log(res);
                     console.log(res.data);
 
-
+                
+                    
                     toast.success('Counsellee created successful!', {
                         position: "top-right",
                         autoClose: 3000,

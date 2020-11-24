@@ -27,6 +27,9 @@ import ViewMessages from './layout/ViewMessages'
 import ViewChangeRequest from './layout/ViewUserChangeRequest'
 import ViewAccepted from './layout/ViewUserAccepted';
 import ViewRequest from './layout/ViewUserRequest';
+
+import EditUserProfile from './layout/ViewEditUserProfile';
+ 
 import { baseURLAPI, baseURL } from "../../../Global";
 
 
@@ -45,6 +48,8 @@ const UserDashboard = (props) => {
     const [open, setOpen] = useState(false);
     const [isMessagesSelected, setIsMessagesSelected] = useState(false);
     const [isRequestSelected, setIsRequestSelected] = useState(false);
+
+     const [isEditSelected, setIsEditSelected] = useState(false);
     const [isUserCompleteSelected, setUserCompletedSelected] = useState(false);
     const { name, email, isCounsellor, image, isCompleted } = userDetails;
     var user = [];
@@ -86,7 +91,7 @@ const UserDashboard = (props) => {
     return (
         <>
             <Grid.Row>
-                <Grid.Column width={16}>
+                <Grid.Column width={20}>
                     <Container clearing style={{ backgroundColor: 'transparent', width: "100%", padding: '30px 3rem 0px 3rem' }}>
                         <div style={{ float: 'left' }}>
                             <List horizontal >
@@ -100,11 +105,18 @@ const UserDashboard = (props) => {
 
 
                         <div style={{ float: 'right' }}>
-                            {parseInt(localStorage.isCompleted) == 1 ? (
-                                <div>
+                            
+                               
                                     <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
                                         Home
                             </Label>
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsEditSelected(true);  setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                                        View Profile
+                            </Label>
+
+
+
+
                                     <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                         View Change Request
                             </Label>
@@ -135,11 +147,9 @@ const UserDashboard = (props) => {
                                     <Label as='a' circular style={{ marginRight: '10px' }}>
                                         <Icon name='like' style={{ margin: '0px' }} />
                                     </Label>
-                                </div>
-                            ) : (<div>
-                            </div>)
-                            }
-                            <Label as='a' onClick={e => logout()}>
+                              
+                            
+                            <Label as='a' onClick={e => logout()}style={{ marginRight: '10px' }}>
                                 <Icon name='sign out' />
                                 Log out
                             </Label>
@@ -155,16 +165,7 @@ const UserDashboard = (props) => {
                     </Container>
                 </Grid.Column >
             </Grid.Row >
-            {isRequestChangeSelected && <ViewChangeRequest />}
-
-            {isRequestAcceptSelected && <ViewAccepted />}
-            {/* {isMessagesSelected && <ViewMessages />} */}
-            {isRequestSelected && <ViewRequest />}
-            {/* {isProfileSelected && <ViewProfile />}  */}
-            {/* {!isProfileSelected && <Search />} */}
-            {/* {!isProfileSelected && <DisplayProfiles />} */}
-            {isProfileSelected && <Search />}
-
+         
 
 
             {parseInt(localStorage.verificationStatus) == 1 ? (
@@ -204,7 +205,19 @@ const UserDashboard = (props) => {
                     </Modal.Actions>
                 </Modal>
             </div>)
-            }
+            }   
+            
+            {isRequestChangeSelected && <ViewChangeRequest />}
+
+            {isRequestAcceptSelected && <ViewAccepted />}
+            {/* {isMessagesSelected && <ViewMessages />} */}
+            {isRequestSelected && <ViewRequest />}
+            {/* {isProfileSelected && <ViewProfile />}  */}
+            {/* {!isProfileSelected && <Search />} */}
+            {/* {!isProfileSelected && <DisplayProfiles />} */}
+            {isProfileSelected && <Search />}
+            {isEditSelected && <EditUserProfile />}
+             
         </>
     )
 }

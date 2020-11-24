@@ -150,10 +150,7 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
             
 
 
-            let newUser = pool.query(
-                'UPDATE   "T_USER" SET  "TX_IS_COMPLETED" = $1  WHERE "ID_USER_UUID" = $2', [
-                1, user.rows[0].ID_USER_UUID
-            ])
+            
 
 
 
@@ -267,6 +264,10 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
                     }
                 }
             }
+            const updatedUser = pool.query(
+                'UPDATE   "T_USER" SET  "TX_IS_COMPLETED" = $1 , "TX_PICTURE" = $2  WHERE "ID_USER_UUID" = $3', [
+                1, COUNSELLOR_PHOTO,user.rows[0].ID_USER_UUID
+            ])
            // res.status(400).json([{ error: "User not found ", message: "User not found" }]);
            res.status(200).json("success");
         }

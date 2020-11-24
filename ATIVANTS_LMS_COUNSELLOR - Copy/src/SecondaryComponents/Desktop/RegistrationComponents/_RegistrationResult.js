@@ -56,7 +56,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                 console.log(res);
                 console.log(res.data);
                  
-                localStorage.setItem("isCompleted", 1);
+               
                     toast.success('Counsellor created successful!', {
                         position: "top-right",
                         autoClose: 3000,

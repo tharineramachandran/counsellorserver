@@ -200,9 +200,10 @@ class ChangePassword extends React.Component {
             </Form.Group>
             )
             }
-            < br />
-            <button class="ui button" onClick={this.submitCode}>Submit</button>
-
+            < br /> 
+            <Button className="appBanner" color='blue' onClick={this.submitCode}>
+                                                            <Icon name='send' className="appBanner" /> Update password &nbsp;&nbsp;
+                                    </Button> &nbsp;&nbsp;&nbsp;
           </Form>
 
         ) :
@@ -239,7 +240,10 @@ class ChangePassword extends React.Component {
 
 
                 < br />
-                <button class="ui button" onClick={this.submitRequest}>Submit</button>
+                <Button className="appBanner" color='blue' onClick={this.submitRequest}>
+                                                            <Icon name='send' className="appBanner" /> Send Code   &nbsp;&nbsp;
+                                    </Button> &nbsp;&nbsp;&nbsp;
+                
               </Segment  >
             </Form>
           )
