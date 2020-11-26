@@ -142,7 +142,7 @@ const CounsellorDashboard = (props) => {
                         </div>
                         <div style={{ float: 'right' }}> 
                             <Label as='a' style={{ marginRight: '10px' }} onClick= {() => {
- setIsProfileSelected(!isProfileSelected) ;  setisRequestSelected(false) ; setViewDeclineSelected(false) ;                               
+ setIsProfileSelected(!isProfileSelected) ;  setisRequestSelected(false) ; setViewDeclineSelected(false) ; setIsMessagesSelected(false);  setViewDeclineSelected(false); setViewAcceptSelected(false);    setViewChangeSelected(false);     setisRequestSelected(false)                              
 }}  >
                                 {isProfileSelected ? "Home" : "View Profile"}
                             </Label>
@@ -211,7 +211,7 @@ const CounsellorDashboard = (props) => {
             
            <h3> </h3>
              
-            ):(
+            ):(< div>
              
                 <Modal
                 onClose={() => setOpen(false)}
@@ -222,7 +222,7 @@ const CounsellorDashboard = (props) => {
 <div class="ui message" style = {{backgroundColor :'#EA3C53'  ,color :'white'   }}  >
 <div class="header">
 Click here to complete profile set up 
-</div> </div> < br/></div> 
+</div> </div>  </div> 
                   }
               > 
                 <Modal.Content  >
@@ -232,11 +232,11 @@ Click here to complete profile set up
                   <Button onClick={() => setOpen(false)}>Cancel</Button>
                   
                 </Modal.Actions>
-              </Modal>
+              </Modal>< br/>   </div>
 
 
             
-            ) } </Grid.Column >
+            ) }< br/> < br/>  </Grid.Column >
             </Grid.Row >
             
             < Grid.Row >

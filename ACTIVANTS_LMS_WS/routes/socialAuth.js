@@ -37,8 +37,12 @@ router.get('/google/:id', function (req, res, next) {
                         });
                     }
                 }
+                
+                
+             
                 console.log(["===============updated ", user]);
-                return res.redirect(CLIENT_HOME_PAGE_URL);
+                   
+                 res.redirect(CLIENT_HOME_PAGE_URL);
             });
         })(req, res, next);
 });
@@ -61,7 +65,7 @@ router.get("/login/success", async (req, res) => {
         console.log("-------------------------user success-------------------------");
         var resUser = res;
         var reqUser = req;
-console.log(reqUser) ;
+console.log(reqUser.user) ;
         if (reqUser.user) {
             if (reqUser.user.hasOwnProperty("rows")) {
                 const jwtToken = jwtGenerator(req.user.googleId);

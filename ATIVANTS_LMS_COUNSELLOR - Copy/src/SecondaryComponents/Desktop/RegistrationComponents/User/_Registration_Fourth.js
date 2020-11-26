@@ -64,10 +64,10 @@ const Registration_Fourth = ({ formData, setForm, navigation, step }) => {
                                             <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
-                                        <Label as='a' circular onClick={() => navigation.go(3)}>
+                                        {/* <Label as='a' circular onClick={() => navigation.go(3)}>
                                             <Icon name={icon_name} />
                                                 Video&nbsp;
-                                            </Label>
+                                            </Label> */}
                                             {/* <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
                                             <Icon name="circle outline" />
                                                 Availability&nbsp;
@@ -76,7 +76,7 @@ const Registration_Fourth = ({ formData, setForm, navigation, step }) => {
                                             <Icon name="circle outline"/>
                                                 Verification&nbsp;
                                             </Label> */}
-                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
                                                     <Icon name="circle outline" />
                                                 Summary&nbsp;
                                             </Label>

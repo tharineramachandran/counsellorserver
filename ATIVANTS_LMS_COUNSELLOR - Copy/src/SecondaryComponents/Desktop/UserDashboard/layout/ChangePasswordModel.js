@@ -65,7 +65,7 @@ class ChangePassword extends React.Component {
 
 
 
-            this.results(false, "Unsuccessful to resent password", this.state.subject, "red");
+            this.results(false, "Unsuccessful to resent password,try google-sign", this.state.subject, "red");
           }
 
         });

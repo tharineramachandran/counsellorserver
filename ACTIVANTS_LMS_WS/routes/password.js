@@ -13,8 +13,11 @@ router.post("/confirmEmail", async (req, res) => {
     const user = await pool.query('SELECT * FROM "T_USER" WHERE "TX_USER_EMAIL" = $1', [
       data
     ]);
-
-    if (user.rows.length !== 0) {
+    
+    if (user.rows.length !== 0 ) {
+      if( user.rows[0].TX_GOOGLE_ID ){
+        res.status(400).json({ message: "Sign-in using google", code: false })} 
+      else {
       var ct_password_code = Math.floor((Math.random() * 1000) + 99999);
 
       let newUser = await pool.query(
@@ -27,7 +30,9 @@ router.post("/confirmEmail", async (req, res) => {
 
 
       res.status(200).json({ message: "Reset code is sent to your email address", code: true })
-    }
+    }   
+  
+  }
     res.status(400).json({ message: "no user found under this email address", code: false })
 
 

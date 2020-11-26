@@ -106,13 +106,13 @@ module.exports = (req, res, next) => {
         }
 
 
-        if (![COUNSELLOR_VIDEO_URL].every(Boolean)) {
-            errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "No video URL provided" });
-        } else if (!is_url(COUNSELLOR_VIDEO_URL)) {
-            errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "Invalid URL provided" });
-        } else if (!COUNSELLOR_VIDEO_URL.includes("youtube.com")) {
-            errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "Invalid Youtube URL provided" });
-        }
+        // if (![COUNSELLOR_VIDEO_URL].every(Boolean)) {
+        //     errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "No video URL provided" });
+        // } else if (!is_url(COUNSELLOR_VIDEO_URL)) {
+        //     errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "Invalid URL provided" });
+        // } else if (!COUNSELLOR_VIDEO_URL.includes("youtube.com")) {
+        //     errorlist.push({ error: "COUNSELLOR_VIDEO_URL", message: "Invalid Youtube URL provided" });
+        // }
 
 
         if (COUNSELLOR_QUALIFICATION_INSTITUTE.length > 0) {

@@ -46,11 +46,17 @@ class ViewMessages extends React.Component {
             }
         })
             .then((res) => {
+ console.log("res.data");
+                    console.log(res.data);
+                if(parseInt(res.data) == 0 ) {
+
+                    this.setState({ loadingChats: "No chats for you ",loadingMessages : 'No messages for you '})
+                }
 
                 if (parseInt(res.data) != this.state.totalChats) {
                     this.setTable();
                     this.setState({ totalChats: parseInt(res.data) })
-
+                   
                 }
 
             })

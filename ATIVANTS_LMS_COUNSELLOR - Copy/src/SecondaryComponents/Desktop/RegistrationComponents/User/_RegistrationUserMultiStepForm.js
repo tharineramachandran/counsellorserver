@@ -51,7 +51,7 @@ const steps = [
     { id: 'User_details' },
     { id: 'User_photo' },
     { id: 'User_about' },
-    { id: 'User_video' },
+    // { id: 'User_video' },
     // { id: 'Counsellor_availability' },
     // { id: 'Counsellor_documents' },
     { id: 'User_results' } 
@@ -75,8 +75,8 @@ const _RegistrationUserMultiStepForm = () => {
         case 'User_about':
             return <Registration_Third {...props} />
 
-        case 'User_video':
-            return <Registration_Fourth {...props} />
+        // case 'User_video':
+        //     return <Registration_Fourth {...props} />
 
         // case 'Counsellor_availability':
         //     return <Registration_Fifth {...props} />

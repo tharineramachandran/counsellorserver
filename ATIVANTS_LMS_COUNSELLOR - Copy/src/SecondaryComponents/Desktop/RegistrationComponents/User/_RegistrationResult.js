@@ -6,6 +6,7 @@ import {
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Divider, Table, Card, List, Container, Label, Item, Dropdown, Select
 } from 'semantic-ui-react';
 
+import { baseURLAPI, baseURL } from "../../../../Global";
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import ReCAPTCHA from "react-google-recaptcha";
@@ -66,8 +67,8 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
         var sixthString = [];
         var seventhString = [];
         var eightString = [];
-        if (checkedstate.checked && recapcha.value) {
-            axios.post(`http://localhost:5000/Counsellee/createCounsellee`, { formData: formData, COUNSELLORID: localStorage.userID })
+        if (checkedstate.checked ) {
+            axios.post(baseURLAPI + '/Counsellee/createCounsellee', { formData: formData, COUNSELLORID: localStorage.userID })
                 .then(res => {
                     console.log(res);
                     console.log(res.data);
@@ -201,10 +202,10 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                             <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
-                                        <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
+                                        {/* <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
                                             <Icon name="circle outline" />
                                                 Video&nbsp;
-                                            </Label>
+                                            </Label> */}
                                         {/* <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
                                             <Icon name="circle outline" />
                                                 Availability&nbsp;
@@ -213,7 +214,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                             <Icon name="circle outline" />
                                                 Verification&nbsp;
                                             </Label> */}
-                                        <Label as='a' circular onClick={() => navigation.go(4)}>
+                                        <Label as='a' circular onClick={() => navigation.go(3)}>
                                             <Icon name={icon_name} />
                                                 Summary&nbsp;
                                             </Label>
@@ -349,12 +350,12 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 ))}
                             </Table>
 
-                            <div style={{ width: '100%', textAlign: 'left' }}>
+                            {/* <div style={{ width: '100%', textAlign: 'left' }}>
                                 <Label as='a' color='blue' ribbon>
                                     Counselling details
                         </Label>
 
-                            </div>
+                            </div> */}
                             <br />
                             {thirdboxError.length > 0 && (
                                 <Form.Group widths='equal'>
@@ -371,7 +372,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 </Form.Group>
                             )
                             }
-                            <Table>
+                            {/* <Table>
 
                                 {COUNSELLOR_COUNSELLING_DETAILS.map((details, index) => (
                                     <Table.Body>
@@ -396,7 +397,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                         }
                                     </Table.Body>
                                 ))}
-                            </Table>
+                            </Table> */}
                         </Segment >
                         < Segment color='blue' size="mini" widths='equal' >
                             <div style={{ width: '100%', textAlign: 'left' }}>
@@ -490,7 +491,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
 
                         </Segment >
                         < Segment color='red' size="mini" widths='equal' >
-                            <div style={{ width: '100%', textAlign: 'left' }}>
+                            {/* <div style={{ width: '100%', textAlign: 'left' }}>
                                 <Label as='a' color='blue' ribbon>
                                     Video
                         </Label>
@@ -499,7 +500,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                         <Icon name="edit" />
                                                     Edit&nbsp;
                                             </Label>
-                                </div>            </div>
+                                </div>            </div> */}
                             <br />
                             {sixthboxError.length > 0 && (
                                 <Form.Group widths='equal'>
@@ -519,7 +520,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
 
                             <br />
                             <div >
-
+{/* 
                                 {COUNSELLOR_VIDEO_URL ? (
                                     <iframe width="560" height="315" src={COUNSELLOR_VIDEO_URL} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
@@ -545,7 +546,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                         </Form.Field>
                                     </Form.Group>
                                 )
-                                }
+                                } */}
                                 <Table color='teal' key='teal' inverted >
                                     <Table.Body>
                                         <Table.Row>
@@ -686,6 +687,22 @@ As long as the website and the information and services on the website are provi
                                     </Table.Body>
                                 </Table>
                             </div>
+                            <br/>
+                            {seventhboxError.length > 0 && (
+                                            <Form.Group widths='equal'>
+                                                <Form.Field className="CustomForm">
+                                                    <Message negative style={{ padding: '0.5rem' }}>
+                                                        {seventhboxError.map((firstStringmessage, index) => (
+                                                            <p>
+                                                                {firstStringmessage}
+                                                            </p>
+                                                        ))}
+
+                                                    </Message>
+                                                </Form.Field>
+                                            </Form.Group>
+                                        )
+                                        }
                         </Segment >
                         {/* < Segment color='yellow' size="mini" widths='equal' >
                             <div style={{ width: '100%', textAlign: 'left' }}>
@@ -986,7 +1003,7 @@ As long as the website and the information and services on the website are provi
                             </div>
                         </Segment > */}
 
-                        <ReCAPTCHA
+                        {/* <ReCAPTCHA
                             sitekey={keys.google.googleRecapcha }
 
                             style={{ display: "inline-block" }}
@@ -994,7 +1011,7 @@ As long as the website and the information and services on the website are provi
                           
                             onChange={handleChange}
                             asyncScriptOnLoad={asyncScriptOnLoad}
-                        />
+                        /> */}
 
                         <Button className="appBanner" color='blue' onClick={_handleSubmitClick}>
                             <Icon name='send' className="appBanner" /> Submit &nbsp;&nbsp;

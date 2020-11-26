@@ -43,12 +43,13 @@ if(content  != null){
     
   setMessage ({  header,content,color             })
 }  
-    if (localStorage.jwtToken) {
+ 
+    if (localStorage.jwtToken ) {
  
                
         const CalendarId = urlParams.get('id');
          
-        
+
           if (CalendarId && localStorage.userID) {
             const response = await axios ({
               url: baseURLAPI+"/request/userID?userID="+localStorage.userID+"&requestID="+CalendarId     ,
