@@ -1,9 +1,9 @@
 
-const GOOGLE_CLIENT_SECRET = "aaaaaaaaaa";
-const GOOGLE_CLIENT_ID = "aaaaaaaaaaaaaaaaaaaaaaaaaa";
+const GOOGLE_CLIENT_SECRET = "qeqwnpnIyhtEGPnKKxUqH6mH";
+const GOOGLE_CLIENT_ID = "372290496331-gtol72os2aha6loa609ov1ft12p801ne.apps.googleusercontent.com";
 
-const ACCESS_KEY_ID="rrrrrrrrrrrrrrrrrrrr";
-const  SECRET_ACCESS_KEY  = "44444444444444444";
+const ACCESS_KEY_ID="AKIA24FZDIZKVRXSPIWH";
+const  SECRET_ACCESS_KEY  = "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";
 
 module.exports = {
     google: {
