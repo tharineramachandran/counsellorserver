@@ -6,7 +6,7 @@ const fs = require('fs');
 const readline = require('readline');
 const keys = require('../config/keys');
 const opn = require('opn');
- 
+
 const { google } = require('googleapis');
 const passport = require('passport');
 
@@ -14,15 +14,15 @@ const window = require('window');
 const GOOGLE_CLIENT_SECRET = keys.google.clientSecret;
 const GOOGLE_CLIENT_ID = keys.google.clientID;
 
-const { baseURLAPI ,baseURL   } = require('../Global');
+const { baseURLAPI, baseURL } = require('../Global');
 
 const CLIENT_HOME_PAGE_URL = baseURL;
-const CLIENT_BASEURL_PAGE_URL = baseURLAPI            ;
+const CLIENT_BASEURL_PAGE_URL = baseURLAPI;
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  CLIENT_BASEURL_PAGE_URL+ "/request/google/callback"
+  CLIENT_BASEURL_PAGE_URL + "/request/google/callback"
 );
 
 // generate a url that asks permissions for Blogger and Google Calendar scopes
@@ -40,46 +40,43 @@ const url = oauth2Client.generateAuthUrl({
 
 var requestID = '';
 router.get("/getCounsellorRequests/:id", authorization, async (req, res) => {
-  try { var id = req.params.id;
-    
-      const user = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_user_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
+  try {
+    var id = req.params.id;
+
+    const user = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_user_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
       [id, '3']);
- 
+
     res.json(user.rows);
   } catch (error) {
     console.log(error.message);
   }
 })
- 
+
 
 router.get("/getTotalCounsellorRequests/:id", authorization, async (req, res) => {
-  try { var id = req.params.id;
-    
-      const user = await pool.query('SELECT  *  FROM "CT_COUNSELLOR_REQUESTS"     where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
+  try {
+    var id = req.params.id;
+
+    const user = await pool.query('SELECT  *  FROM "CT_COUNSELLOR_REQUESTS"     where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
       [id, '3']);
- 
+
     res.json(user.rowCount);
   } catch (error) {
     console.log(error.message);
   }
 })
 router.get("/user/getRequests/:id", authorization, async (req, res) => {
-  try { 
+  try {
     var id = req.params.id;
-    
-      const user = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_user_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
+
+    const user = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_user_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
       [id, '3']);
- 
+
     res.json(user.rows);
   } catch (error) {
     console.log(error.message);
   }
 })
-
-
-
-
-
 
 router.get("/userID", async (req, res) => {
 
@@ -92,14 +89,6 @@ router.get("/userID", async (req, res) => {
 
   res.json("Successful");
 });
-
-
-
-
-
-
-
-
 
 router.post("/sendResponse", authorization, (req, res) => {
   try {
@@ -234,7 +223,7 @@ router.get("/google/:id", async (req, res) => {
                 console.log(err);
               } else {
                 // Update session and add session to confirm
-                
+
                 const updateRequest = pool.query('UPDATE "CT_COUNSELLOR_REQUESTS" SET "ct_counsellor_response" = $1 WHERE "id" = $2',
                   [response, requestID]);
                 pool.query(
@@ -277,7 +266,7 @@ router.get("/google/:id", async (req, res) => {
     }
   }
 });
- 
+
 oauth2Client.on('tokens', (tokens) => {
   if (tokens.refresh_token) {
     console.log(["Token is adad", tokens.refresh_token]);
@@ -287,6 +276,6 @@ oauth2Client.on('tokens', (tokens) => {
   }
   console.log(["Token is set", tokens.access_token]);
 });
-  
+
 
 module.exports = router;

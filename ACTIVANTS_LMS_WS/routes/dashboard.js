@@ -6,7 +6,6 @@ router.get("/", authorization, async (req, res) => {
     try {
         console.log(req.user);
         console.log(authorization); 
-
         console.log(req.user);
         const user = await pool.query('SELECT "TX_USER_NAME","TX_USER_EMAIL" FROM "T_USER" WHERE "ID_USER_UUID" = $1',
         [req.user]);

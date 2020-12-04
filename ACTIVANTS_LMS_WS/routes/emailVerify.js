@@ -11,11 +11,8 @@ const emailFun = require('../functions/email');
 router.get("/:email", async (req, res) => {
   try {
     const email = req.params.email;
- 
     const updateRequest = await pool.query('UPDATE "T_USER" SET "TX_VERIFICATION_STATUS" = $1 WHERE "TX_USER_EMAIL" = $2',
     [1, email]);
-       
-
     emailFun.sendEmail(email,"email address verified","Dear user,this is confirmation email that  you have verified your email address   "  ) ;
       res.redirect(baseURL+'/?color=green&header=Success&content=Successfully+verified+email+address');    
 

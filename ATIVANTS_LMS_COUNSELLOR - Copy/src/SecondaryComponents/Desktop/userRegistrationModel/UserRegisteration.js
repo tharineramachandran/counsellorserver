@@ -13,7 +13,7 @@ import {
  
 import ReCAPTCHA from "react-google-recaptcha";
 import keys from "../../../env"; 
-import {baseURLAPI ,baseURL }from "../../../Global";
+import {baseURLAPI ,baseURL,googleRecapcha }from "../../../Global";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from 'react-datepicker';
@@ -70,7 +70,7 @@ class UserRegisteration extends React.Component {
       <Container> <Segment> 
  
  <ReCAPTCHA
-                            sitekey={keys.google.googleRecapcha }
+                            sitekey={ googleRecapcha }
 
                             style={{ display: "inline-block" }}
                             theme="light"

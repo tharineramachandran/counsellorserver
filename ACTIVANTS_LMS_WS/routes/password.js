@@ -1,38 +1,36 @@
 const router = require("express").Router();
 const pool = require("../database/Db_Connection");
 const authorization = require("../middleware/authorization");
-
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const email = require('../functions/email');
+
 router.post("/confirmEmail", async (req, res) => {
   try {
     const data = req.body.email;
-
-
     const user = await pool.query('SELECT * FROM "T_USER" WHERE "TX_USER_EMAIL" = $1', [
       data
     ]);
-    
-    if (user.rows.length !== 0 ) {
-      if( user.rows[0].TX_GOOGLE_ID ){
-        res.status(400).json({ message: "Sign-in using google", code: false })} 
+
+    if (user.rows.length !== 0) {
+      if (user.rows[0].TX_GOOGLE_ID) {
+        res.status(400).json({ message: "Sign-in using google", code: false })
+      }
       else {
-      var ct_password_code = Math.floor((Math.random() * 1000) + 99999);
+        var ct_password_code = Math.floor((Math.random() * 1000) + 99999);
 
-      let newUser = await pool.query(
-        'INSERT INTO "CT_PASSWORD_CHANGE" (ct_password_code, ct_userid ) VALUES ($1,$2 ) RETURNING *',
-        [ct_password_code, user.rows[0].ID_USER_UUID]
-      );
-      var subject = "Password Change";
-      var message = await "Dear " + user.rows[0].TX_USER_NAME + " ,your password change code is  " + ct_password_code;
-      await email.sendEmail(user.rows[0].TX_USER_EMAIL, subject, message);
+        let newUser = await pool.query(
+          'INSERT INTO "CT_PASSWORD_CHANGE" (ct_password_code, ct_userid ) VALUES ($1,$2 ) RETURNING *',
+          [ct_password_code, user.rows[0].ID_USER_UUID]
+        );
+        var subject = "Password Change";
+        var message = await "Dear " + user.rows[0].TX_USER_NAME + " ,your password change code is  " + ct_password_code;
+        
+        await email.sendEmail(user.rows[0].TX_USER_EMAIL, subject, message);
+        res.status(200).json({ message: "Reset code is sent to your email address", code: true })
+      }
 
-
-      res.status(200).json({ message: "Reset code is sent to your email address", code: true })
-    }   
-  
-  }
+    }
     res.status(400).json({ message: "no user found under this email address", code: false })
 
 
@@ -44,7 +42,7 @@ router.post("/confirmEmail", async (req, res) => {
 
 router.post("/reset", async (req, res) => {
   try {
-    const data = req.body; 
+    const data = req.body;
     const request = await pool.query('SELECT * FROM "CT_PASSWORD_CHANGE" WHERE "ct_password_code" = $1', [
       data.code
     ]);
@@ -70,7 +68,7 @@ router.post("/reset", async (req, res) => {
       user.rows[0].ID_USER_UUID
     ]);
     const jwtToken = jwtGenerator(user.rows[0].ID_USER_UUID);
-    res.status(200).json({ jwtToken: jwtToken, user: user.rows[0]  });
+    res.status(200).json({ jwtToken: jwtToken, user: user.rows[0] });
 
   } catch (err) {
     res.status(400).json("An error occured");

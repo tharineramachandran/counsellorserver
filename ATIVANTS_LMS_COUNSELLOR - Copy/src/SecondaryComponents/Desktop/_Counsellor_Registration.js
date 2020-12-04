@@ -8,7 +8,7 @@ import axios from '../../Store/_AxiosInstance';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import googleLogin from "google-auth-library"
-import { baseURLAPI, baseURL } from "../../Global";
+import { baseURLAPI,googleRecapcha, baseURL } from "../../Global";
 import keys from "../../env";
 import ReCAPTCHA from "react-google-recaptcha";
 const Counsellor_Registration = props => {
@@ -250,7 +250,7 @@ const Counsellor_Registration = props => {
                                                 </Form.Field>
                                             </Form.Group  >     <div   >
                                                 <ReCAPTCHA
-                                                    sitekey={keys.google.googleRecapcha}
+                                                    sitekey={googleRecapcha}
 
                                                     style={{ display: "inline-block" }}
                                                     theme="light"

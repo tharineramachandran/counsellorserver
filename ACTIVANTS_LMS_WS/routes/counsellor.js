@@ -229,18 +229,11 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
 
 
         if (user.rows.length == 1 && COUNSELLOR_FILES.length > 0) {
-            uploadtoS3 = await awsS3.uploadtoS3(COUNSELLOR_FILES, "counsellorverify");
+            uploadtoS3 = await awsS3.uploadtoS3(COUNSELLOR_FILES, "counsellorverifydocuments");
 
         } else { uploadtoS3 = true }
 
-
-
         if (user.rows.length == 1 && uploadtoS3) {
-
-
-
-
-
 
 
             const newCounsellorDetails = await pool.query(
@@ -375,8 +368,6 @@ router.post("/UpdatePhoto", authorization, async (req, res) => {
     var { COUNSELLOR_PHOTO } = req.body.formData;
     const COUNSELLORID = req.body.COUNSELLORID;
 
-
-
     try {
 
         let newUser = pool.query(
@@ -387,15 +378,11 @@ router.post("/UpdatePhoto", authorization, async (req, res) => {
             'UPDATE   "CT_COUNSELLOR_INTRODUCTION" SET  "ct_counsellor_photo" = $1   WHERE "ct_counsellor_id" = $2', [
             COUNSELLOR_PHOTO, COUNSELLORID])
 
-
-
-
         res.status(200).json("success");
 
     } catch (error) {
         console.error(["api consellee update", error.message]);
         res.status(400).json([{ error: "An error occurred ", message: "An error occurred" }]);
-
     }
 })
 
@@ -476,18 +463,12 @@ function formatDates(dates) {
                 FROM: dates[i].ct_from, TO: dates[i].ct_to
 
             })
-
-
         }
         return datesformat;
-
     }
-
-
-
 };
 
- 
+
 
 
 
@@ -495,14 +476,14 @@ function formatDates(dates) {
 router.post("/UpdateTimeTable", authorization, async (req, res) => {
     var { COUNSELLOR_COUNTRY_CODE } = req.body.formData;
     const COUNSELLORID = req.body.COUNSELLORID;
-        const days =req.body.days;
-      var  COUNSELLOR_AVAILABILITY_MONDAY =days.Monday ;
-       var  COUNSELLOR_AVAILABILITY_TUESDAY=days.Tuesday ;
-      var  COUNSELLOR_AVAILABILITY_WEDNESDAY=days.Wednesday ;
-      var  COUNSELLOR_AVAILABILITY_THURSDAY=days.Thursday ;
-        var COUNSELLOR_AVAILABILITY_FRIDAY=days.Friday ;
-        var   COUNSELLOR_AVAILABILITY_SATURDAY =days.Saturday ;
- 
+    const days = req.body.days;
+    var COUNSELLOR_AVAILABILITY_MONDAY = days.Monday;
+    var COUNSELLOR_AVAILABILITY_TUESDAY = days.Tuesday;
+    var COUNSELLOR_AVAILABILITY_WEDNESDAY = days.Wednesday;
+    var COUNSELLOR_AVAILABILITY_THURSDAY = days.Thursday;
+    var COUNSELLOR_AVAILABILITY_FRIDAY = days.Friday;
+    var COUNSELLOR_AVAILABILITY_SATURDAY = days.Saturday;
+
     try {
         await pool.query(
             'DELETE FROM "CT_COUNSELLOR_AVAILABILITY_MONDAY" WHERE "ct_counsellor_id" = $1',
@@ -511,107 +492,107 @@ router.post("/UpdateTimeTable", authorization, async (req, res) => {
         await pool.query(
             'DELETE FROM "CT_COUNSELLOR_AVAILABILITY_TUESDAY" WHERE "ct_counsellor_id" = $1',
             [COUNSELLORID]);
-          await pool.query(
+        await pool.query(
             'DELETE  FROM "CT_COUNSELLOR_AVAILABILITY_WEDNESDAY" WHERE "ct_counsellor_id" = $1',
             [COUNSELLORID]);
         await pool.query(
             'DELETE  FROM "CT_COUNSELLOR_AVAILABILITY_THURSDAY" WHERE "ct_counsellor_id" = $1',
             [COUNSELLORID]);
-     await pool.query(
+        await pool.query(
             'DELETE  FROM "CT_COUNSELLOR_AVAILABILITY_FRIDAY" WHERE "ct_counsellor_id" = $1',
             [COUNSELLORID]);
-      await pool.query(
+        await pool.query(
             'DELETE FROM "CT_COUNSELLOR_AVAILABILITY_SATURDAY" WHERE "ct_counsellor_id" = $1',
             [COUNSELLORID]);
 
- console.log({ COUNSELLOR_COUNTRY_CODE ,COUNSELLOR_AVAILABILITY_MONDAY, COUNSELLOR_AVAILABILITY_TUESDAY, COUNSELLOR_AVAILABILITY_WEDNESDAY,
-    COUNSELLOR_AVAILABILITY_THURSDAY, COUNSELLOR_AVAILABILITY_FRIDAY, COUNSELLOR_AVAILABILITY_SATURDAY }) ;
+        console.log({
+            COUNSELLOR_COUNTRY_CODE, COUNSELLOR_AVAILABILITY_MONDAY, COUNSELLOR_AVAILABILITY_TUESDAY, COUNSELLOR_AVAILABILITY_WEDNESDAY,
+            COUNSELLOR_AVAILABILITY_THURSDAY, COUNSELLOR_AVAILABILITY_FRIDAY, COUNSELLOR_AVAILABILITY_SATURDAY
+        });
 
 
-            if (Array.isArray(COUNSELLOR_AVAILABILITY_MONDAY)  ) {
+        if (Array.isArray(COUNSELLOR_AVAILABILITY_MONDAY)) {
 
-                COUNSELLOR_AVAILABILITY_MONDAY.forEach(insertConsellorMonday);
+            COUNSELLOR_AVAILABILITY_MONDAY.forEach(insertConsellorMonday);
 
-                function insertConsellorMonday(item, index) {
+            function insertConsellorMonday(item, index) {
 
-                    if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
-                        pool.query(
-                            'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_MONDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
-                            [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
-                    }
+                if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
+                    pool.query(
+                        'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_MONDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
+                        [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
                 }
             }
+        }
 
-            if (Array.isArray(COUNSELLOR_AVAILABILITY_TUESDAY) ) {
+        if (Array.isArray(COUNSELLOR_AVAILABILITY_TUESDAY)) {
 
-                COUNSELLOR_AVAILABILITY_TUESDAY.forEach(insertConsellorTuesday);
+            COUNSELLOR_AVAILABILITY_TUESDAY.forEach(insertConsellorTuesday);
 
-                function insertConsellorTuesday(item, index) {
+            function insertConsellorTuesday(item, index) {
 
-                    if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
-                        pool.query(
-                            'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_TUESDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
-                            [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
-                    }
+                if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
+                    pool.query(
+                        'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_TUESDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
+                        [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
                 }
             }
+        }
 
-            if (Array.isArray(COUNSELLOR_AVAILABILITY_WEDNESDAY) )  {
+        if (Array.isArray(COUNSELLOR_AVAILABILITY_WEDNESDAY)) {
 
-                COUNSELLOR_AVAILABILITY_WEDNESDAY.forEach(insertConsellorWednesday);
+            COUNSELLOR_AVAILABILITY_WEDNESDAY.forEach(insertConsellorWednesday);
 
-                function insertConsellorWednesday(item, index) {
+            function insertConsellorWednesday(item, index) {
 
-                    if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
-                        pool.query(
-                            'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_WEDNESDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
-                            [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
-                    }
+                if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
+                    pool.query(
+                        'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_WEDNESDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
+                        [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
                 }
             }
-            if (Array.isArray(COUNSELLOR_AVAILABILITY_THURSDAY) )  {
+        }
+        if (Array.isArray(COUNSELLOR_AVAILABILITY_THURSDAY)) {
 
-                COUNSELLOR_AVAILABILITY_THURSDAY.forEach(insertConsellorThursday);
+            COUNSELLOR_AVAILABILITY_THURSDAY.forEach(insertConsellorThursday);
 
-                function insertConsellorThursday(item, index) {
+            function insertConsellorThursday(item, index) {
 
-                    if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
-                        pool.query(
-                            'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_THURSDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
-                            [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
-                    }
+                if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
+                    pool.query(
+                        'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_THURSDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
+                        [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
                 }
             }
-            if (Array.isArray(COUNSELLOR_AVAILABILITY_FRIDAY) )  {
+        }
+        if (Array.isArray(COUNSELLOR_AVAILABILITY_FRIDAY)) {
 
-                COUNSELLOR_AVAILABILITY_FRIDAY.forEach(insertConsellorFriday);
+            COUNSELLOR_AVAILABILITY_FRIDAY.forEach(insertConsellorFriday);
 
-                function insertConsellorFriday(item, index) {
+            function insertConsellorFriday(item, index) {
 
-                    if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
+                if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
 
-                        pool.query(
-                            'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_FRIDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
-                            [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
-                    }
+                    pool.query(
+                        'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_FRIDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
+                        [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
                 }
             }
-            if (Array.isArray(COUNSELLOR_AVAILABILITY_SATURDAY) )  {
+        }
+        if (Array.isArray(COUNSELLOR_AVAILABILITY_SATURDAY)) {
 
-                COUNSELLOR_AVAILABILITY_SATURDAY.forEach(insertConsellorSaturday);
+            COUNSELLOR_AVAILABILITY_SATURDAY.forEach(insertConsellorSaturday);
 
 
-                function insertConsellorSaturday(item, index) {
-                    if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
+            function insertConsellorSaturday(item, index) {
+                if (item.TO && item.FROM && COUNSELLOR_COUNTRY_CODE) {
 
-                        pool.query(
-                            'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_SATURDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
-                            [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
-                    }
+                    pool.query(
+                        'INSERT INTO "CT_COUNSELLOR_AVAILABILITY_SATURDAY" (    ct_to, ct_from, ct_counsellor_id, ct_counsellor_timezone_code   ) VALUES($1,$2,$3,$4) RETURNING *',
+                        [item.TO, item.FROM, COUNSELLORID, COUNSELLOR_COUNTRY_CODE]);
                 }
             }
-
-
+        }
 
         res.status(200).json("success");
 
@@ -655,7 +636,7 @@ router.post("/UpdateDetails", checkCounsellorUpdate, async (req, res) => {
             function insertConsellorQualInst(item, index) {
                 pool.query(
                     'INSERT INTO "CT_COUNSELLOR_QUALIFICATION_INSTITUTE" (    ct_institute_code, ct_qualification_code, ct_counsellor_id ) VALUES($1,$2,$3) RETURNING *',
-                    [   item.CT_INSTITUTE_CODE, item.CT_QUALIFICATION_CODE, COUNSELLORID]);
+                    [item.CT_INSTITUTE_CODE, item.CT_QUALIFICATION_CODE, COUNSELLORID]);
             }
 
         }
@@ -684,15 +665,11 @@ router.get("/profilePicture/:id", authorization, async (req, res) => {
 
     try {
         const COUNSELLORID = req.params.id;
-
-
         if (COUNSELLORID) {
 
             const newCounsellorDetails = await pool.query(
                 'SELECT "TX_PICTURE" FROM "T_USER" WHERE "ID_USER_UUID" = $1',
                 [parseInt(COUNSELLORID)]);
-
-
             res.json({ COUNSELLOR_PHOTO: newCounsellorDetails.rows[0].TX_PICTURE });
         }
 
@@ -707,9 +684,6 @@ router.get("/profilePicture/:id", authorization, async (req, res) => {
 
 
 
-
-
-
 router.get('/info/:id', async (req, res) => {
 
     const item = req.params.id;
@@ -720,7 +694,6 @@ router.get('/info/:id', async (req, res) => {
             var counsellor_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_ID" = $1', [item]);
             var counselling_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_COUNSELLING_DETAILS" where "ct_counsellor_id" = $1', [item]);
             var counselling_education = await pool.query('SELECT * FROM "CT_COUNSELLOR_QUALIFICATION_INSTITUTE" where "ct_counsellor_id" = $1', [item]);
-
             var counselling_edu_values = [];
 
             for (let x = 0; x < counselling_education.rowCount; x++) {

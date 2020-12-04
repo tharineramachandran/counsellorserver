@@ -8,10 +8,6 @@ const passport = require('passport');
 const { route } = require('./jwtAuth');
 const CLIENT_HOME_PAGE_URL = "http://localhost:3000";
 
-//1.scope : what info you need to retrieve..  
-
-// router.get('/google', passport.authenticate('google', { scope: ["profile","https://www.googleapis.com/auth/calendar"] }));
-
 
 router.get('/google' , function(req, res, next) {
     passport.authenticate('google', { scope: ["profile"] }, 
@@ -24,8 +20,6 @@ router.get('/google' , function(req, res, next) {
      });
    })(req, res, next);
  });
-
-
 
 router.get('/google/callback', passport.authenticate('google', {
     successRedirect:  "/Counsellor/Account",
@@ -46,17 +40,12 @@ router.get("/login/success", async (req, res) => {
     var reqUser = req; 
 
     if (reqUser.user.rows ) { 
-         
         const jwtToken = jwtGenerator(req.user.googleId);
         res.json({ jwtToken :jwtToken, isCounsellor :reqUser.user.rows[0].IS_COUNSELLOR ,userID :reqUser.user.rows[0].ID_USER_UUID });
-       
     }
     else if (reqUser.user){
-
-
         const jwtToken = jwtGenerator(req.user.googleId);
         res.json({ jwtToken :jwtToken, isCounsellor :reqUser.user.IS_COUNSELLOR ,userID :reqUser.user.ID_USER_UUID });
-        
     }
     else
     {
@@ -65,9 +54,7 @@ router.get("/login/success", async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-    req.logout();
-    console.log(req.user)
-    console.log(req.user)
+    req.logout();    
     res.redirect(CLIENT_HOME_PAGE_URL);
 })
  

@@ -15,10 +15,7 @@ import axios from '../../Store/_AxiosInstance';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import googleLogin from "google-auth-library"
-
-import { baseURLAPI, baseURL } from "../../Global";
-
-
+import { baseURLAPI, baseURL, googleRecapcha } from "../../Global";
 
 const _RegistrationModal = props => {
 
@@ -30,8 +27,7 @@ const _RegistrationModal = props => {
     const [openPassword, setPasswordOpen] = useState(false)
     const [ModalStudentSignUp, setModalStudentSignUp] = useState(false);
     const [ModalPassword, setModalPassword] = useState(false);
-    const [wrongPassword, setWrongPassword] = useState(0)
-
+    const [wrongPassword, setWrongPassword] = useState(0);
 
     const [inputs, setInputs] = useState({
         TX_USER_NAME: "",
@@ -42,7 +38,6 @@ const _RegistrationModal = props => {
     const [errorLoginMessage, setErrorLoginMessage] = useState('');
     const [errorSignUpMessage, setErrorSignUpMessage] = useState('');
     const [rememberMe, setRememberMe] = useState();
-
     const { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD } = inputs;
     const setAuth = useContext(Authorize);
 
@@ -77,7 +72,6 @@ const _RegistrationModal = props => {
                     localStorage.checkbox = false;
                 }
 
-
                 const body = { TX_USER_NAME, TX_USER_EMAIL, TX_USER_PASSWORD };
                 console.log(body);
 
@@ -89,7 +83,6 @@ const _RegistrationModal = props => {
 
                 const parseResponse = await response.json()
                 console.log("registration data", parseResponse)
-
                 if (parseResponse.jwtToken) {
                     await localStorage.setItem("jwtToken", parseResponse.jwtToken)
                     await localStorage.setItem("email", parseResponse.user.TX_USER_EMAIL);
@@ -99,8 +92,6 @@ const _RegistrationModal = props => {
                     await localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
                     await localStorage.setItem("isCompleted", parseResponse.user.TX_IS_COMPLETED);
                     await localStorage.setItem("verificationStatus", parseResponse.user.TX_VERIFICATION_STATUS);
-
-
 
                     setAuth(true);
                     toast.success('login successful!', {
@@ -126,8 +117,6 @@ const _RegistrationModal = props => {
             setErrorSignUpMessage("Check Recapcha before submit");
             setAuth(false);
         }
-
-
     }
 
 
@@ -157,7 +146,6 @@ const _RegistrationModal = props => {
             console.log(["--------------------------------ss", parseRes]);
             if (parseRes.jwtToken) {
 
-
                 localStorage.setItem("jwtToken", parseRes.jwtToken)
                 localStorage.setItem("email", parseRes.user.TX_USER_EMAIL);
                 localStorage.setItem("isCounsellor", parseRes.user.IS_COUNSELLOR);
@@ -180,18 +168,15 @@ const _RegistrationModal = props => {
             }
             else {
                 setErrorLoginMessage(parseRes);
-
                 setWrongPassword(wrongPassword + 1);
                 console.log(wrongPassword);
                 setAuth(false);
             }
 
-
         } catch (error) {
             console.log(error.message);
         }
     }
-
 
     useEffect(() => {
         const setHeightofScreen = () => setHeight(window.innerHeight)
@@ -203,8 +188,6 @@ const _RegistrationModal = props => {
     })
     const [recapcha, setrecapcha] = useState([]);
 
-
-
     const handleChange = async (value) => {
         console.log("Captcha value:", value);
         setrecapcha({ value });
@@ -213,9 +196,6 @@ const _RegistrationModal = props => {
     };
 
     const asyncScriptOnLoad = async () => {
-
-
-
         setrecapcha({ callback: "called!" });
         console.log("scriptLoad - reCaptcha Ref-");
     };
@@ -245,7 +225,6 @@ const _RegistrationModal = props => {
         setModalStudentSignUp(false)
         setModalPassword(false)
     }
-
 
     const close = () => {
         setOpen(false);
@@ -336,7 +315,7 @@ const _RegistrationModal = props => {
                                                     &nbsp;&nbsp;&nbsp;
                                                         <Checkbox name="rememberMe" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} label='Remember me' />
                                                 </Form.Field>
-                                            
+
                                             </Form.Group>
                                             {errorLoginMessage && (
                                                 <Form.Group widths='equal'>
@@ -483,15 +462,13 @@ const _RegistrationModal = props => {
                         size={'large'}
                         closeOnEscape={false}
                         closeOnDimmerClick={false}
-
                         open={open}
                         onClose={() => close()}>
-
                         <Modal.Content>
                             <Grid textAlign='center' verticalAlign='middle'>
                                 <Grid.Column style={{ maxWidth: 450 }}>
                                     <Header as='h2' color='black' textAlign='center' style={{ padding: "10px" }}>
-                                        Sign up as Student 
+                                        Sign up as Student
                             </Header>
                                     <br />    <Form size='large' >
                                         <List divided relaxed>
@@ -565,18 +542,16 @@ const _RegistrationModal = props => {
                                                 </Form.Field>
                                             </Form.Group  >     <div   >
                                                 <ReCAPTCHA
-                                                    sitekey={keys.google.googleRecapcha}
-
+                                                    sitekey={googleRecapcha}
+                                                    size="normal"
+                                                    render="explicit"
                                                     style={{ display: "inline-block" }}
                                                     theme="light"
-
                                                     onChange={handleChange}
                                                     asyncScriptOnLoad={asyncScriptOnLoad}
                                                 />
 
-
                                             </div>
-
 
                                             {errorSignUpMessage && (
                                                 <Form.Group widths='equal'>
@@ -601,17 +576,14 @@ const _RegistrationModal = props => {
                                                         onOpen={() => setTermsOpen(true)}
                                                         trigger={
 
-
                                                             <p>
                                                                 By clicking Sign-up, you agree to the counselling gorilla's terms of service  and privacy policy
-    </p>}
+                                                                </p>}
                                                     >
                                                         <Modal.Header>Terms and Conditions</Modal.Header>
                                                         <Modal.Content image scrolling>
-
                                                             <Modal.Description>
                                                                 <Container width='20%' text>
-
                                                                     <p>
 
                                                                         Welcome to Counselling LMS!
@@ -625,18 +597,15 @@ The following terminology applies to these Terms and Conditions, Privacy Stateme
 Cookies <br />  </p>
 
                                                                 </Container>
-
                                                             </Modal.Description>
                                                         </Modal.Content>
                                                         <Modal.Actions>
                                                             <Button onClick={() => setTermsOpen(false)}  >
                                                                 Close
-        </Button>
+                                                                </Button>
                                                         </Modal.Actions>
                                                     </Modal>
-
                                                 </Form.Field>
-
                                             </Form.Group>
                                         </Segment>
                                     </Form>
@@ -648,7 +617,6 @@ Cookies <br />  </p>
                                         <span onClick={CounsellorSignUp}>&nbsp;&nbsp;<a href='#'>Sign Up as a Counsellor</a></span>
                                         <br />
                                         <span onClick={PasswordSignUp}>&nbsp;&nbsp;<a href='#'>Forgot Password</a></span>
-
                                     </Message>
                                 </Grid.Column>
                             </Grid>
@@ -657,8 +625,6 @@ Cookies <br />  </p>
                     </Modal>
                 </>
             }
-
-
         </React.Fragment >
     )
 }

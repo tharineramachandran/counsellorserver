@@ -101,12 +101,10 @@ router.post("/sessionchange", authorization, async (req, res) => {
 
         var datestr = date.split("T");
         var datestr3 = datestr[0].split("-");
-        
+
         var day = (parseInt(datestr3[2]) + 1).toString();
-        
+
         var startDate = datestr3[0] + "-" + datestr3[1] + "-" + day + "T" + sessionDetails.ct_from + ":00.000+08:00";
-
-
         var endDate = datestr3[0] + "-" + datestr3[1] + "-" + day + "T" + sessionDetails.ct_to + ":00.000+08:00";
 
         pool.query(
@@ -118,9 +116,7 @@ router.post("/sessionchange", authorization, async (req, res) => {
         ['2', data.requestID]);
 
     }
-
     res.status(200).json("Successful");
-
 
   } catch (error) {
     console.log(error.message);
@@ -149,34 +145,21 @@ router.post("/user/acceptChange", authorization, async (req, res) => {
 
 router.get("/counsellor/ChangeRequests/", authorization, async (req, res) => {
 
-
-  console.log("req.user");
-  console.log(req.user);
   try {
     // console.log(id) 
     const userChangeRequests = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_user_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
       [req.user, '2']);
 
     var sessionList = [];
-
     for (let x = 0; x < userChangeRequests.rowCount; x++) {
-
-
       var ChangeRequests = await pool.query('SELECT  * FROM "CT_COUNSELLOR_CHANGE_SESSIONS"  WHERE "ct_requestID"  = $1 ',
         [userChangeRequests.rows[x].id.toString()]);
       var objectRequest = userChangeRequests.rows[x];
-      console.log("userChangeRequests");
-      console.log(objectRequest);
-
 
       var object = { request: objectRequest, changeRequests: ChangeRequests.rows };
       sessionList.push(object);
     }
-
     res.json(sessionList);
-
-
-
 
   } catch (error) {
     console.log(error.message);
@@ -211,13 +194,8 @@ router.get("/user/accepted/:id", authorization, async (req, res) => {
   }
 })
 
-
-
 router.get("/counsellor/acceptChangeRequests/", authorization, async (req, res) => {
   try {
-
-    console.log("req.user");
-    console.log(req.user);
     const acceptedSession = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_user_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
       [req.user, '5']);
     res.json(acceptedSession.rows);

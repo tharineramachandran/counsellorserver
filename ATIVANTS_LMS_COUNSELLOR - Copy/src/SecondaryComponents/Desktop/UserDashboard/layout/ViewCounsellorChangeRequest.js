@@ -6,9 +6,9 @@ import {
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
 import { ToastContainer, toast } from 'react-toastify';
-import UserChangeSession from './UserChangeSessionModel'
-import {baseURLAPI ,baseURL }from "../../../../Global";
+import {baseURLAPI ,baseURL,googleRecapcha }from "../../../../Global"; 
 const axios = require('axios');
+
 class ViewCounsellorChangeRequest extends React.Component {
     state = {
         requests: [],
@@ -64,7 +64,7 @@ class ViewCounsellorChangeRequest extends React.Component {
                 console.log(error);
             });
 
-        axios.get('http://localhost:5000/session/counsellor/acceptChangeRequests/', {
+        axios.get(baseURLAPI+'/session/counsellor/acceptChangeRequests/', {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -114,7 +114,7 @@ class ViewCounsellorChangeRequest extends React.Component {
                 jwtToken: localStorage.jwtToken,
             }
         };
-        axios.get('http://localhost:5000/request/google/get',
+        axios.get(baseURLAPI+'/request/google/get',
             {
                 params: {
                     requestID: requestID,
@@ -135,7 +135,7 @@ class ViewCounsellorChangeRequest extends React.Component {
                         progress: '',
                     });
 
-                    axios.get('http://localhost:5000/request/getCounsellorRequests', {
+                    axios.get(baseURLAPI+'/request/getCounsellorRequests', {
                         headers: {
                             jwtToken: localStorage.jwtToken
                         },
