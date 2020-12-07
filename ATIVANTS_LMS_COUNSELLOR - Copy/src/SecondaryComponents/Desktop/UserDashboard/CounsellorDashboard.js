@@ -11,10 +11,10 @@ import {
 
 import {
     Button,
-    Form,Card,
+    Form, Card,
     Header,
     Icon,
-    Input, Dropdown, Grid,Modal,
+    Input, Dropdown, Grid, Modal,
     Message,
     Segment,
     Table, Label, Container, List, Popup
@@ -22,17 +22,17 @@ import {
 import ViewRequest from './layout/ViewCounsellorRequest'
 import ViewProfile from './layout/ViewCounsellorProfile'
 
-import ViewMessages from'./layout/ViewMessages'
+import ViewMessages from './layout/ViewMessages'
 import ViewAccepted from './layout/ViewCounsellorAccepted'
 import ViewDeclined from './layout/ViewCounsellorDeclined'
- 
+
 import ViewCounsellorChangeRequest from './layout/ViewCounsellorChangeRequest'
- 
+
 import Search from './layout/Search'
-import RegistrationMultiStepForm from '../RegistrationComponents/_RegistrationMultiStepForm'; 
-  
-   
-import {baseURLAPI ,baseURL }from "../../../Global"; 
+import RegistrationMultiStepForm from '../RegistrationComponents/_RegistrationMultiStepForm';
+
+
+import { baseURLAPI, baseURL } from "../../../Global";
 const axios = require('axios');
 toast.configure();
 
@@ -40,24 +40,24 @@ const CounsellorDashboard = (props) => {
 
     const setAuth = useContext(Authorize);
     const [userDetails, setUserDetails] = useState({ name: '', email: '', isCounsellor: '', isDetailsProvided: true });
-    const [isProfileSelected, setIsProfileSelected] = useState(false); 
+    const [isProfileSelected, setIsProfileSelected] = useState(false);
     const [isRequestSelected, setisRequestSelected] = useState(false);
-    const [isViewDeclineSelected, setViewDeclineSelected] = useState(false); 
+    const [isViewDeclineSelected, setViewDeclineSelected] = useState(false);
 
-    const [isViewChangeSelected, setViewChangeSelected] = useState(false); 
+    const [isViewChangeSelected, setViewChangeSelected] = useState(false);
 
-    const [isMessagesSelected, setIsMessagesSelected] = useState(false); 
+    const [isMessagesSelected, setIsMessagesSelected] = useState(false);
 
-  
-    const [isViewAcceptSelected, setViewAcceptSelected] = useState(false); 
+
+    const [isViewAcceptSelected, setViewAcceptSelected] = useState(false);
     const { name, email, isCounsellor, isDetailsProvided } = userDetails;
     var user = [];
-     
-    const [open, setOpen] = useState(false) 
-   
+
+    const [open, setOpen] = useState(false)
+
     async function getName() {
         try {
-            axios.get(baseURLAPI+'/Counsellor/GetSingleCounsellorDetails/' + localStorage.userID
+            axios.get(baseURLAPI + '/Counsellor/GetSingleCounsellorDetails/' + localStorage.userID
 
 
                 , {
@@ -68,19 +68,19 @@ const CounsellorDashboard = (props) => {
                 .then(function (response) {
                     console.log(response);
                     user = response.data.counsellor;
-                    var value = undefined ;
-                    
+                    var value = undefined;
+
                     if (user.counsellor_details.length > 0) {
                         value = true;
                     } else {
                         value = false;
-                    }  console.log(value);
-                    
+                    } console.log(value);
+
                     setUserDetails({
                         name: response.data.counsellor.user_details[0].TX_USER_NAME,
                         email: response.data.counsellor.user_details[0].TX_USER_EMAIL,
                         isCounsellor: response.data.counsellor.user_details[0].IS_COUNSELLOR,
-                        isDetailsProvided :value
+                        isDetailsProvided: value
                     })
                 })
                 .catch(function (error) {
@@ -98,10 +98,10 @@ const CounsellorDashboard = (props) => {
     }, [])
 
     const logout = async () => {
-        window.open(baseURLAPI+"/socialauth/logout", "_self");
+        window.open(baseURLAPI + "/socialauth/logout", "_self");
         setAuth(false);
 
-        
+
         localStorage.removeItem("isCounsellor");
         localStorage.removeItem("jwtToken");
 
@@ -112,9 +112,9 @@ const CounsellorDashboard = (props) => {
         localStorage.removeItem("isCompleted");
         localStorage.removeItem("verificationStatus");
 
-         
 
-        
+
+
     }
 
     const style = {
@@ -122,7 +122,7 @@ const CounsellorDashboard = (props) => {
         padding: '1em',
         width: '10rem'
     }
-     
+
 
     var users = `This is just an amazing website. Isn't it...?? `;
 
@@ -140,47 +140,48 @@ const CounsellorDashboard = (props) => {
                                 </List.Item>
                             </List>
                         </div>
-                        <div style={{ float: 'right' }}> 
-                            <Label as='a' style={{ marginRight: '10px' }} onClick= {() => {
- setIsProfileSelected(!isProfileSelected) ;  setisRequestSelected(false) ; setViewDeclineSelected(false) ; setIsMessagesSelected(false);  setViewDeclineSelected(false); setViewAcceptSelected(false);    setViewChangeSelected(false);     setisRequestSelected(false)                              
-}}  >
-                                {isProfileSelected ? "Home" : "View Profile"}
+                        <div style={{ float: 'right' }}>
+ 
+                            {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => {
+                                setIsProfileSelected(!isProfileSelected); setisRequestSelected(false); setViewDeclineSelected(false); setIsMessagesSelected(false); setViewDeclineSelected(false); setViewAcceptSelected(false); setViewChangeSelected(false); setisRequestSelected(false)
+                            }}  >
+                                 View Profile 
+                            </Label>}
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setisRequestSelected(!isRequestSelected); setViewAcceptSelected(false); setIsProfileSelected(false); setViewChangeSelected(false); setViewDeclineSelected(false) }}>
+                                View Request
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }} onClick= {() => {  setIsMessagesSelected(false);  setisRequestSelected(!isRequestSelected); setViewAcceptSelected(false); setIsProfileSelected(false)  ; setViewChangeSelected(false);     setViewDeclineSelected(false) }  }>
-                                 View Request
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setViewDeclineSelected(!isViewDeclineSelected); setViewAcceptSelected(false); setIsProfileSelected(false); setViewChangeSelected(false); setisRequestSelected(false) }}>
+                                View Declined Request
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {  setIsMessagesSelected(false);  setViewDeclineSelected(!isViewDeclineSelected); setViewAcceptSelected(false);  setIsProfileSelected(false);  setViewChangeSelected(false);     setisRequestSelected(false) } }>
-                                 View Declined Request 
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setViewAcceptSelected(!isViewAcceptSelected); setViewDeclineSelected(false); setViewChangeSelected(false); setIsProfileSelected(false); setisRequestSelected(false) }}>
+                                View Accepted Request
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {     setIsMessagesSelected(false);  setViewAcceptSelected(!isViewAcceptSelected);   setViewDeclineSelected(false)  ;   setViewChangeSelected(false);      setIsProfileSelected(false);  setisRequestSelected(false) } }>
-                                 View Accepted Request 
-                            </Label>
-                            <Label as='a' style={{ marginRight: '10px' }}  onClick= {() => {     setIsMessagesSelected(false);   setViewChangeSelected(!isViewChangeSelected);        setViewAcceptSelected(false);        setViewDeclineSelected(false)  ;               setIsProfileSelected(false);             } }>
-                                 View Change Request 
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setViewChangeSelected(!isViewChangeSelected); setViewAcceptSelected(false); setViewDeclineSelected(false); setIsProfileSelected(false); }}>
+                                View Change Request
                             </Label>
                             <Popup
-          trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
-          <Icon name='mail' style={{ margin: '0px' }} />
-      </Label>}
-        size='mini'
-          position='top right'
-     on='click'
-     flowing hoverable
-   // popper={{ id: 'popper-container' }}
-    // trigger={<Button>View Message</Button>}
-     > 
-   <Popup.Content  >
-   
-  <Grid     style={{width: '500px' , height :'400px',  overflowY: 'scroll', marginBottom: "15px"   }}    >
-      <Grid.Column  >
-      <ViewMessages  
- 
-  />
-      </Grid.Column>
-    </Grid>  
-  </Popup.Content> 
+                                trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
+                                    <Icon name='mail' style={{ margin: '0px' }} />
+                                </Label>}
+                                size='mini'
+                                position='top right'
+                                on='click'
+                                flowing hoverable
+                            // popper={{ id: 'popper-container' }}
+                            // trigger={<Button>View Message</Button>}
+                            >
+                                <Popup.Content  >
 
-  </Popup>
+                                    <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
+                                        <Grid.Column  >
+                                            <ViewMessages
+
+                                            />
+                                        </Grid.Column>
+                                    </Grid>
+                                </Popup.Content>
+
+                            </Popup>
 
                             <Label as='a' circular style={{ marginRight: '10px' }}>
                                 <Icon name='alarm' style={{ margin: '0px' }} />
@@ -205,76 +206,76 @@ const CounsellorDashboard = (props) => {
                 </Grid.Column >
             </Grid.Row >
 
-            
+
             <Grid.Row><Grid.Column>
-            {parseInt(localStorage.isCompleted)  ==1    ? (  
-            
-           <h3> </h3>
-             
-            ):(< div>
-             
-                <Modal
-                onClose={() => setOpen(false)}
-                onOpen={() => setOpen(true)}
-                open={open}
-                trigger={
-                    <   div> 
-<div class="ui message" style = {{backgroundColor :'#EA3C53'  ,color :'white'   }}  >
-<div class="header">
-Click here to complete profile set up 
-</div> </div>  </div> 
-                  }
-              > 
-                <Modal.Content  >
-                <RegistrationMultiStepForm />
-                </Modal.Content>
-                <Modal.Actions>
-                  <Button onClick={() => setOpen(false)}>Cancel</Button>
-                  
-                </Modal.Actions>
-              </Modal>< br/>   </div>
+                {parseInt(localStorage.isCompleted) == 1 ? (
+
+                    <h3> </h3>
+
+                ) : (< div>
+
+                    <Modal
+                        onClose={() => setOpen(false)}
+                        onOpen={() => setOpen(true)}
+                        open={open}
+                        trigger={
+                            <   div>
+                                <div class="ui message" style={{ backgroundColor: '#EA3C53', color: 'white' }}  >
+                                    <div class="header">
+                                        Click here to complete profile set up
+</div> </div>  </div>
+                        }
+                    >
+                        <Modal.Content  >
+                            <RegistrationMultiStepForm />
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button onClick={() => setOpen(false)}>Cancel</Button>
+
+                        </Modal.Actions>
+                    </Modal>< br />   </div>
 
 
-            
-            ) }< br/> < br/>  </Grid.Column >
-            </Grid.Row >
-            
-            < Grid.Row >
-            < Grid.Column >    
-            {isProfileSelected && <ViewProfile />}
-            </Grid.Column >
+
+                    )}< br /> < br />  </Grid.Column >
             </Grid.Row >
 
             < Grid.Row >
-            < Grid.Column > 
-            { isViewDeclineSelected && <ViewDeclined />   }  
- 
-            </Grid.Column >
+                < Grid.Column >
+                    {isProfileSelected && <ViewProfile />}
+                </Grid.Column >
             </Grid.Row >
 
             < Grid.Row >
-            < Grid.Column > 
-            { isViewAcceptSelected && <ViewAccepted />   }  
- 
-            </Grid.Column >
+                < Grid.Column >
+                    {isViewDeclineSelected && <ViewDeclined />}
+
+                </Grid.Column >
             </Grid.Row >
 
             < Grid.Row >
-            < Grid.Column > 
-            { isRequestSelected && <ViewRequest />   }  
-            </Grid.Column >
+                < Grid.Column >
+                    {isViewAcceptSelected && <ViewAccepted />}
+
+                </Grid.Column >
+            </Grid.Row >
+
+            < Grid.Row >
+                < Grid.Column >
+                    {isRequestSelected && <ViewRequest />}
+                </Grid.Column >
             </Grid.Row >
             < Grid.Row >
-            < Grid.Column > 
-            { isViewChangeSelected && <ViewCounsellorChangeRequest />   }  
-            </Grid.Column >
+                < Grid.Column >
+                    {isViewChangeSelected && <ViewCounsellorChangeRequest />}
+                </Grid.Column >
             </Grid.Row >
-             
+
             {isMessagesSelected && <ViewMessages />}
-             
 
 
-{/* 
+
+            {/* 
             < Grid.Row >
             < Grid.Column >   
             { isRequestSelected &&    <ViewDeclined /> }  
@@ -286,10 +287,10 @@ Click here to complete profile set up
             { isRequestSelected &&    <ViewAccepted /> }  
             </Grid.Column >
             </Grid.Row > */}
-          
-            {/* {!isProfileSelected && <DisplayProfiles />} */} 
-           
-            
+
+            {/* {!isProfileSelected && <DisplayProfiles />} */}
+
+
         </>
     )
 }

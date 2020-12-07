@@ -504,6 +504,8 @@ class Search extends React.Component {
                                                                 
                                                                 </Table.Body>
                                                     </Table>
+
+                                                    
                                                     </div>    
                                                     <div  style={{ float: 'right', width: '50%' , textAlign : 'left' , padding :"3%"}}  > 
                                                     <h3>Tuesday</h3>

@@ -143,7 +143,7 @@ router.get("/getChats/:id", authorization, async (req, res) => {
 
     res.json(chats2chats.concat(chats1chats));
   } catch (error) {
-    console.log(error.message);
+    console.log("SDFGSDFG"+error.message);
   }
 })
 

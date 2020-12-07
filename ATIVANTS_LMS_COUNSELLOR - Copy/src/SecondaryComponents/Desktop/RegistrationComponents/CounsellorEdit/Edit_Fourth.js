@@ -169,43 +169,64 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
 
 
     useEffect(() => {
-        if (COUNSELLOR_AVAILABILITY_MONDAY.length > 0)
-            setDays((days) => ({
-                ...days,
-                Monday: COUNSELLOR_AVAILABILITY_MONDAY
-            }));
 
-        if (COUNSELLOR_AVAILABILITY_TUESDAY.length > 0)
-            setDays((days) => ({
-                ...days,
-                Tuesday: COUNSELLOR_AVAILABILITY_TUESDAY
-            }));
 
-        if (COUNSELLOR_AVAILABILITY_WEDNESDAY.length > 0)
-            setDays((days) => ({
-                ...days,
-                Wednesday: COUNSELLOR_AVAILABILITY_WEDNESDAY
-            }));
 
-        if (COUNSELLOR_AVAILABILITY_THURSDAY.length > 0)
-            setDays((days) => ({
-                ...days,
-                Thursday: COUNSELLOR_AVAILABILITY_THURSDAY
-            }));
 
-        if (COUNSELLOR_AVAILABILITY_FRIDAY.length > 0)
-            setDays((days) => ({
-                ...days,
-                Friday: COUNSELLOR_AVAILABILITY_FRIDAY
-            }));
 
-        if (COUNSELLOR_AVAILABILITY_SATURDAY.length > 0)
-            setDays((days) => ({
-                ...days,
-                Saturday: COUNSELLOR_AVAILABILITY_SATURDAY
-            }));
 
-        // etc for each day of the week
+
+        if (COUNSELLOR_AVAILABILITY_MONDAY) {
+            if (COUNSELLOR_AVAILABILITY_MONDAY.length > 0) {
+                setDays((days) => ({
+                    ...days,
+                    Monday: COUNSELLOR_AVAILABILITY_MONDAY
+                }));
+            }
+        }
+
+        if (COUNSELLOR_AVAILABILITY_TUESDAY) {
+            if (COUNSELLOR_AVAILABILITY_TUESDAY.length > 0) {
+                setDays((days) => ({
+                    ...days,
+                    Tuesday: COUNSELLOR_AVAILABILITY_TUESDAY
+                }));
+            }
+        }
+
+        if (COUNSELLOR_AVAILABILITY_WEDNESDAY) {
+            if (COUNSELLOR_AVAILABILITY_WEDNESDAY.length > 0) {
+                setDays((days) => ({
+                    ...days,
+                    Wednesday: COUNSELLOR_AVAILABILITY_WEDNESDAY
+                }));
+            }
+        }
+        if (COUNSELLOR_AVAILABILITY_THURSDAY) {
+            if (COUNSELLOR_AVAILABILITY_THURSDAY.length > 0) {
+                setDays((days) => ({
+                    ...days,
+                    Thursday: COUNSELLOR_AVAILABILITY_THURSDAY
+                }));
+            }
+        }
+        if (COUNSELLOR_AVAILABILITY_FRIDAY) {
+            if (COUNSELLOR_AVAILABILITY_FRIDAY.length > 0) {
+                setDays((days) => ({
+                    ...days,
+                    Friday: COUNSELLOR_AVAILABILITY_FRIDAY
+                }));
+            }
+        }
+        if (COUNSELLOR_AVAILABILITY_SATURDAY) {
+            if (COUNSELLOR_AVAILABILITY_SATURDAY.length > 0) {
+                setDays((days) => ({
+                    ...days,
+                    Saturday: COUNSELLOR_AVAILABILITY_SATURDAY
+                }));
+            }
+        }
+ 
     }, []);
 
 
@@ -383,7 +404,7 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
 
         const list = [...days[day]];
         list.splice(index, 1);
-         
+
         setDays((days) => ({
             ...days,
             [day]: list
@@ -473,62 +494,62 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
 
         var done = addtoForm();
         console.log(days);
-// //
-//         var e = {
-//             target: {
-//                 name: "COUNSELLOR_AVAILABILITY_MONDAY",
-//                 value: undefined
-//             }
-//         };
-//         setForm(e);
+        // //
+        //         var e = {
+        //             target: {
+        //                 name: "COUNSELLOR_AVAILABILITY_MONDAY",
+        //                 value: undefined
+        //             }
+        //         };
+        //         setForm(e);
 
-//        e = {
-//             target: {
-//                 name: "COUNSELLOR_AVAILABILITY_TUESDAY",
-//                 value: undefined
-//             }
-//         };
-//         setForm(e);
+        //        e = {
+        //             target: {
+        //                 name: "COUNSELLOR_AVAILABILITY_TUESDAY",
+        //                 value: undefined
+        //             }
+        //         };
+        //         setForm(e);
 
-//         e = {
-//             target: {
-//                 name: "COUNSELLOR_AVAILABILITY_WEDNESDAY",
-//                 value: undefined
-//             }
-//         };setForm(e);
+        //         e = {
+        //             target: {
+        //                 name: "COUNSELLOR_AVAILABILITY_WEDNESDAY",
+        //                 value: undefined
+        //             }
+        //         };setForm(e);
 
-//         e = {
-//             target: {
-//                 name: "COUNSELLOR_AVAILABILITY_THURSDAY",
-//                 value: undefined
-//             }
-//         }; 
-//         setForm(e);
+        //         e = {
+        //             target: {
+        //                 name: "COUNSELLOR_AVAILABILITY_THURSDAY",
+        //                 value: undefined
+        //             }
+        //         }; 
+        //         setForm(e);
 
-//        e = {
-//             target: {
-//                 name: "COUNSELLOR_AVAILABILITY_FRIDAY",
-//                 value: undefined
-//             }
-//         };
-//         setForm(e);
+        //        e = {
+        //             target: {
+        //                 name: "COUNSELLOR_AVAILABILITY_FRIDAY",
+        //                 value: undefined
+        //             }
+        //         };
+        //         setForm(e);
 
-//         e = {
-//             target: {
-//                 name: "COUNSELLOR_AVAILABILITY_SATURDAY",
-//                 value: undefined
-//             }
-//         }; 
-//         setForm(e);
-        
+        //         e = {
+        //             target: {
+        //                 name: "COUNSELLOR_AVAILABILITY_SATURDAY",
+        //                 value: undefined
+        //             }
+        //         }; 
+        //         setForm(e);
 
-       console.log(formData);
+
+        console.log(formData);
         if (done) {
             const headers = {
                 jwtToken: localStorage.jwtToken
             }
 
-            axios.post(baseURLAPI + '/Counsellor/UpdateTimeTable', { formData: formData,days :days, COUNSELLORID: localStorage.userID },
+            axios.post(baseURLAPI + '/Counsellor/UpdateTimeTable', { formData: formData, days: days, COUNSELLORID: localStorage.userID },
 
                 {
                     headers: headers
@@ -616,30 +637,30 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                                 <div style={{ backgroundColor: 'transparent' }}>
                                     <List horizontal >
                                         <List.Item>
-                                        <Label as='a' circular  className="activeBreadCrumb"onClick={() => navigation.go(0)}>
-                                                    <Icon name={icon_name} />
+                                            <Label as='a' circular className="activeBreadCrumb" onClick={() => navigation.go(0)}>
+                                                <Icon name={icon_name} />
                                                 Personal Details&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
-                                                    <Icon name="circle outline" />
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
+                                                <Icon name="circle outline" />
                                                 Photo&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(2)}>
-                                                    <Icon name="circle outline" />
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(2)}>
+                                                <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
-                                                <Label as='a' circular onClick={() => navigation.go(3)}>
-                                                    <Icon name="circle outline" />
+                                            <Label as='a' circular onClick={() => navigation.go(3)}>
+                                                <Icon name="circle outline" />
                                                     Availability&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
-                                                    <Icon name="circle outline" />
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                                <Icon name="circle outline" />
                                                     Verification&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
-                                                    <Icon name="circle outline" />
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
+                                                <Icon name="circle outline" />
                                                     Change Password&nbsp;
-                                            </Label> 
+                                            </Label>
                                         </List.Item>
                                     </List>
                                 </div>
@@ -727,14 +748,14 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                                                             })
                                                             }
 
-                                                  
+
                                                         </Segment>          <Form.Group widths='equal'>
-                                                                <Form.Field className="CustomForm">
-                                                                    <Button className="appBanner" color='blue' onClick={_handleSubmitClick}>
-                                                                        <Icon name='send' className="appBanner" /> Update Details &nbsp;&nbsp;
+                                                            <Form.Field className="CustomForm">
+                                                                <Button className="appBanner" color='blue' onClick={_handleSubmitClick}>
+                                                                    <Icon name='send' className="appBanner" /> Update Details &nbsp;&nbsp;
                                     </Button> &nbsp;&nbsp;&nbsp;
-                                                    </Form.Field> 
-                                                            </Form.Group>
+                                                    </Form.Field>
+                                                        </Form.Group>
                                                     </Grid.Column>
                                                 </Grid.Row>
                                             </Grid>

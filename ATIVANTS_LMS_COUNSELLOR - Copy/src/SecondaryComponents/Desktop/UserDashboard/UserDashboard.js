@@ -110,9 +110,21 @@ const UserDashboard = (props) => {
                                     <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
                                         Home
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsEditSelected(true);  setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
-                                        View Profile
-                            </Label>
+ 
+{parseInt(localStorage.isCompleted) == 1 &&  <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsEditSelected(true);  setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                  View Profile
+      </Label>}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

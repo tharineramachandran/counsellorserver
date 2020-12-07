@@ -1,9 +1,8 @@
-
 import React, { useState, useContext, useEffect } from 'react';
 import {
   Button,
   Form,
-  Header,
+  Header,Dimmer,Loader,
   Image,
   Input, Dropdown, Grid,
   Message,
@@ -31,6 +30,7 @@ class ChangeSession extends React.Component {
     sessionEnd: '',
     startDate: "",
     slots: [],
+    isLoading:true,
     slotValue: '',
     formWarning: '',
     slotOptions: [],
@@ -49,33 +49,33 @@ class ChangeSession extends React.Component {
       .then(res => {
         console.log(res);
         const person = res.data.counsellor;
-        this.setState({ person: person, slotOptions: slotOptions, formWarning: '' });
+        
 
-        if (this.state.person ) {
+        if (person ) {
 
-        if (this.state.person.counselling_monday.length < 1) {
+        if (person.counselling_monday.length < 1) {
 
           daysNotAvailableList.push(1);
         }
-        if (this.state.person.counselling_tuesday.length < 1) {
+        if (person.counselling_tuesday.length < 1) {
 
           daysNotAvailableList.push(2);
-        } if (this.state.person.counselling_wednesday.length < 1) {
+        } if (person.counselling_wednesday.length < 1) {
 
           daysNotAvailableList.push(3);
-        } if (this.state.person.counselling_thursday.length < 1) {
+        } if (person.counselling_thursday.length < 1) {
 
           daysNotAvailableList.push(4);
 
-        } if (this.state.person.counselling_friday.length < 1) {
+        } if (person.counselling_friday.length < 1) {
 
           daysNotAvailableList.push(5);
         }
-        if (this.state.person.counselling_saturday.length < 1) {
+        if (person.counselling_saturday.length < 1) {
 
           daysNotAvailableList.push(6);
         }}
-
+        this.setState({ person: person, slotOptions: slotOptions, formWarning: '' ,isLoading:false});
       })
   }
   isWeekday = date => {
@@ -157,7 +157,6 @@ class ChangeSession extends React.Component {
 
         function checkForDuplicate(item, index) {
 
-          
           if ((item.strdate == data.strdate && item.sessionDetails.ct_to == data.sessionDetails.ct_to && item.sessionDetails.ct_from == data.sessionDetails.ct_from)) {
             sameValue= false;
           } 
@@ -222,6 +221,18 @@ class ChangeSession extends React.Component {
 
       <Container>
          <div  className="appBanner"  >
+{this.state.isLoading ? (<div> 
+  <Container ma>
+      <Dimmer active inverted    >
+        <Loader size='medium'>Loading</Loader>
+      </Dimmer>
+
+     
+    </Container>
+
+
+    </div>) :( <div>      
+      < br />
         <h3>Pick a date for the counselling session  </h3>
 
         <DatePicker
@@ -231,43 +242,69 @@ class ChangeSession extends React.Component {
           onCalendarClose={this.handleCalendarClose}
           placeholderText="Select a day for meeting " />
 
-
-
         {this.state.slots.length > 0 ? (<div>
           < br />
           <h3>Choose a slot on the day</h3>
           <Dropdown placeholder='Add slot timing'
             fluid
             selection value={this.state.slotValue} onChange={this.slotChange} options={this.state.slotOptions} />
-        </div>) :
-          (<strong>
-
-          </strong>)
-        }
-        < br />
+     
+       
         <p style={{ color: 'red' }}>{this.state.formWarning}</p>
-        < br />
+  
         <button  class="ui button" onClick={this.addDate}>Add Date</button>
 
-
-        </div>
-        <h3>requested counselling session  change dates</h3>
-
-        {this.state.addedSessions.length > 0 ? (<div>
-          {this.state.addedSessions.map((details, index) => (
-            <p>
-              <span> {details.strdate} ------- {details.sessionDetails.ct_from}  ------- {details.sessionDetails.ct_to}</span>
-            </p>
-          ))}
-        </div>
-        ) :
+   </div>) :
           (<strong>
 
           </strong>)
         }
+    </div>)}
+ 
+        </div>
+
+        {this.state.isLoading ? (<div> </div>) :( <div> < br /><h3>Requested counselling session  change dates</h3>
+
+
+ <Table basic='very' celled collapsing>
+ <Table.Header>
+     <Table.Row>
+     <Table.HeaderCell>Session Date </Table.HeaderCell>
+         <Table.HeaderCell>Session Start Time </Table.HeaderCell>
+         <Table.HeaderCell>Session End Time </Table.HeaderCell>
+     </Table.Row>
+ </Table.Header> 
+<Table.Body>
+ {this.state.addedSessions.length  > 0 ? (  
+   this.state.addedSessions.map((details, index) => (
+                      
+                            <Table.Row>
+                              <Table.Cell>
+                                {details.strdate.substring(0,15)}
+                            </Table.Cell>
+                            <Table.Cell>
+                                {details.sessionDetails.ct_from}
+                            </Table.Cell>
+                            <Table.Cell>
+                                {details.sessionDetails.ct_to}
+                            </Table.Cell>
+                        </Table.Row>
+                      )   )) :
+             (<Table.Row>
+                 <Table.Cell>     No change sessions 
+                    
+                 </Table.Cell>
+             </Table.Row>)
+         }
+         
+         </Table.Body>
+</Table>
+
 <div className="appBanner"    >
 <button   class="ui button" onClick={this.submitRequest}>Submit Change Request</button>
-</div>
+</div>      
+          </div>)}
+      
 </Container>
 
     )

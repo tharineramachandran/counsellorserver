@@ -186,6 +186,7 @@ app.post("/addevent", async (req, res) => {
     var { session, date, userId, counsellorId, sessionDetails } = req.body;
     /// Date time things  
 
+
     var datestr = date.split("T");
     var datestr3 = datestr[0].split("-");
     var day = (parseInt(datestr3[2]) + 1).toString();
@@ -193,19 +194,21 @@ app.post("/addevent", async (req, res) => {
     var endDate = datestr3[0] + "-" + datestr3[1] + "-" + day + "T" + sessionDetails.ct_to + ":00.000+08:00";
      
 
-    const user = await pool.query('SELECT * FROM "CT_COUNSELLOR_REQUESTS" WHERE    "ct_session_start_time" = $1 && "ct_session_end_time" = $2 && "ct_session_date" = $3 && "ct_user_id" = $4 && "ct_counsellor_id" = $5 && "ct_counsellor_timezone_code"= $6 ', [startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code]);
+    const userrepeat = await pool.query('SELECT * FROM "CT_COUNSELLOR_REQUESTS" WHERE    "ct_session_start_time" = $1 AND "ct_session_end_time" = $2 AND "ct_session_date" = $3 AND "ct_user_id" = $4 AND "ct_counsellor_id" = $5 AND "ct_counsellor_timezone_code"= $6 ', [startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code]);
 
 
     const counsellor = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL" from "T_USER" where "ID_USER_UUID" = $1 ', [counsellorId]);
-   
+     
+    const user = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL" from "T_USER" where "ID_USER_UUID" = $1 ', [userId]);
+if(userrepeat.rowCount == 0   &&  counsellor.rowCount >0            ){ 
 
-if(user.rowCount == 0 ){ 
+ 
     var subject = "new session request";
     var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + startDate + " to " + endDate;
-    
+    console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
     await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message);
  
-    pool.query(
+    await  pool.query(
       'INSERT INTO "CT_COUNSELLOR_REQUESTS" (    ct_session_start_time, ct_session_end_time, ct_session_date,ct_user_id,ct_counsellor_id, ct_counsellor_timezone_code ,ct_counsellor_response  ) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *',
       [startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
 
@@ -221,7 +224,7 @@ if(user.rowCount == 0 ){
     })
 
   } catch (error) {
-    console.log(error.message);
+    console.log("dghdfgh"+error.message);
   }
 })
 
