@@ -186,7 +186,7 @@ router.get("/accepted/:id", authorization, async (req, res) => {
 router.get("/user/accepted/:id", authorization, async (req, res) => {
   try {
     const id = req.params.id;
-    const acceptedSession = await pool.query(' SELECT id, ct_session_date, ct_session_start_time, ct_session_end_time, ct_meeting_url, ct_password_url, ct_counsellor_id, ct_user_id, "ct_counsellor_eventID","TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_SESSIONS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_SESSIONS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_SESSIONS"."ct_user_id" = $1 ',
+    const acceptedSession = await pool.query(' SELECT id,ct_request_id, ct_session_date, ct_session_start_time, ct_session_end_time, ct_meeting_url, ct_password_url, ct_counsellor_id, ct_user_id, "ct_counsellor_eventID","TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_SESSIONS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_SESSIONS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_SESSIONS"."ct_user_id" = $1 ',
       [id]);
     res.json(acceptedSession.rows);
   } catch (error) {

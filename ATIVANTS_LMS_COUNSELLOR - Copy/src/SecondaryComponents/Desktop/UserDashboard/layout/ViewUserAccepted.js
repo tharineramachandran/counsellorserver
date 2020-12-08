@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Button, Form, Header, Image, Input,
     Dropdown, Grid, Modal,
-    Message, Segment, Card, Img, Icon,
+    Message, Segment, Card, Img, Icon,Rating,
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
 import { ToastContainer, toast } from 'react-toastify';
@@ -23,7 +23,8 @@ class ViewAccepted extends React.Component {
     state = {
         requests: [],
         openModel: false,
-        element : {}
+        element : {},     rating :0 , maxRating : 5,
+        feedback :''
     }
 
     componentDidMount() {
@@ -173,9 +174,47 @@ class ViewAccepted extends React.Component {
 
 
     }
+
+    handleRate = (e, { rating, maxRating }) =>
+    this.setState({ rating, maxRating })
+    _onKeyUp = e => {
+        var value = e.target.value.toLowerCase();
+        this.setState({ feedback: value });
+    };
+
+
     openGoogleMeet= (url) => {
         window.open( url);
     }
+    sendMessage = () => {
+        console.log(this.state.feedback);
+         
+
+
+        const headers = {
+            jwtToken: localStorage.jwtToken
+        }
+        const formData = {
+            feedback: this.state.feedback,
+            rating: this.state.rating ,
+
+
+
+
+
+        }
+        axios.post(baseURLAPI + '/messages/creaddddddddddddddddteMessages', formData, {
+            headers: headers
+        })
+            .then((res) => {
+                console.log(res);
+             
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     render() {
         return (
             <Grid columns='equal' divided>
@@ -218,6 +257,28 @@ class ViewAccepted extends React.Component {
                                                  onClick={() => window.open(this.state.element.ct_meeting_url)}
                                                  > Google Meet Link
                                                  </Button> 
+
+
+
+                                                 <Form  >
+        <Form.Group>
+          <Form.Input
+           style ={{width:"300px"}} 
+           type="FeedBack"
+           onChange={this._onKeyUp                                       }
+           name="m"
+           id="m"
+           placeholder="FeedBack"
+       
+          />
+         <Rating maxRating={5} onRate={this.handleRate} />
+          <Form.Button style ={{width:"100px"}} onClick={() => this.sendMessage()}>  Send </Form.Button>
+        </Form.Group>
+      </Form>            
+
+
+
+
                                                         </Modal.Content>
                                                         <Modal.Actions>
                                                             <Button color='black' onClick={() => this.setState({ openModel: false })}>

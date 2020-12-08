@@ -29,7 +29,7 @@ import ViewAccepted from './layout/ViewUserAccepted';
 import ViewRequest from './layout/ViewUserRequest';
 
 import EditUserProfile from './layout/ViewEditUserProfile';
- 
+
 import { baseURLAPI, baseURL } from "../../../Global";
 
 
@@ -49,7 +49,7 @@ const UserDashboard = (props) => {
     const [isMessagesSelected, setIsMessagesSelected] = useState(false);
     const [isRequestSelected, setIsRequestSelected] = useState(false);
 
-     const [isEditSelected, setIsEditSelected] = useState(false);
+    const [isEditSelected, setIsEditSelected] = useState(false);
     const [isUserCompleteSelected, setUserCompletedSelected] = useState(false);
     const { name, email, isCounsellor, image, isCompleted } = userDetails;
     var user = [];
@@ -77,10 +77,10 @@ const UserDashboard = (props) => {
         window.open(baseURLAPI + "/socialauth/logout", "_self");
         localStorage.removeItem("userID");
         localStorage.removeItem("isCounsellor");
-        localStorage.removeItem("jwtToken"); 
+        localStorage.removeItem("jwtToken");
         localStorage.removeItem("email");
         localStorage.removeItem("image");
-        localStorage.removeItem("name"); 
+        localStorage.removeItem("name");
         localStorage.removeItem("isCompleted");
         localStorage.removeItem("verificationStatus");
 
@@ -105,63 +105,49 @@ const UserDashboard = (props) => {
 
 
                         <div style={{ float: 'right' }}>
-                            
-                               
-                                    <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
-                                        Home
+
+
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
+                                Home
                             </Label>
- 
-{parseInt(localStorage.isCompleted) == 1 &&  <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsEditSelected(true);  setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
-                  View Profile
+
+                            {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsEditSelected(true); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                                View Profile
       </Label>}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
-                                        View Change Request
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                                View Change Request
                             </Label>
-                                    <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
-                                        View Requests
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                                View Requests
                             </Label>
-                                    <Popup
-                                        trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
-                                            <Icon name='mail' style={{ margin: '0px' }} />
-                                        </Label>}
-                                        size='mini'
-                                        position='top right'
-                                        on='click'
-                                        flowing hoverable
-                                    // popper={{ id: 'popper-container' }}
-                                    // trigger={<Button>View Message</Button>}
-                                    >                                        <Popup.Content  >
-                                            <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
-                                                <Grid.Column  >
-                                                    <ViewMessages />
-                                                </Grid.Column>
-                                            </Grid>
-                                        </Popup.Content>
-                                    </Popup>
-                                    <Label as='a' circular style={{ marginRight: '10px' }}>
-                                        <Icon name='alarm' style={{ margin: '0px' }} />
-                                    </Label>
-                                    <Label as='a' circular style={{ marginRight: '10px' }}>
-                                        <Icon name='like' style={{ margin: '0px' }} />
-                                    </Label>
-                              
-                            
-                            <Label as='a' onClick={e => logout()}style={{ marginRight: '10px' }}>
+                            <Popup
+                                trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
+                                    <Icon name='mail' style={{ margin: '0px' }} />
+                                </Label>}
+                                size='mini'
+                                position='top right'
+                                on='click'
+                                flowing hoverable
+                            // popper={{ id: 'popper-container' }}
+                            // trigger={<Button>View Message</Button>}
+                            >                                        <Popup.Content  >
+                                    <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
+                                        <Grid.Column  >
+                                            <ViewMessages />
+                                        </Grid.Column>
+                                    </Grid>
+                                </Popup.Content>
+                            </Popup>
+                            <Label as='a' circular style={{ marginRight: '10px' }}>
+                                <Icon name='alarm' style={{ margin: '0px' }} />
+                            </Label>
+                            <Label as='a' circular style={{ marginRight: '10px' }}>
+                                <Icon name='like' style={{ margin: '0px' }} />
+                            </Label>
+
+
+                            <Label as='a' onClick={e => logout()} style={{ marginRight: '10px' }}>
                                 <Icon name='sign out' />
                                 Log out
                             </Label>
@@ -177,15 +163,15 @@ const UserDashboard = (props) => {
                     </Container>
                 </Grid.Column >
             </Grid.Row >
-         
+
 
 
             {parseInt(localStorage.verificationStatus) == 1 ? (
                 <div>
                 </div>
 
-            ) : (<   div  style={{  paddingBottom:"1%" }} >
-                <div class="ui message" style={{ backgroundColor: 'teal', color: 'white'  }}  >
+            ) : (<   div style={{ paddingBottom: "1%" }} >
+                <div class="ui message" style={{ backgroundColor: 'teal', color: 'white' }}  >
                     <div class="header">
                         Please check your mailbox for {localStorage.email} for email verification link
 </div> </div> </div>)
@@ -206,7 +192,7 @@ const UserDashboard = (props) => {
                             <div class="ui message" style={{ backgroundColor: '#EA3C53', color: 'white' }}  >
                                 <div class="header">
                                     Click here to complete profile set up
-</div> </div>  </div>
+</div> </div><br /></div>
                     }
                 >
                     <Modal.Content  >
@@ -217,10 +203,9 @@ const UserDashboard = (props) => {
                     </Modal.Actions>
                 </Modal>
             </div>)
-            }   
-            
-            {isRequestChangeSelected && <ViewChangeRequest />}
+            }
 
+            {isRequestChangeSelected && <ViewChangeRequest />}
             {isRequestAcceptSelected && <ViewAccepted />}
             {/* {isMessagesSelected && <ViewMessages />} */}
             {isRequestSelected && <ViewRequest />}
@@ -229,7 +214,7 @@ const UserDashboard = (props) => {
             {/* {!isProfileSelected && <DisplayProfiles />} */}
             {isProfileSelected && <Search />}
             {isEditSelected && <EditUserProfile />}
-             
+
         </>
     )
 }

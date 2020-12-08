@@ -28,7 +28,7 @@ router.post("/register", validInfo, async (req, res) => {
 
     let newUser = await pool.query(
       'INSERT INTO "T_USER" ("TX_USER_NAME", "TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR","TX_IS_COMPLETED") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
-      [TX_USER_NAME, TX_USER_EMAIL, bcryptPassword, 0, datetime.toISOString().slice(0, 10), 0, 0, 0]
+      [TX_USER_NAME, TX_USER_EMAIL.toLowerCase(), bcryptPassword, 0, datetime.toISOString().slice(0, 10), 0, 0, 0]
     );
 
     await email.sendEmail(TX_USER_EMAIL, "verify email address", "Dear user, please click on the following link to confirm your email address :  " + CLIENT_BASEURL_PAGE_URL + "/emailVerify/" + TX_USER_EMAIL);
@@ -52,8 +52,9 @@ router.post("/login", validInfo, async (req, res) => {
   try {
 
     const { TX_USER_EMAIL, TX_USER_PASSWORD } = req.body;
+     
     const user = await pool.query('SELECT "TX_USER_NAME","ID_USER_UUID" ,  "TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR","TX_IS_COMPLETED" FROM "T_USER" WHERE "TX_USER_EMAIL" = $1',
-      [TX_USER_EMAIL]);
+      [TX_USER_EMAIL.toLowerCase()]);
 
     if (user.rows.length === 0) {
       return res.status(401).json("Password or Email is incorrect")
@@ -68,7 +69,8 @@ router.post("/login", validInfo, async (req, res) => {
     res.json({ jwtToken, user: user.rows[0] });
 
   } catch (error) {
-    res.status(500).send("Server Error");
+    console.log(error);
+    return res.status(401).json("Password or Email is incorrect");
   }
 })
 

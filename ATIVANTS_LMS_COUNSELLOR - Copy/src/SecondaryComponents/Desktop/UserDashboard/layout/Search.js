@@ -392,7 +392,7 @@ class Search extends React.Component {
                                                        
                                                       
                                                       <Table.Cell>
-                                                          <p>  <Rating icon='star' defaultRating={person.counselling_average_review}  maxRating={5} />        {person.counselling_total_review} reviews  </p>
+                                                          <p>  <Rating icon='star' defaultRating={person.counselling_average_review}  maxRating={5} disabled />        {person.counselling_total_review} reviews  </p>
                                                       </Table.Cell>
                                                       <Table.Cell>
                                                           <p> <Icon size='big' name='money bill alternate' /><strong> S$ {person.counselling_average_price} </strong> average per hour </p>
@@ -748,7 +748,7 @@ class Search extends React.Component {
                                                                                                                   
                                                                     <Table.Row>
                                                                         <Table.Cell>
-                                                                        <Message>    <Message.Header> {details.TX_USER_NAME}   <Rating icon='star' defaultRating={details.ct_counsellor_stars}  maxRating={5} />  </Message.Header>
+                                                                        <Message>    <Message.Header> {details.TX_USER_NAME}   <Rating icon='star' defaultRating={details.ct_counsellor_stars}  maxRating={5} disabled/>  </Message.Header>
                                                                         <p> {details.ct_counsellor_review}</p>
                                                                         </Message> 
                                                                         </Table.Cell>

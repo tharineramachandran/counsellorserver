@@ -78,6 +78,12 @@ router.get("/GetCounsellorDetails", async (req, res) => {
 
                 counselling_total_price += parseInt(counselling_details.rows[x].ct_counsellor_hourly_rate);
             }
+
+
+ 
+
+
+
             var counselling_average_price = counselling_total_price / counselling_details.rowCount;
             var counselling_average_review = counselling_total_review / counsellor_review.rowCount;
 
@@ -361,6 +367,35 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
         res.status(400).json([{ error: "Duplicate account  found ", message: "Duplicate account  found" }]);
     }
 })
+
+
+
+ 
+router.post("/rating", authorization, async (req, res) => {
+    var { requestID,feedback,rating,userID,cousellorID } = req.body.formData;
+    
+    var datetime = new Date();
+    try {
+
+    await    pool.query(
+            'INSERT INTO "CT_COUNSELLOR_REVIEW" (  ct_request_id,  ct_counsellor_review, ct_counsellor_stars, ct_counsellor_user_id, ct_counsellor_date, ct_counsellor_id  ) VALUES($1,$2,$3,$4,$5,$6) RETURNING *',
+            [parseInt (requestID),feedback,rating,userID,datetime.toISOString().slice(0, 10),cousellorID   ]);
+
+
+           
+
+
+        res.status(200).json("success");
+
+    } catch (error) {
+        console.error(["api consellee update", error.message]);
+        res.status(400).json([{ error: "An error occurred ", message: "An error occurred" }]);
+    }
+})
+ 
+
+
+
 
 
 //update counsellee

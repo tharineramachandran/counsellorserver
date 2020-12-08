@@ -43,16 +43,11 @@ const CounsellorDashboard = (props) => {
     const [isProfileSelected, setIsProfileSelected] = useState(false);
     const [isRequestSelected, setisRequestSelected] = useState(false);
     const [isViewDeclineSelected, setViewDeclineSelected] = useState(false);
-
     const [isViewChangeSelected, setViewChangeSelected] = useState(false);
-
     const [isMessagesSelected, setIsMessagesSelected] = useState(false);
-
-
     const [isViewAcceptSelected, setViewAcceptSelected] = useState(false);
     const { name, email, isCounsellor, isDetailsProvided } = userDetails;
     var user = [];
-
     const [open, setOpen] = useState(false)
 
     async function getName() {
@@ -100,21 +95,14 @@ const CounsellorDashboard = (props) => {
     const logout = async () => {
         window.open(baseURLAPI + "/socialauth/logout", "_self");
         setAuth(false);
-
-
         localStorage.removeItem("isCounsellor");
         localStorage.removeItem("jwtToken");
-
         localStorage.removeItem("email");
         localStorage.removeItem("image");
         localStorage.removeItem("name");
         localStorage.removeItem("userID");
         localStorage.removeItem("isCompleted");
         localStorage.removeItem("verificationStatus");
-
-
-
-
     }
 
     const style = {
@@ -141,11 +129,11 @@ const CounsellorDashboard = (props) => {
                             </List>
                         </div>
                         <div style={{ float: 'right' }}>
- 
+
                             {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => {
-                                setIsProfileSelected(!isProfileSelected); setisRequestSelected(false); setViewDeclineSelected(false); setIsMessagesSelected(false); setViewDeclineSelected(false); setViewAcceptSelected(false); setViewChangeSelected(false); setisRequestSelected(false)
+                                setIsProfileSelected(!isProfileSelected); setisRequestSelected(false); setViewDeclineSelected(false); setIsMessagesSelected(false); setViewDeclineSelected(false); setViewAcceptSelected(false); setViewChangeSelected(false);
                             }}  >
-                                 View Profile 
+                                View Profile
                             </Label>}
                             <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setisRequestSelected(!isRequestSelected); setViewAcceptSelected(false); setIsProfileSelected(false); setViewChangeSelected(false); setViewDeclineSelected(false) }}>
                                 View Request
@@ -156,7 +144,7 @@ const CounsellorDashboard = (props) => {
                             <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setViewAcceptSelected(!isViewAcceptSelected); setViewDeclineSelected(false); setViewChangeSelected(false); setIsProfileSelected(false); setisRequestSelected(false) }}>
                                 View Accepted Request
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setViewChangeSelected(!isViewChangeSelected); setViewAcceptSelected(false); setViewDeclineSelected(false); setIsProfileSelected(false); }}>
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setViewChangeSelected(!isViewChangeSelected); setViewAcceptSelected(false); setViewDeclineSelected(false); setisRequestSelected(false); setIsProfileSelected(false); }}>
                                 View Change Request
                             </Label>
                             <Popup
@@ -174,15 +162,11 @@ const CounsellorDashboard = (props) => {
 
                                     <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
                                         <Grid.Column  >
-                                            <ViewMessages
-
-                                            />
+                                            <ViewMessages />
                                         </Grid.Column>
                                     </Grid>
                                 </Popup.Content>
-
                             </Popup>
-
                             <Label as='a' circular style={{ marginRight: '10px' }}>
                                 <Icon name='alarm' style={{ margin: '0px' }} />
                             </Label>
@@ -193,7 +177,6 @@ const CounsellorDashboard = (props) => {
                                 <Icon name='sign out' />
                                 Log out
                             </Label>
-
                         </div>
                     </Container>
                     <Container clearing style={{
@@ -205,13 +188,9 @@ const CounsellorDashboard = (props) => {
                     </Container>
                 </Grid.Column >
             </Grid.Row >
-
-
             <Grid.Row><Grid.Column>
                 {parseInt(localStorage.isCompleted) == 1 ? (
-
                     <h3> </h3>
-
                 ) : (< div>
 
                     <Modal
@@ -223,7 +202,7 @@ const CounsellorDashboard = (props) => {
                                 <div class="ui message" style={{ backgroundColor: '#EA3C53', color: 'white' }}  >
                                     <div class="header">
                                         Click here to complete profile set up
-</div> </div>  </div>
+</div> </div> < br /> </div>
                         }
                     >
                         <Modal.Content  >
@@ -234,9 +213,6 @@ const CounsellorDashboard = (props) => {
 
                         </Modal.Actions>
                     </Modal>< br />   </div>
-
-
-
                     )}< br /> < br />  </Grid.Column >
             </Grid.Row >
 
@@ -245,21 +221,17 @@ const CounsellorDashboard = (props) => {
                     {isProfileSelected && <ViewProfile />}
                 </Grid.Column >
             </Grid.Row >
-
             < Grid.Row >
                 < Grid.Column >
                     {isViewDeclineSelected && <ViewDeclined />}
 
                 </Grid.Column >
             </Grid.Row >
-
             < Grid.Row >
                 < Grid.Column >
                     {isViewAcceptSelected && <ViewAccepted />}
-
                 </Grid.Column >
             </Grid.Row >
-
             < Grid.Row >
                 < Grid.Column >
                     {isRequestSelected && <ViewRequest />}
@@ -272,25 +244,6 @@ const CounsellorDashboard = (props) => {
             </Grid.Row >
 
             {isMessagesSelected && <ViewMessages />}
-
-
-
-            {/* 
-            < Grid.Row >
-            < Grid.Column >   
-            { isRequestSelected &&    <ViewDeclined /> }  
-            </Grid.Column >
-            </Grid.Row >
-
-            < Grid.Row >
-            < Grid.Column > 
-            { isRequestSelected &&    <ViewAccepted /> }  
-            </Grid.Column >
-            </Grid.Row > */}
-
-            {/* {!isProfileSelected && <DisplayProfiles />} */}
-
-
         </>
     )
 }

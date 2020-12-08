@@ -227,8 +227,8 @@ router.get("/google/:id", async (req, res) => {
                 const updateRequest = pool.query('UPDATE "CT_COUNSELLOR_REQUESTS" SET "ct_counsellor_response" = $1 WHERE "id" = $2',
                   [response, requestID]);
                 pool.query(
-                  'INSERT INTO "CT_COUNSELLOR_SESSIONS" (    ct_session_date, ct_session_start_time, ct_session_end_time, ct_meeting_url, ct_password_url, ct_counsellor_id, ct_user_id  ,"ct_counsellor_eventID" ) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
-                  [updatedRequest.rows[0].ct_session_start_time, updatedRequest.rows[0].ct_session_start_time, updatedRequest.rows[0].ct_session_end_time, res.data.hangoutLink, 0, updatedRequest.rows[0].ct_counsellor_id, updatedRequest.rows[0].ct_user_id, eventid]);
+                  'INSERT INTO "CT_COUNSELLOR_SESSIONS" (    ct_request_id , ct_session_date, ct_session_start_time, ct_session_end_time, ct_meeting_url, ct_password_url, ct_counsellor_id, ct_user_id  ,"ct_counsellor_eventID" ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',
+                  [parseInt (requestID) ,updatedRequest.rows[0].ct_session_start_time, updatedRequest.rows[0].ct_session_start_time, updatedRequest.rows[0].ct_session_end_time, res.data.hangoutLink, 0, updatedRequest.rows[0].ct_counsellor_id, updatedRequest.rows[0].ct_user_id, eventid]);
 
               }
             });

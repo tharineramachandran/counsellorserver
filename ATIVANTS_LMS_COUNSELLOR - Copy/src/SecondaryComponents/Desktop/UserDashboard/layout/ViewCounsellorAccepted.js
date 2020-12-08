@@ -1,9 +1,9 @@
 import React from 'react';
 import {
     Button, Form, Header, Image, Input,
-    Dropdown, Grid, Modal,
+    Dropdown, Grid, Modal,Rating,
     Message, Segment, Card, Img, Icon,
-    Table, Label, Container, List, Popup
+    Table, Label, Container, List, Popup,  
 } from "semantic-ui-react";
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -17,7 +17,8 @@ class ViewAccepted extends React.Component {
     state = {
         requests: [],
         openModel: false,
-        element: {}
+        element: {},
+    
     }
 
     componentDidMount() {
@@ -99,9 +100,16 @@ class ViewAccepted extends React.Component {
 
 
     }
+ 
+
+
     openGoogleMeet = (url) => {
         window.open(url);
     }
+   
+
+
+    
     render() {
         return (
             <Grid columns='equal' divided>
@@ -143,6 +151,13 @@ class ViewAccepted extends React.Component {
                                         onClick={() => window.open(this.state.element.ct_meeting_url)}
                                     > Google Meet Link
                                                  </Button>
+
+                                                 
+                                             
+
+
+
+
                                 </Modal.Content>
                                 <Modal.Actions>
                                     <Button color='black' onClick={() => this.setState({ openModel: false })}>

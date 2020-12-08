@@ -183,13 +183,16 @@ app.get("/openLink/:id", async (req, res) => {
 // Add event 
 app.post("/addevent", async (req, res) => {
   try { 
-    var { session, date, userId, counsellorId, sessionDetails } = req.body;
+    var { session, date, userId, counsellorId, sessionDetails , requestID} = req.body;
     /// Date time things  
-
+console.log([ session, date, userId, counsellorId, sessionDetails]);
 
     var datestr = date.split("T");
     var datestr3 = datestr[0].split("-");
     var day = (parseInt(datestr3[2]) + 1).toString();
+
+    if(day.length ==1){ day = "0"+day}
+
     var startDate = datestr3[0] + "-" + datestr3[1] + "-" + day + "T" + sessionDetails.ct_from + ":00.000+08:00";
     var endDate = datestr3[0] + "-" + datestr3[1] + "-" + day + "T" + sessionDetails.ct_to + ":00.000+08:00";
      
@@ -200,28 +203,42 @@ app.post("/addevent", async (req, res) => {
     const counsellor = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL" from "T_USER" where "ID_USER_UUID" = $1 ', [counsellorId]);
      
     const user = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL" from "T_USER" where "ID_USER_UUID" = $1 ', [userId]);
-if(userrepeat.rowCount == 0   &&  counsellor.rowCount >0            ){ 
+    
+    const request  = await pool.query('select  * from "CT_COUNSELLOR_COUNSELLING_DETAILS" where "id" = $1 ', [requestID]);
+    
+
+    if(userrepeat.rowCount == 0   &&  counsellor.rowCount >0   &&  user.rowCount >0           ){ 
+    
+     
+        var subject = "new session request";
+        var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + startDate + " to " + endDate;
+        console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
+        await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message);
+     console.log([startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']); 
+      
+     
+     await  pool.query(
+          'INSERT INTO "CT_COUNSELLOR_REQUESTS" (  ct_conselling_id, ct_counselling_level_code, ct_counselling_subject_code, ct_counsellor_hourly_rate,                                      ct_session_start_time, ct_session_end_time, ct_session_date,ct_user_id,ct_counsellor_id, ct_counsellor_timezone_code ,ct_counsellor_response  ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *',
+          [ requestID ,request.rows[0].ct_counselling_level_code,   request.rows[0].ct_counselling_subject_code        ,request.rows[0].ct_counsellor_hourly_rate       ,          startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
+    
+
 
  
-    var subject = "new session request";
-    var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + startDate + " to " + endDate;
-    console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
-    await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message);
- 
-    await  pool.query(
-      'INSERT INTO "CT_COUNSELLOR_REQUESTS" (    ct_session_start_time, ct_session_end_time, ct_session_date,ct_user_id,ct_counsellor_id, ct_counsellor_timezone_code ,ct_counsellor_response  ) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *',
-      [startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
 
+ 
     // // Load client secrets from a local file.
     // fs.readFile('credentials.json', (err, content) => {
     //   if (err) return console.log('Error loading client secret file:', err);
     //   // Authorize a client with credentials, then call the Google Calendar API.
     //     authorize(JSON.parse(content), addEvents );
-    // });
-    }
     res.status(200).json({
       message: "Request is sent"
     })
+    // });
+    } else { res.status(200).json({
+      message: "Request is sent"
+    })} 
+    
 
   } catch (error) {
     console.log("dghdfgh"+error.message);
