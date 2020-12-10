@@ -28,6 +28,7 @@ import ViewChangeRequest from './layout/ViewUserChangeRequest'
 import ViewAccepted from './layout/ViewUserAccepted';
 import ViewRequest from './layout/ViewUserRequest';
 
+import ViewUserRating from './layout/ViewUserRating';
 import EditUserProfile from './layout/ViewEditUserProfile';
 
 import { baseURLAPI, baseURL } from "../../../Global";
@@ -48,6 +49,9 @@ const UserDashboard = (props) => {
     const [open, setOpen] = useState(false);
     const [isMessagesSelected, setIsMessagesSelected] = useState(false);
     const [isRequestSelected, setIsRequestSelected] = useState(false);
+    const [isRatingSelected, setIsRatingSelected] = useState(false);
+
+     
 
     const [isEditSelected, setIsEditSelected] = useState(false);
     const [isUserCompleteSelected, setUserCompletedSelected] = useState(false);
@@ -107,18 +111,23 @@ const UserDashboard = (props) => {
                         <div style={{ float: 'right' }}>
 
 
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => {setIsRatingSelected(false) ; setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
                                 Home
                             </Label>
 
-                            {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsEditSelected(true); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                            {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => {setIsRatingSelected(false) ; setIsEditSelected(true); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Profile
       </Label>}
 
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsRatingSelected(false) ;setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Change Request
                             </Label>
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsRatingSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                                View Rating
+                            </Label>
+                             
+                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected);setIsRatingSelected(false) ; setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Requests
                             </Label>
                             <Popup
@@ -209,6 +218,8 @@ const UserDashboard = (props) => {
             {isRequestAcceptSelected && <ViewAccepted />}
             {/* {isMessagesSelected && <ViewMessages />} */}
             {isRequestSelected && <ViewRequest />}
+            {isRatingSelected && <ViewUserRating />}
+             
             {/* {isProfileSelected && <ViewProfile />}  */}
             {/* {!isProfileSelected && <Search />} */}
             {/* {!isProfileSelected && <DisplayProfiles />} */}

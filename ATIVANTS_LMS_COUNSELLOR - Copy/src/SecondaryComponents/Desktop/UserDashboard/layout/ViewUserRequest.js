@@ -211,20 +211,7 @@ class ViewRequest extends React.Component {
                                 <br />
                                 {this.state.element.ct_meeting_url ? (
                                     <div>
-                                        <Form  >
-                                            <Form.Group>
-                                                <Form.Input
-                                                    style={{ width: "300px" }}
-                                                    type="FeedBack"
-                                                    onChange={this._onKeyUp}
-                                                    name="m"
-                                                    id="m"
-                                                    placeholder="FeedBack"
-                                                />
-                                                <Rating maxRating={5} onRate={this.handleRate} />
-                                                <Form.Button style={{ width: "100px" }} onClick={() => this.sendMessage()}>  Send </Form.Button>
-                                            </Form.Group>
-                                        </Form>
+                                       
                                         <Button color='teal'
                                             onClick={() => window.open(this.state.element.ct_meeting_url)}
                                         > Google Meet Link

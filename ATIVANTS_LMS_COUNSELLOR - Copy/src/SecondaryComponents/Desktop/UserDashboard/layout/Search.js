@@ -40,6 +40,7 @@ for (var i = 0; k < 1000; i++) {
 }
 class Search extends React.Component {
     state = {
+        loading:true,
         activeIndex: 0,
         post: [],
         allPosts: [],
@@ -180,6 +181,7 @@ class Search extends React.Component {
                     maxValue: maxValue,
                     counsellingSubjectName: '00',
                     show: false ,
+                    loading:false,
                     counsellingDayName: "Anyday"
                 });
             })
@@ -197,9 +199,10 @@ class Search extends React.Component {
                 this.setState({
                     counsellingSubjectNameOptions: counsellingSubjectNameOptions,
                     counsellingDayOptions: [],
-
+                      
                 });
             })
+            
     }
  
 
@@ -329,6 +332,17 @@ class Search extends React.Component {
                 <Grid.Row textAlign='center'>
                     <Grid.Column>
                         <Container>
+{ 
+                        this.state.loading ? (<Segment>
+                                            <div textAlign="center">
+                                            <h3>  Page is loading...........   </h3>
+                                              <Icon size = "huge" loading name='spinner' />
+                                              </div>       </Segment>
+                                      ):( <div>
+                                           
+                                        </div>)  }
+
+
                             {this.state.post.map((person, index) =>
                                 <div class="ui card" style={{ width: '100%' }}>
                                  
@@ -742,14 +756,32 @@ class Search extends React.Component {
                                                     </Table>
                                                     <Container>
                                                     <h2>Ratings</h2>
-                                                    <Table basic='very' celled collapsing>  <Table.Body>         
+                                                    <Table basic='very' width="100%">  <Table.Body>         
                                                     { person.counsellor_review.length > 0  ? (                                                         
                                                        person.counsellor_review.map((details, index) => (
                                                                                                                   
                                                                     <Table.Row>
                                                                         <Table.Cell>
-                                                                        <Message>    <Message.Header> {details.TX_USER_NAME}   <Rating icon='star' defaultRating={details.ct_counsellor_stars}  maxRating={5} disabled/>  </Message.Header>
-                                                                        <p> {details.ct_counsellor_review}</p>
+                                                                        <Message width="100%"  > 
+                                                                        
+
+
+                                                                       
+
+    
+
+    {details.TX_PICTURE ?( <div>
+    <Image src={details.TX_PICTURE}   avatar />
+    <strong> {details.TX_USER_NAME}     </strong>   </div>):(<div><Image size='small'>
+      <Icon disabled name='user' /><strong> {details.TX_USER_NAME}     </strong> 
+    </Image></div>) }
+
+
+                                                                      
+                                                                          <Rating icon='star' defaultRating={details.ct_counsellor_stars}  maxRating={5} disabled/>   <br/>                                                              
+                                                                          <span>   {details.ct_counselling_level_name}    | {details.ct_counselling_subject_name}        </span>
+                                                                      
+                                                                       <p> {details.ct_counsellor_review}</p>
                                                                         </Message> 
                                                                         </Table.Cell>
                                                                     </Table.Row> 

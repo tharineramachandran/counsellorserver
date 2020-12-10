@@ -220,19 +220,19 @@ class ChangeSession extends React.Component {
     return (
 
       <Container>
-         <div  className="appBanner"  >
+       
 {this.state.isLoading ? (<div> 
-  <Container ma>
-      <Dimmer active inverted    >
-        <Loader size='medium'>Loading</Loader>
-      </Dimmer>
-
+  <Container textAlign="center"  >
+    
+  <h3>  Page is loading...........   </h3>
+    <Icon size = "huge" loading name='spinner' />
+                                            
      
     </Container>
 
 
     </div>) :( <div>      
-      < br />
+      <div className="appBanner"   >
         <h3>Pick a date for the counselling session  </h3>
 
         <DatePicker
@@ -241,8 +241,8 @@ class ChangeSession extends React.Component {
           filterDate={this.isWeekday}
           onCalendarClose={this.handleCalendarClose}
           placeholderText="Select a day for meeting " />
-
-        {this.state.slots.length > 0 ? (<div>
+</div>
+        {this.state.slots.length > 0 ? (<div> <div className="appBanner"   >
           < br />
           <h3>Choose a slot on the day</h3>
           <Dropdown placeholder='Add slot timing'
@@ -253,18 +253,7 @@ class ChangeSession extends React.Component {
         <p style={{ color: 'red' }}>{this.state.formWarning}</p>
   
         <button  class="ui button" onClick={this.addDate}>Add Date</button>
-
-   </div>) :
-          (<strong>
-
-          </strong>)
-        }
-    </div>)}
- 
         </div>
-
-        {this.state.isLoading ? (<div> </div>) :( <div> < br /><h3>Requested counselling session  change dates</h3>
-
 
  <Table basic='very' celled collapsing>
  <Table.Header>
@@ -303,7 +292,18 @@ class ChangeSession extends React.Component {
 <div className="appBanner"    >
 <button   class="ui button" onClick={this.submitRequest}>Submit Change Request</button>
 </div>      
-          </div>)}
+   </div>) :
+          (<strong>
+
+          </strong>)
+        }
+    </div>)}
+ 
+        
+
+       {/* {this.state.isLoading ? (<div> </div>) :( <div> < br /><h3>Requested counselling session  change dates</h3> */}
+
+          {/* </div> )} */}
       
 </Container>
 

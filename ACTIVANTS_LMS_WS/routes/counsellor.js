@@ -27,7 +27,7 @@ router.get("/GetCounsellorDetails", async (req, res) => {
             var item = details[i];
 
             var counsellor_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_ID" = $1', [item]);
-            var counsellor_review = await pool.query('SELECT "CT_COUNSELLOR_REVIEW"."id", "CT_COUNSELLOR_REVIEW"."ct_counsellor_review","CT_COUNSELLOR_REVIEW"."ct_counsellor_stars", "CT_COUNSELLOR_REVIEW"."ct_counsellor_date","CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" ,"T_USER"."TX_USER_NAME" FROM public."CT_COUNSELLOR_REVIEW" INNER JOIN public."T_USER" ON  CAST("CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" AS INTEGER) = "T_USER"."ID_USER_UUID" WHERE  "CT_COUNSELLOR_REVIEW"."ct_counsellor_id" = $1', [item]);
+            var counsellor_review = await pool.query('SELECT  "CT_COUNSELLOR_REVIEW"."ct_request_id",       "CT_COUNSELLOR_REVIEW"."id", "CT_COUNSELLOR_REVIEW"."ct_counsellor_review","CT_COUNSELLOR_REVIEW"."ct_counsellor_stars", "CT_COUNSELLOR_REVIEW"."ct_counsellor_date","CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" ,"T_USER"."TX_USER_NAME" ,"T_USER"."TX_PICTURE"         FROM public."CT_COUNSELLOR_REVIEW" INNER JOIN public."T_USER" ON  CAST("CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" AS INTEGER) = "T_USER"."ID_USER_UUID" WHERE  "CT_COUNSELLOR_REVIEW"."ct_counsellor_id" = $1', [item]);
 
             var counselling_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_COUNSELLING_DETAILS" where "ct_counsellor_id" = $1', [item]);
             var counselling_introduction = await pool.query('SELECT * FROM "CT_COUNSELLOR_INTRODUCTION" where "ct_counsellor_id" = $1', [item]);
@@ -79,9 +79,23 @@ router.get("/GetCounsellorDetails", async (req, res) => {
                 counselling_total_price += parseInt(counselling_details.rows[x].ct_counsellor_hourly_rate);
             }
 
+            var view_counsellor_review= []
 
  
+            for (let x = 0; x < counsellor_review.rowCount; x++) {
 
+
+                var review_request = await pool.query('SELECT * FROM "CT_COUNSELLOR_REQUESTS" where "id" = $1', [counsellor_review.rows[x].ct_request_id]);
+                console.log(["-------------fffffff--------",review_request.rows]); 
+                console.log(["-------------sdsdsds--------",counsellor_review.rows[x]]); 
+
+                var counsellingLevelName = await getName.getCounsellingLevelName(review_request.rows[0].ct_counselling_level_code);
+                counsellor_review.rows[x].ct_counselling_level_name = counsellingLevelName;
+                var counsellingSubjectsName = await getName.getCounsellingSubjectsName(review_request.rows[0].ct_counselling_subject_code);
+                counsellor_review.rows[x].ct_counselling_subject_name = counsellingSubjectsName;
+                view_counsellor_review.push(counsellor_review.rows[x]);
+ 
+            }
 
 
             var counselling_average_price = counselling_total_price / counselling_details.rowCount;
@@ -89,7 +103,7 @@ router.get("/GetCounsellorDetails", async (req, res) => {
 
             var account = {
                 counsellor_details: counsellor_details.rows,
-                counsellor_review: counsellor_review.rows,
+                counsellor_review: view_counsellor_review,
                 counselling_details: counselling_details_values,
                 counselling_introduction: counselling_introduction.rows,
                 counselling_education: counselling_edu_values,
@@ -368,35 +382,7 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
     }
 })
 
-
-
  
-router.post("/rating", authorization, async (req, res) => {
-    var { requestID,feedback,rating,userID,cousellorID } = req.body.formData;
-    
-    var datetime = new Date();
-    try {
-
-    await    pool.query(
-            'INSERT INTO "CT_COUNSELLOR_REVIEW" (  ct_request_id,  ct_counsellor_review, ct_counsellor_stars, ct_counsellor_user_id, ct_counsellor_date, ct_counsellor_id  ) VALUES($1,$2,$3,$4,$5,$6) RETURNING *',
-            [parseInt (requestID),feedback,rating,userID,datetime.toISOString().slice(0, 10),cousellorID   ]);
-
-
-           
-
-
-        res.status(200).json("success");
-
-    } catch (error) {
-        console.error(["api consellee update", error.message]);
-        res.status(400).json([{ error: "An error occurred ", message: "An error occurred" }]);
-    }
-})
- 
-
-
-
-
 
 //update counsellee
 router.post("/UpdatePhoto", authorization, async (req, res) => {

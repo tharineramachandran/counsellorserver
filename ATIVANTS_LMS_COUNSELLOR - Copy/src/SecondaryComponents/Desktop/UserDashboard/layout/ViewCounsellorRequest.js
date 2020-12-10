@@ -11,6 +11,7 @@ import {baseURLAPI ,baseURL }from "../../../../Global";
 const axios = require('axios');
 class ViewRequest extends React.Component {
     state = {
+        loading:true,
         requests: [],
         openModel: false,
         totalRequests :0
@@ -19,6 +20,7 @@ class ViewRequest extends React.Component {
     componentDidMount() {
        this.setTable();
        setInterval(this.checkValue, 5000);
+          
     }
 
     checkValue = ( ) => {
@@ -86,9 +88,17 @@ class ViewRequest extends React.Component {
                 const openModel = false;
                 
                 this.setState({ requests, openModel });
+                this.setState({ 
+                    loading:false,
+                    
+                });
             })
             .catch(function (error) {
                 console.log(error);
+                this.setState({ 
+                    loading:false,
+                    
+                });
             });
         }else {
 
@@ -102,9 +112,12 @@ class ViewRequest extends React.Component {
                 progress: '',
             });
 
-
+            this.setState({ 
+                loading:false,
+                
+            });
         }
-
+         
     }
 
 
@@ -197,21 +210,28 @@ class ViewRequest extends React.Component {
                     <Grid.Column>
                         <Container>
                             <h1>Requests for sessions</h1>
-                            <Table basic='very' celled collapsing>
-                                <Table.Header>
-                                    <Table.Row>
-                                        <Table.HeaderCell>Session ID </Table.HeaderCell>
-                                        <Table.HeaderCell>Counsellee Name </Table.HeaderCell>
-                                        <Table.HeaderCell>Counsellee Email </Table.HeaderCell>
-                                        <Table.HeaderCell>Session Date </Table.HeaderCell>
-                                        <Table.HeaderCell>Session Start Time </Table.HeaderCell>
-                                        <Table.HeaderCell>Session End Time </Table.HeaderCell>
-                                        <Table.HeaderCell>Session Time Zone </Table.HeaderCell>
-                                        <Table.HeaderCell>Options</Table.HeaderCell>
-                                    </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                    {this.state.requests.length > 0 ? (
+                             
+                              
+                                { 
+                        this.state.loading ? (<Segment>
+                                            <div textAlign="center">
+                                            <h3>  Page is loading...........   </h3>
+                                              <Icon size = "huge" loading name='spinner' />
+                                              </div>       </Segment>
+                                      ):( <Table basic='very' celled collapsing>
+                                      <Table.Header>
+                                          <Table.Row>
+                                              <Table.HeaderCell>Session ID </Table.HeaderCell>
+                                              <Table.HeaderCell>Counsellee Name </Table.HeaderCell>
+                                              <Table.HeaderCell>Counsellee Email </Table.HeaderCell>
+                                              <Table.HeaderCell>Session Date </Table.HeaderCell>
+                                              <Table.HeaderCell>Session Start Time </Table.HeaderCell>
+                                              <Table.HeaderCell>Session End Time </Table.HeaderCell>
+                                              <Table.HeaderCell>Session Time Zone </Table.HeaderCell>
+                                              <Table.HeaderCell>Options</Table.HeaderCell>
+                                          </Table.Row>
+                                      </Table.Header>  <Table.Body>
+                                            {this.state.requests.length > 0 ? (
                                         this.state.requests.map((details, index) => (
                                             <Table.Row>
                                                 <Table.Cell>
@@ -258,7 +278,7 @@ class ViewRequest extends React.Component {
                                                                 RequestID={details.id}
                                                                 UserID={details.ct_user_id}
                                                             />
-                                                        </Modal.Content>
+                                                         </Modal.Content>
                                                         <Modal.Actions>
                                                             <Button color='black' onClick={() => this.setState({ openModel: false })}>
                                                                 Close
@@ -276,8 +296,11 @@ class ViewRequest extends React.Component {
                                             </Table.Row>
                                         )
                                     }
-                                </Table.Body>
-                            </Table>
+                                         </Table.Body> </Table> )  }
+
+                                   
+                             
+                           
                         </Container>
                     </Grid.Column>
                 </Grid.Row>
