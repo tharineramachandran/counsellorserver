@@ -9,9 +9,15 @@ const getName = require("../functions/names");
 const awsS3 = require("../functions/awsS3");
 const createCounsellorValidation = require("../middleware/createCounsellorValidation");
 
-router.get("/GetCounsellorDetails", async (req, res) => {
-
-    try {
+router.get("/GetCounsellorDetails/:id", async (req, res) => {
+ var id=  req.params.id; 
+ console.log( parseInt(id)) ;
+    try { 
+        var user_fav =[];
+        if(   Number.isInteger ( parseInt(id))    ){ 
+            user_fav = await pool.query('SELECT  * FROM "T_USER_FAVORITES" WHERE "ct_user_id" = $1', [parseInt(id)]);
+         
+        } 
 
         var details = [];
         var final_details = [];
@@ -86,10 +92,7 @@ router.get("/GetCounsellorDetails", async (req, res) => {
 
 
                 var review_request = await pool.query('SELECT * FROM "CT_COUNSELLOR_REQUESTS" where "id" = $1', [counsellor_review.rows[x].ct_request_id]);
-                console.log(["-------------fffffff--------",review_request.rows]); 
-                console.log(["-------------sdsdsds--------",counsellor_review.rows[x]]); 
-
-                var counsellingLevelName = await getName.getCounsellingLevelName(review_request.rows[0].ct_counselling_level_code);
+               var counsellingLevelName = await getName.getCounsellingLevelName(review_request.rows[0].ct_counselling_level_code);
                 counsellor_review.rows[x].ct_counselling_level_name = counsellingLevelName;
                 var counsellingSubjectsName = await getName.getCounsellingSubjectsName(review_request.rows[0].ct_counselling_subject_code);
                 counsellor_review.rows[x].ct_counselling_subject_name = counsellingSubjectsName;
@@ -100,9 +103,27 @@ router.get("/GetCounsellorDetails", async (req, res) => {
 
             var counselling_average_price = counselling_total_price / counselling_details.rowCount;
             var counselling_average_review = counselling_total_review / counsellor_review.rowCount;
+            var FavisAvailable = false;
+            var counsellor_detailsFav = [];
+       
+                if(user_fav.rowCount > 0){
+                    var FavisAvailable = true;
+
+                   
+  console.log(user_fav.rows[0].ct_user_fav)
+                    if ( user_fav.rows[0].ct_user_fav.includes( counsellor_details.rows[0].CT_COUNSELLOR_ID  ))
+                    {counsellor_details.rows[0].FavisAvailable =1 ; 
+                    } else { counsellor_details.rows[0].FavisAvailable = 0 ; }
+                        
+         
+                  
+                }
+   
+
 
             var account = {
                 counsellor_details: counsellor_details.rows,
+                FavisAvailable :FavisAvailable , 
                 counsellor_review: view_counsellor_review,
                 counselling_details: counselling_details_values,
                 counselling_introduction: counselling_introduction.rows,

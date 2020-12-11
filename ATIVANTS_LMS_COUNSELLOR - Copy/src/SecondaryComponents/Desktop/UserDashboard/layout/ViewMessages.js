@@ -34,8 +34,15 @@ class ViewMessages extends React.Component {
     componentDidMount() {
         this.setTable();
         this.getData();
-        setInterval(this.getData, 5000);
+         
+        this.intervalID = setInterval(this.getData, 5000);
+        console.log("is here    ");
     }
+    componentWillUnmount() {
+        console.log("asdfasdfasdf here    ");
+        clearInterval(this.intervalID) ;
+    }
+
     getData = () => {
         axios.get(baseURLAPI + '/messages/getTotalChats/' + localStorage.userID, {
             headers: {

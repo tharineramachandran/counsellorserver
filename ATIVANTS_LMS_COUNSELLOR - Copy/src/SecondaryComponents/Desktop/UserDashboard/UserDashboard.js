@@ -28,6 +28,7 @@ import ViewChangeRequest from './layout/ViewUserChangeRequest'
 import ViewAccepted from './layout/ViewUserAccepted';
 import ViewRequest from './layout/ViewUserRequest';
 
+import ViewUserLike from './layout/ViewUserLike';
 import ViewUserRating from './layout/ViewUserRating';
 import EditUserProfile from './layout/ViewEditUserProfile';
 
@@ -50,14 +51,21 @@ const UserDashboard = (props) => {
     const [isMessagesSelected, setIsMessagesSelected] = useState(false);
     const [isRequestSelected, setIsRequestSelected] = useState(false);
     const [isRatingSelected, setIsRatingSelected] = useState(false);
-
-     
+    const [IsLikeSelected, setIsLikeSelected] = useState(false);
+      
+    const [totalmessages, settotalmessages] = useState(0);
+    const [newNoti, setnewNoti] = useState(false);
 
     const [isEditSelected, setIsEditSelected] = useState(false);
     const [isUserCompleteSelected, setUserCompletedSelected] = useState(false);
     const { name, email, isCounsellor, image, isCompleted } = userDetails;
     var user = [];
+
+
+     
+
     async function getName() {
+         
         try {
             setUserDetails({
                 name: localStorage.name,
@@ -72,8 +80,90 @@ const UserDashboard = (props) => {
         }
     }
 
+
+    async function getData() {
+        try {
+           
+            axios.get(baseURLAPI + '/messages/getTotalChats/' + localStorage.userID, {
+                headers: {
+                    jwtToken: localStorage.jwtToken
+                },
+                data: {
+                    userID: localStorage.userID
+                }
+            })
+                .then((res) => {
+     console.log("res.data");
+                        console.log(res.data);
+                    
+                    if (parseInt(res.data) != totalmessages) {
+                       
+                        settotalmessages( parseInt(res.data)  );
+                        setnewNoti(false);
+                    }
+    
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+    
+
+
+
+
+
+
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    useEffect(() => {
+        setInterval(() => {
+            try {
+           
+        //         axios.get(baseURLAPI + '/messages/getTotalChats/' + localStorage.userID, {
+        //             headers: {
+        //                 jwtToken: localStorage.jwtToken
+        //             },
+        //             data: {
+        //                 userID: localStorage.userID
+        //             }
+        //         })
+        //             .then((res) => {
+        //  console.log("res.data");
+        //                     console.log(res.data);
+                        
+        //                 if (parseInt(res.data) != totalmessages) {
+                           
+        //                     settotalmessages( parseInt(res.data)  );
+        //                     setnewNoti(false);
+        //                 }
+        
+        //             })
+        //             .catch(function (error) {
+        //                 console.log(error);
+        //             });
+        
+    
+    
+    
+    
+    
+    
+    
+            } catch (error) {
+                console.log(error.message);
+            }
+        }, 5000);
+
+       
+      }); 
+
     useEffect(() => {
         getName();
+        getData();
+        
     }, [])
 
     const logout = async () => {
@@ -131,9 +221,22 @@ const UserDashboard = (props) => {
                                 View Requests
                             </Label>
                             <Popup
-                                trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
-                                    <Icon name='mail' style={{ margin: '0px' }} />
-                                </Label>}
+                                trigger={
+                                    < Label>
+
+{newNoti? (<Label as='a' circular style={{ marginRight: '10px' }}>  <Icon.Group size='huge'>
+      <Icon name='mail' />
+      <Icon corner='top right' name='circle' color='red'/>
+    </Icon.Group>  </Label> 
+):(    <Label as='a' circular style={{ marginRight: '10px' }}>
+                                    <Icon name='mail' style={{ margin: '0px' }} /> </Label>) }
+
+                                    </Label>
+                             
+                            
+                            
+                            
+                            }
                                 size='mini'
                                 position='top right'
                                 on='click'
@@ -151,7 +254,7 @@ const UserDashboard = (props) => {
                             <Label as='a' circular style={{ marginRight: '10px' }}>
                                 <Icon name='alarm' style={{ margin: '0px' }} />
                             </Label>
-                            <Label as='a' circular style={{ marginRight: '10px' }}>
+                            <Label   onClick={() => { setIsMessagesSelected(false); setIsLikeSelected(!IsLikeSelected);setIsRequestSelected(false);setIsRatingSelected(false) ; setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}      as='a' circular style={{ marginRight: '10px' }}>
                                 <Icon name='like' style={{ margin: '0px' }} />
                             </Label>
 
@@ -225,7 +328,7 @@ const UserDashboard = (props) => {
             {/* {!isProfileSelected && <DisplayProfiles />} */}
             {isProfileSelected && <Search />}
             {isEditSelected && <EditUserProfile />}
-
+            {IsLikeSelected  && <ViewUserLike />}
         </>
     )
 }

@@ -48,7 +48,7 @@ for (var i = 0; k < 1000; i++) {
   priceRange.push({ key: i, text: k, value: k });
   k += 50;
 }
-class Search extends React.Component {
+class ViewUserLike extends React.Component {
   state = {
     loading: true,
     activeIndex: 0,
@@ -175,10 +175,8 @@ class Search extends React.Component {
     var counsellingSubjectNameOptions = [
       { key: "00", text: "Any Subject", value: "00" },
     ];
-    axios
-      .get(
-        baseURLAPI + "/Counsellor/GetCounsellorDetails/" + localStorage.userID
-      )
+     
+    axios.get(baseURLAPI + '/favourites/userfavourites/'+localStorage.userID) 
       .then((res) => {
         const persons = res.data.counsellor;
         const minValue = 0;
@@ -422,7 +420,7 @@ class Search extends React.Component {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById( person.counsellor_details[0].CT_COUNSELLOR_ID).className   = "grey heart large icon";
+        
         toast.success("Successfully removed to favourites!", {
           position: "top-right",
           autoClose: 3000,
@@ -431,7 +429,7 @@ class Search extends React.Component {
           pauseOnHover: false,
           draggable: true,
           progress: "",
-        });
+        });   
       })
       .catch(function (error) {
         console.log(error);
@@ -445,6 +443,29 @@ class Search extends React.Component {
           progress: "",
         });
       });
+
+
+
+      var post = [];
+       
+      this.state.allPosts.forEach(checkItem);
+  
+      function checkItem(item, index) {
+        var itemNotPushed = true;
+
+        console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )   );
+
+        console.log( parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID)  );
+
+        console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )     ==  parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
+  console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )     ==  parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID) );
+        if (!(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )     ==  parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID) )  ) {
+          post.push(item); 
+          
+        }  
+      }
+      this.setState({ post: post });  
+
   };
   render() {
     const { activeIndex } = this.state;
@@ -630,8 +651,7 @@ class Search extends React.Component {
                           {" "}
                           <List  size='large' horizontal  >
     <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
-    <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item>
- 
+    <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item> 
     <List.Item as='a'>{person.counsellor_details[0].FavisAvailable == '1'?
                                 ( <Icon   id={ person.counsellor_details[0].CT_COUNSELLOR_ID  } onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' /> 
                                 )
@@ -1140,4 +1160,4 @@ class Search extends React.Component {
   }
 }
 
-export default Search;
+export default ViewUserLike;
