@@ -175,8 +175,8 @@ class ViewUserLike extends React.Component {
     var counsellingSubjectNameOptions = [
       { key: "00", text: "Any Subject", value: "00" },
     ];
-     
-    axios.get(baseURLAPI + '/favourites/userfavourites/'+localStorage.userID) 
+
+    axios.get(baseURLAPI + '/favourites/userfavourites/' + localStorage.userID)
       .then((res) => {
         const persons = res.data.counsellor;
         const minValue = 0;
@@ -354,7 +354,7 @@ class ViewUserLike extends React.Component {
   };
   addtoFav = (person) => {
 
-     
+
 
     console.log(person.counsellor_details);
     const headers = {
@@ -375,7 +375,7 @@ class ViewUserLike extends React.Component {
       )
       .then((res) => {
         console.log(res);
- document.getElementById( person.counsellor_details[0].CT_COUNSELLOR_ID).className   = "red heart large icon";
+        document.getElementById(person.counsellor_details[0].CT_COUNSELLOR_ID).className = "red heart large icon";
 
         toast.success("Successfully added to favourites!", {
           position: "top-right",
@@ -401,7 +401,7 @@ class ViewUserLike extends React.Component {
       });
   };
   removetoFav = (person) => {
-     
+
     const headers = {
       jwtToken: localStorage.jwtToken,
     };
@@ -420,7 +420,7 @@ class ViewUserLike extends React.Component {
       )
       .then((res) => {
         console.log(res);
-        
+
         toast.success("Successfully removed to favourites!", {
           position: "top-right",
           autoClose: 3000,
@@ -429,7 +429,7 @@ class ViewUserLike extends React.Component {
           pauseOnHover: false,
           draggable: true,
           progress: "",
-        });   
+        });
       })
       .catch(function (error) {
         console.log(error);
@@ -446,25 +446,25 @@ class ViewUserLike extends React.Component {
 
 
 
-      var post = [];
-       
-      this.state.allPosts.forEach(checkItem);
-  
-      function checkItem(item, index) {
-        var itemNotPushed = true;
+    var post = [];
 
-        console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )   );
+    this.state.allPosts.forEach(checkItem);
 
-        console.log( parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID)  );
+    function checkItem(item, index) {
+      var itemNotPushed = true;
 
-        console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )     ==  parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
-  console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )     ==  parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID) );
-        if (!(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID   )     ==  parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID) )  ) {
-          post.push(item); 
-          
-        }  
+      console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID));
+
+      console.log(parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
+
+      console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) == parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
+      console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) == parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
+      if (!(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) == parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID))) {
+        post.push(item);
+
       }
-      this.setState({ post: post });  
+    }
+    this.setState({ post: post });
 
   };
   render() {
@@ -532,8 +532,8 @@ class ViewUserLike extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                <div></div>
-              )}
+                  <div></div>
+                )}
 
               {this.state.post.map((person, index) => (
                 <div class="ui card" style={{ width: "100%" }}>
@@ -572,22 +572,54 @@ class ViewUserLike extends React.Component {
                   </Modal>{" "}
                   <Card style={{ width: "100%" }}>
                     <Card.Content>
-                      <Image
-                        width="100px"
+
+
+
+                    <div   style={{ float: "left" , paddingRight:"2%" }} >
+                    <Image   width="200px"  bordered 
+                        src={  person.counselling_introduction[0].ct_counsellor_photo}  verticalAlign='top' /> <span>{
+                          person.counsellor_details[0].FavisAvailable == '1' ?
+                          (<Icon id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' />
+                          )
+                          :
+                          (<Icon color='grey' id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.addtoFav(person)} size='large' name='heart' />
+                          )
+                          } </span>  
+        </div> 
+
+                     
+
+                      {/* <Image
+                        width="200px"
                         style={{ padding: "5%", float: "left" }}
                         src={
                           person.counselling_introduction[0].ct_counsellor_photo
                         }
-                        wrapped
-                        ui={true}
-                      />
-                         
+                        // wrapped
+                        // ui={true}
+                        label={{
+                          as: 'a',
+                          position:"top right",
+                          content:
+
+                            person.counsellor_details[0].FavisAvailable == '1' ?
+                              (<Icon id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' />
+                              )
+                              :
+                              (<Icon color='grey' id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.addtoFav(person)} size='large' name='heart' />
+                              )
+                          ,
+
+                        }}
+
+                      /> */}
+
                       <div style={{ width: "20%", float: "right" }}>
                         <Table floated="right" basic="very" collapsing>
                           <Table.Body>
                             <Table.Row>
                               <Table.Cell>
-                              
+
                                 <p>
                                   {" "}
                                   <Rating
@@ -649,20 +681,14 @@ class ViewUserLike extends React.Component {
                       >
                         <Card.Header>
                           {" "}
-                          <List  size='large' horizontal  >
-    <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
-    <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item> 
-    <List.Item as='a'>{person.counsellor_details[0].FavisAvailable == '1'?
-                                ( <Icon   id={ person.counsellor_details[0].CT_COUNSELLOR_ID  } onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' /> 
-                                )
-                                :
-                                (   <Icon color='grey'  id={ person.counsellor_details[0].CT_COUNSELLOR_ID  }  onClick={() => this.addtoFav(person)} size='large' name='heart' />       
-                                )
-                                 
-                                }</List.Item>
-  </List>
+                          <List size='large' horizontal  >
                            
-                         
+                            <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
+                            <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item>
+
+                          </List>
+
+
                         </Card.Header>
                         <Card.Description>
                           <strong>My Counselling Group(s)</strong>
@@ -719,25 +745,25 @@ class ViewUserLike extends React.Component {
                             <h2>Counsellor Introduction Video</h2>
                             {person.counselling_introduction[0]
                               .ct_counsellor_video_url ? (
-                              <iframe
-                                width="560"
-                                height="315"
-                                src={
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_video_url
-                                }
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                              ></iframe>
-                            ) : (
-                              // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                              // </iframe>
+                                <iframe
+                                  width="560"
+                                  height="315"
+                                  src={
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_video_url
+                                  }
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen
+                                ></iframe>
+                              ) : (
+                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                                // </iframe>
 
-                              <p style={{ color: "red" }}>
-                                No video was provided
-                              </p>
-                            )}
+                                <p style={{ color: "red" }}>
+                                  No video was provided
+                                </p>
+                              )}
                           </Segment>
 
                           <Segment>
@@ -777,22 +803,22 @@ class ViewUserLike extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Monday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Monday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -831,22 +857,22 @@ class ViewUserLike extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Tuesday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Tuesday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -885,22 +911,22 @@ class ViewUserLike extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Wednesday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Wednesday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -939,22 +965,22 @@ class ViewUserLike extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Thursay Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Thursay Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -993,22 +1019,22 @@ class ViewUserLike extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Friday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Friday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -1047,22 +1073,22 @@ class ViewUserLike extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Saturday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Saturday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                               <Container>
@@ -1090,21 +1116,21 @@ class ViewUserLike extends React.Component {
                                                     </strong>{" "}
                                                   </div>
                                                 ) : (
-                                                  <div>
-                                                    <Image size="small">
-                                                      <Icon
-                                                        disabled
-                                                        name="user"
-                                                      />
-                                                      <strong>
-                                                        {" "}
-                                                        {
-                                                          details.TX_USER_NAME
-                                                        }{" "}
-                                                      </strong>
-                                                    </Image>
-                                                  </div>
-                                                )}
+                                                    <div>
+                                                      <Image size="small">
+                                                        <Icon
+                                                          disabled
+                                                          name="user"
+                                                        />
+                                                        <strong>
+                                                          {" "}
+                                                          {
+                                                            details.TX_USER_NAME
+                                                          }{" "}
+                                                        </strong>
+                                                      </Image>
+                                                    </div>
+                                                  )}
                                                 <Rating
                                                   icon="star"
                                                   defaultRating={
@@ -1134,13 +1160,13 @@ class ViewUserLike extends React.Component {
                                         )
                                       )
                                     ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                        <Table.Row>
+                                          <Table.Cell>
+                                            {" "}
                                           No Rating for this counsellor yet.....
                                         </Table.Cell>
-                                      </Table.Row>
-                                    )}{" "}
+                                        </Table.Row>
+                                      )}{" "}
                                   </Table.Body>
                                 </Table>
                               </Container>

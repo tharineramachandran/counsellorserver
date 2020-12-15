@@ -12,7 +12,7 @@ import {
 import {
     Button,
     Form, Modal,
-    Header,
+    Header, Menu,
     Icon,
     Input, Dropdown, Grid,
     Message,
@@ -27,7 +27,8 @@ import ViewMessages from './layout/ViewMessages'
 import ViewChangeRequest from './layout/ViewUserChangeRequest'
 import ViewAccepted from './layout/ViewUserAccepted';
 import ViewRequest from './layout/ViewUserRequest';
-
+ 
+import ViewNoti from './layout/ViewNoti'
 import ViewUserLike from './layout/ViewUserLike';
 import ViewUserRating from './layout/ViewUserRating';
 import EditUserProfile from './layout/ViewEditUserProfile';
@@ -36,13 +37,15 @@ import { baseURLAPI, baseURL } from "../../../Global";
 
 
 import RegistrationUserMultiStepForm from '../RegistrationComponents/User/_RegistrationUserMultiStepForm';
+import { useRef } from 'react';
 const axios = require('axios');
 toast.configure();
 
 const UserDashboard = (props) => {
 
     const setAuth = useContext(Authorize);
-
+    const contextRef = useRef();
+    const contextRefNoti = useRef();
     const [userDetails, setUserDetails] = useState({ name: '', email: '', isCounsellor: '', image: '', isCompleted: '' });
     const [isProfileSelected, setIsProfileSelected] = useState(false);
     const [isRequestAcceptSelected, setIsRequestAcceptSelected] = useState(false);
@@ -52,8 +55,12 @@ const UserDashboard = (props) => {
     const [isRequestSelected, setIsRequestSelected] = useState(false);
     const [isRatingSelected, setIsRatingSelected] = useState(false);
     const [IsLikeSelected, setIsLikeSelected] = useState(false);
-      
+    const [OpenMessageSelected, setOpenMessageSelected] = useState(false);
+ 
+    const [OpenNotiSelected, setOpenNotiSelected] = useState(false);
     const [totalmessages, settotalmessages] = useState(0);
+    
+    const [totalnoti, settotalnoti] = useState(0);
     const [newNoti, setnewNoti] = useState(false);
 
     const [isEditSelected, setIsEditSelected] = useState(false);
@@ -62,10 +69,10 @@ const UserDashboard = (props) => {
     var user = [];
 
 
-     
+
 
     async function getName() {
-         
+
         try {
             setUserDetails({
                 name: localStorage.name,
@@ -83,8 +90,8 @@ const UserDashboard = (props) => {
 
     async function getData() {
         try {
-           
-            axios.get(baseURLAPI + '/messages/getTotalChats/' + localStorage.userID, {
+
+            axios.get(baseURLAPI + '/messages/TotalUnread/' + localStorage.userID, {
                 headers: {
                     jwtToken: localStorage.jwtToken
                 },
@@ -93,27 +100,48 @@ const UserDashboard = (props) => {
                 }
             })
                 .then((res) => {
-     console.log("res.data");
-                        console.log(res.data);
-                    
+                    console.log("res.data");
+                    console.log(res.data);
+
                     if (parseInt(res.data) != totalmessages) {
-                       
-                        settotalmessages( parseInt(res.data)  );
+
+                        settotalmessages(parseInt(res.data));
                         setnewNoti(false);
                     }
-    
+
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-    
+ 
 
+        } catch (error) {
+            console.log(error.message);
+        }
+        try {
 
+            axios.get(baseURLAPI + '/notification/getTotalNoti/' + localStorage.userID, {
+                headers: {
+                    jwtToken: localStorage.jwtToken
+                },
+                data: {
+                    userID: localStorage.userID
+                }
+            })
+                .then((res) => {
+                    console.log("res.data");
+                    console.log(res.data);
+                    console.log(totalnoti);
+                    if (parseInt(res.data) != totalnoti) {
 
+                        settotalnoti(parseInt(res.data));
+                    
+                    }
 
-
-
-
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }); 
         } catch (error) {
             console.log(error.message);
         }
@@ -121,49 +149,71 @@ const UserDashboard = (props) => {
     useEffect(() => {
         setInterval(() => {
             try {
-           
-        //         axios.get(baseURLAPI + '/messages/getTotalChats/' + localStorage.userID, {
-        //             headers: {
-        //                 jwtToken: localStorage.jwtToken
-        //             },
-        //             data: {
-        //                 userID: localStorage.userID
-        //             }
-        //         })
-        //             .then((res) => {
-        //  console.log("res.data");
-        //                     console.log(res.data);
-                        
-        //                 if (parseInt(res.data) != totalmessages) {
-                           
-        //                     settotalmessages( parseInt(res.data)  );
-        //                     setnewNoti(false);
-        //                 }
-        
-        //             })
-        //             .catch(function (error) {
-        //                 console.log(error);
-        //             });
-        
-    
-    
-    
-    
-    
-    
-    
+
+                axios.get(baseURLAPI + '/messages/TotalUnread2222/' + localStorage.userID, {
+                    headers: {
+                        jwtToken: localStorage.jwtToken
+                    },
+                    data: {
+                        userID: localStorage.userID
+                    }
+                })
+                    .then((res) => {
+                        console.log("res.data");
+                        console.log(res.data);
+                        console.log(totalmessages);
+                        if (parseInt(res.data) != totalmessages) {
+
+                            settotalmessages(parseInt(res.data));
+                            setnewNoti(false);
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    }); 
             } catch (error) {
                 console.log(error.message);
             }
-        }, 5000);
 
-       
-      }); 
+             
+            try {
+
+                axios.get(baseURLAPI + '/notification/getTotalNoti2222/' + localStorage.userID, {
+                    headers: {
+                        jwtToken: localStorage.jwtToken
+                    },
+                    data: {
+                        userID: localStorage.userID
+                    }
+                })
+                    .then((res) => {
+                        console.log("res.data");
+                        console.log(res.data);
+                        console.log(totalnoti);
+                        if (parseInt(res.data) != totalnoti) {
+
+                            settotalnoti(parseInt(res.data));
+                        
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    }); 
+            } catch (error) {
+                console.log(error.message);
+            }
+        }, 100000);
+ 
+
+
+    });
 
     useEffect(() => {
         getName();
         getData();
-        
+
     }, [])
 
     const logout = async () => {
@@ -200,69 +250,130 @@ const UserDashboard = (props) => {
 
                         <div style={{ float: 'right' }}>
 
+{/* 
+                            
 
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => {setIsRatingSelected(false) ; setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
-                                Home
-                            </Label>
+                          
 
-                            {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => {setIsRatingSelected(false) ; setIsEditSelected(true); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                            
+
+                        
+                */}
+
+
+{/*  
+                            <Label as='a' circular style={{ marginRight: '10px' }}>
+                                <Icon name='alarm' style={{ margin: '0px' }} />
+                            </Label> */}
+                            
+                            <Menu   secondary >
+
+                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
+                                Home </p> </Menu.Item>    
+
+                          {parseInt(localStorage.isCompleted) == 1 && 
+                              <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsEditSelected(true); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Profile
-      </Label>}
-
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsRatingSelected(false) ;setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+      </p>  </Menu.Item>   }    
+                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Change Request
-                            </Label>
-
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsRatingSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                             </p>      </Menu.Item>    
+                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsRatingSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Rating
-                            </Label>
-                             
-                            <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected);setIsRatingSelected(false) ; setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                            </p>      </Menu.Item>   
+
+                            <Menu.Item> <p  onClick={() => { setIsLikeSelected(false); setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected); setIsRatingSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Requests
-                            </Label>
+                       </p>      </Menu.Item>    
+
+
+
+
+                            <Menu.Item>             <p onClick={() => { setOpenNotiSelected(false) ; setOpenMessageSelected(!OpenMessageSelected) }}>
+                                <Menu text >
+                                    <Menu.Item >
+                                        < p >
+                                            <Icon name='mail' style={{ margin: '0px' }} />
+                                            {totalmessages > 0 ? (<Label color='red' floating>
+                                                {totalmessages}
+                                            </Label>) : (
+
+                                                    <p></p>
+                                                )}
+                                        </p>
+                                    </Menu.Item>
+                                </Menu>
+                            </p>
+                            <strong ref={contextRef}> </strong>
                             <Popup
-                                trigger={
-                                    < Label>
-
-{newNoti? (<Label as='a' circular style={{ marginRight: '10px' }}>  <Icon.Group size='huge'>
-      <Icon name='mail' />
-      <Icon corner='top right' name='circle' color='red'/>
-    </Icon.Group>  </Label> 
-):(    <Label as='a' circular style={{ marginRight: '10px' }}>
-                                    <Icon name='mail' style={{ margin: '0px' }} /> </Label>) }
-
-                                    </Label>
-                             
-                            
-                            
-                            
-                            }
-                                size='mini'
-                                position='top right'
-                                on='click'
                                 flowing hoverable
-                            // popper={{ id: 'popper-container' }}
-                            // trigger={<Button>View Message</Button>}
-                            >                                        <Popup.Content  >
+                                popper={{ id: 'popper-container' }}
+                                position='top right'
+                                open={OpenMessageSelected}
+                                context={contextRef}
+                                content={
                                     <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
                                         <Grid.Column  >
                                             <ViewMessages />
                                         </Grid.Column>
                                     </Grid>
-                                </Popup.Content>
-                            </Popup>
-                            <Label as='a' circular style={{ marginRight: '10px' }}>
-                                <Icon name='alarm' style={{ margin: '0px' }} />
-                            </Label>
-                            <Label   onClick={() => { setIsMessagesSelected(false); setIsLikeSelected(!IsLikeSelected);setIsRequestSelected(false);setIsRatingSelected(false) ; setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}      as='a' circular style={{ marginRight: '10px' }}>
+                                }
+                            /></Menu.Item>
+                           
+                                <Menu.Item>
+                            <p onClick={() => {  setOpenNotiSelected(!OpenNotiSelected);setOpenMessageSelected(false); }}>
+                                <Menu text >
+                                    <Menu.Item >
+                                       
+                                            <Icon name='alarm'style={{ margin: '0px' }}  />
+                                            {totalnoti > 0 ? (<Label color='red' floating>
+                                                {totalnoti}
+                                            </Label>) : (
+                                                    <p></p>
+                                                )}
+                                        
+                                    </Menu.Item>
+                                </Menu>
+                            </p>
+                            <strong ref={contextRefNoti}> </strong>
+                            <Popup
+                                flowing hoverable
+                                popper={{ id: 'popper-container' }}
+                                position='top right'
+                                open={OpenNotiSelected}
+                                context={contextRefNoti}
+                                content={
+                                    <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
+                                        <Grid.Column  >
+                                            <ViewNoti />
+                                        </Grid.Column>
+                                    </Grid>
+                                }
+                            /></Menu.Item>
+                            <Menu.Item>
+            
+
+                            <p onClick={() => { setOpenNotiSelected(false) ; setOpenMessageSelected(!OpenMessageSelected) }}>
+                                <Menu text >
+                                    <Menu.Item >
+                                    <p onClick={() => { setIsMessagesSelected(false); setIsLikeSelected(!IsLikeSelected); setIsRequestSelected(false); setIsRatingSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }} as='a' circular style={{ marginRight: '10px' }}>
                                 <Icon name='like' style={{ margin: '0px' }} />
-                            </Label>
+                            </p>
+                                    </Menu.Item>
+                                </Menu>
 
+                                </p>
+                                <strong > </strong>
+            </Menu.Item>
+            <Menu.Item>
 
-                            <Label as='a' onClick={e => logout()} style={{ marginRight: '10px' }}>
+                            <p as='a' onClick={e => logout()} style={{ marginRight: '10px' }}>
                                 <Icon name='sign out' />
                                 Log out
-                            </Label>
+                            </p>
+ </Menu.Item>
+      </Menu >    
+
 
                         </div>
                     </Container>
@@ -275,7 +386,7 @@ const UserDashboard = (props) => {
                     </Container>
                 </Grid.Column >
             </Grid.Row >
-
+<br/>
 
 
             {parseInt(localStorage.verificationStatus) == 1 ? (
@@ -322,13 +433,13 @@ const UserDashboard = (props) => {
             {/* {isMessagesSelected && <ViewMessages />} */}
             {isRequestSelected && <ViewRequest />}
             {isRatingSelected && <ViewUserRating />}
-             
+
             {/* {isProfileSelected && <ViewProfile />}  */}
             {/* {!isProfileSelected && <Search />} */}
             {/* {!isProfileSelected && <DisplayProfiles />} */}
             {isProfileSelected && <Search />}
             {isEditSelected && <EditUserProfile />}
-            {IsLikeSelected  && <ViewUserLike />}
+            {IsLikeSelected && <ViewUserLike />}
         </>
     )
 }

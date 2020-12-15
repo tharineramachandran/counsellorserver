@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect,useRef } from 'react';
 import { Authorize } from "../../../MainComponents/DesktopComponent";
 import { toast } from "react-toastify";
 import TopMenu from './layout/TopMenu';
@@ -15,7 +15,7 @@ import {
     Header,
     Icon,
     Input, Dropdown, Grid, Modal,
-    Message,
+    Message,Menu,
     Segment,
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
@@ -37,7 +37,11 @@ const axios = require('axios');
 toast.configure();
 
 const CounsellorDashboard = (props) => {
+const [OpenMessageSelected, setOpenMessageSelected] = useState(false);
 
+    const [totalmessages, settotalmessages] = useState(0);
+    const [newNoti, setnewNoti] = useState(false);
+    const contextRef = useRef();
     const setAuth = useContext(Authorize);
     const [userDetails, setUserDetails] = useState({ name: '', email: '', isCounsellor: '', isDetailsProvided: true });
     const [isProfileSelected, setIsProfileSelected] = useState(false);
@@ -90,8 +94,88 @@ const CounsellorDashboard = (props) => {
 
     useEffect(() => {
         getName();
+        getData();
     }, [])
 
+    async function getData() {
+        try {
+
+            axios.get(baseURLAPI + '/messages/TotalUnread/' + localStorage.userID, {
+                headers: {
+                    jwtToken: localStorage.jwtToken
+                },
+                data: {
+                    userID: localStorage.userID
+                }
+            })
+                .then((res) => {
+                    console.log("res.data");
+                    console.log(res.data);
+
+                    if (parseInt(res.data) != totalmessages) {
+
+                        settotalmessages(parseInt(res.data));
+                        setnewNoti(false);
+                    }
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+
+
+
+
+
+
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    useEffect(() => {
+        setInterval(() => {
+            try {
+
+                axios.get(baseURLAPI + '/messages/TotalUnread/' + localStorage.userID, {
+                    headers: {
+                        jwtToken: localStorage.jwtToken
+                    },
+                    data: {
+                        userID: localStorage.userID
+                    }
+                })
+                    .then((res) => {
+                        console.log("res.data");
+                        console.log(res.data);
+                        console.log(totalmessages);
+                        if (parseInt(res.data) != totalmessages) {
+
+                            settotalmessages(parseInt(res.data));
+                            setnewNoti(false);
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+
+
+
+
+
+
+
+            } catch (error) {
+                console.log(error.message);
+            }
+        }, 10000);
+
+
+    });
+ 
     const logout = async () => {
         window.open(baseURLAPI + "/socialauth/logout", "_self");
         setAuth(false);
@@ -130,7 +214,7 @@ const CounsellorDashboard = (props) => {
                         </div>
                         <div style={{ float: 'right' }}>
 
-                            {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => {
+                            {/* {parseInt(localStorage.isCompleted) == 1 && <Label as='a' style={{ marginRight: '10px' }} onClick={() => {
                                 setIsProfileSelected(!isProfileSelected); setisRequestSelected(false); setViewDeclineSelected(false); setIsMessagesSelected(false); setViewDeclineSelected(false); setViewAcceptSelected(false); setViewChangeSelected(false);
                             }}  >
                                 View Profile
@@ -147,36 +231,109 @@ const CounsellorDashboard = (props) => {
                             <Label as='a' style={{ marginRight: '10px' }} onClick={() => { setIsMessagesSelected(false); setViewChangeSelected(!isViewChangeSelected); setViewAcceptSelected(false); setViewDeclineSelected(false); setisRequestSelected(false); setIsProfileSelected(false); }}>
                                 View Change Request
                             </Label>
-                            <Popup
-                                trigger={<Label as='a' circular style={{ marginRight: '10px' }}>
-                                    <Icon name='mail' style={{ margin: '0px' }} />
-                                </Label>}
-                                size='mini'
-                                position='top right'
-                                on='click'
-                                flowing hoverable
-                            // popper={{ id: 'popper-container' }}
-                            // trigger={<Button>View Message</Button>}
-                            >
-                                <Popup.Content  >
+                   */}
 
-                                    <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
-                                        <Grid.Column  >
-                                            <ViewMessages />
-                                        </Grid.Column>
-                                    </Grid>
-                                </Popup.Content>
-                            </Popup>
-                            <Label as='a' circular style={{ marginRight: '10px' }}>
-                                <Icon name='alarm' style={{ margin: '0px' }} />
-                            </Label>
-                            <Label as='a' circular style={{ marginRight: '10px' }}>
-                                <Icon name='like' style={{ margin: '0px' }} />
-                            </Label>
-                            <Label as='a' onClick={e => logout()}>
-                                <Icon name='sign out' />
-                                Log out
-                            </Label>
+                            <Menu   secondary >
+
+<Menu.Item> <p onClick={() => {   setIsMessagesSelected(false); setisRequestSelected(false); setViewChangeSelected(false); setIsProfileSelected(!isProfileSelected); setViewAcceptSelected(false); }}>
+    Home </p> </Menu.Item>    
+
+{parseInt(localStorage.isCompleted) == 1 && 
+  <Menu.Item> <p onClick={() => {    setIsEditSelected(true); setIsMessagesSelected(false); setisRequestSelected(false); setViewChangeSelected(false); setIsProfileSelected(false); setViewAcceptSelected(false); }}>
+    View Profile
+</p>  </Menu.Item>   } 
+
+<Menu.Item> <p onClick={() => { setIsMessagesSelected(false); setisRequestSelected(!isRequestSelected); setViewAcceptSelected(false); setIsProfileSelected(false); setViewChangeSelected(false); setViewDeclineSelected(false) }}>
+                                View Request
+ </p>      </Menu.Item> 
+
+ 
+<Menu.Item> <p onClick={() => { setIsMessagesSelected(false); setViewDeclineSelected(!isViewDeclineSelected); setViewAcceptSelected(false); setIsProfileSelected(false); setViewChangeSelected(false); setisRequestSelected(false) }}>
+                                View Declined Request
+ </p>      </Menu.Item>    
+<Menu.Item> <p onClick={() => {setIsMessagesSelected(false); setViewAcceptSelected(!isViewAcceptSelected); setViewDeclineSelected(false); setViewChangeSelected(false); setIsProfileSelected(false); setisRequestSelected(false) }}>
+                               View Accepted Request
+</p>      </Menu.Item>   
+
+<Menu.Item> <p onClick={() => { setIsMessagesSelected(false); setViewChangeSelected(!isViewChangeSelected); setViewAcceptSelected(false); setViewDeclineSelected(false); setisRequestSelected(false); setIsProfileSelected(false); }}>
+View Change Request
+</p>      </Menu.Item>    
+
+
+
+
+<Menu.Item>             <p onClick={() => { setOpenNotiSelected(false) ; setOpenMessageSelected(!OpenMessageSelected) }}>
+    <Menu text >
+        <Menu.Item >
+            < p >
+                <Icon name='mail' style={{ margin: '0px' }} />
+                {totalmessages > 0 ? (<Label color='red' floating>
+                    {totalmessages}
+                </Label>) : (
+
+                        <p></p>
+                    )}
+            </p>
+        </Menu.Item>
+    </Menu>
+</p>
+<strong ref={contextRef}> </strong>
+<Popup
+    flowing hoverable
+    popper={{ id: 'popper-container' }}
+    position='top right'
+    open={OpenMessageSelected}
+    context={contextRef}
+    content={
+        <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
+            <Grid.Column  >
+                <ViewMessages />
+            </Grid.Column>
+        </Grid>
+    }
+/></Menu.Item>
+
+    <Menu.Item>
+<p onClick={() => {  setOpenNotiSelected(!OpenNotiSelected);setOpenMessageSelected(false); }}>
+    <Menu text >
+        <Menu.Item >
+           
+                <Icon name='alarm'style={{ margin: '0px' }}  />
+                {totalnoti > 0 ? (<Label color='red' floating>
+                    {totalnoti}
+                </Label>) : (
+                        <p></p>
+                    )}
+            
+        </Menu.Item>
+    </Menu>
+</p>
+<strong ref={contextRefNoti}> </strong>
+<Popup
+    flowing hoverable
+    popper={{ id: 'popper-container' }}
+    position='top right'
+    open={OpenNotiSelected}
+    context={contextRefNoti}
+    content={
+        <Grid style={{ width: '500px', height: '400px', overflowY: 'scroll', marginBottom: "15px" }}    >
+            <Grid.Column  >
+                <ViewNoti />
+            </Grid.Column>
+        </Grid>
+    }
+/></Menu.Item> 
+<Menu.Item>
+
+<p as='a' onClick={e => logout()} style={{ marginRight: '10px' }}>
+    <Icon name='sign out' />
+    Log out
+</p>
+</Menu.Item>
+</Menu >    
+
+
+
                         </div>
                     </Container>
                     <Container clearing style={{

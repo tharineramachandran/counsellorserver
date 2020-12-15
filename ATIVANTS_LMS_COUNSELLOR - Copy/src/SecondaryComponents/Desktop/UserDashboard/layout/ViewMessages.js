@@ -144,7 +144,7 @@ class ViewMessages extends React.Component {
                 },
                 {
                     menuItem: 'Unread', render: () => <Tab.Pane>
-                        {this.state.unread.length > 0 ? (
+                        {this.state.unread.length > 0 ? (   
                             this.state.unread.map((details, index) => (
                                 <Card style={{ width: '100%', padding: '2%' }} onClick={() => this.viewMessages(details.id, details.ID_USER_UUID, details.TX_USER_NAME, details.TX_USER_EMAIL, details.TX_PICTURE)} >
                                     <Card.Content style={{ float: "left", width: '80%' }}  >
@@ -162,7 +162,7 @@ class ViewMessages extends React.Component {
                                 <Card style={{ width: '100%' }} >
                                     <Card.Content>
                                         <Card.Header>
-                                            {this.state.loadingChats}  </Card.Header>
+                                           No unread messages for you </Card.Header>
                                     </Card.Content>
                                 </Card>
                             )

@@ -111,6 +111,30 @@ router.post("/read/:id", authorization, async (req, res) => {
 });
 
 
+router.get("/TotalUnread/:id", authorization, async (req, res) => {
+  try {
+    const id = req.params.id;
+     
+ 
+      const ct_user1 = await pool.query('SELECT * FROM  "CT_USER_CHAT"  WHERE "ct_user1" = $1 AND ct_unread_user1 = $2',
+        [ parseInt(id) ,   1           ]);
+        const ct_user2 = await pool.query('SELECT * FROM  "CT_USER_CHAT"  WHERE "ct_user2" = $1 AND ct_unread_user2 = $2',
+        [ parseInt(id) ,   1           ]);
+
+    res.json(ct_user1.rowCount+ ct_user2.rowCount);
+
+  } catch (err) {
+    console.log(["rrrrrrrrrrrrrrrrrr", err]);
+
+  }
+});
+
+
+
+
+
+
+
 router.get("/getTotalChats/:id", authorization, async (req, res) => {
   try {
     var id = req.params.id;

@@ -551,15 +551,19 @@ class Search extends React.Component {
                   </Modal>{" "}
                   <Card style={{ width: "100%" }}>
                     <Card.Content>
-                      <Image
-                        width="100px"
-                        style={{ padding: "5%", float: "left" }}
-                        src={
-                          person.counselling_introduction[0].ct_counsellor_photo
-                        }
-                        wrapped
-                        ui={true}
-                      />
+                    <div   style={{ float: "left" , paddingRight:"2%" }} >
+                    <Image   width="200px"  bordered 
+                        src={  person.counselling_introduction[0].ct_counsellor_photo}  verticalAlign='top' /> <span>{
+                          person.counsellor_details[0].FavisAvailable == '1' ?
+                          (<Icon id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' />
+                          )
+                          :
+                          (<Icon color='grey' id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.addtoFav(person)} size='large' name='heart' />
+                          )
+                          } </span>  
+        </div> 
+
+                     
                          
                       <div style={{ width: "20%", float: "right" }}>
                         <Table floated="right" basic="very" collapsing>
@@ -631,15 +635,7 @@ class Search extends React.Component {
                           <List  size='large' horizontal  >
     <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
     <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item>
- 
-    <List.Item as='a'>{person.counsellor_details[0].FavisAvailable == '1'?
-                                ( <Icon   id={ person.counsellor_details[0].CT_COUNSELLOR_ID  } onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' /> 
-                                )
-                                :
-                                (   <Icon color='grey'  id={ person.counsellor_details[0].CT_COUNSELLOR_ID  }  onClick={() => this.addtoFav(person)} size='large' name='heart' />       
-                                )
-                                 
-                                }</List.Item>
+  
   </List>
                            
                          
