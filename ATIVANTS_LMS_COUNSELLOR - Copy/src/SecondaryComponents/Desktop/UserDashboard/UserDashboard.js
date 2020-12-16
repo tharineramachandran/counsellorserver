@@ -353,7 +353,7 @@ const UserDashboard = (props) => {
                             <Menu.Item>
             
 
-                            <p onClick={() => { setOpenNotiSelected(false) ; setOpenMessageSelected(!OpenMessageSelected) }}>
+                            <p   >
                                 <Menu text >
                                     <Menu.Item >
                                     <p onClick={() => { setIsMessagesSelected(false); setIsLikeSelected(!IsLikeSelected); setIsRequestSelected(false); setIsRatingSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }} as='a' circular style={{ marginRight: '10px' }}>

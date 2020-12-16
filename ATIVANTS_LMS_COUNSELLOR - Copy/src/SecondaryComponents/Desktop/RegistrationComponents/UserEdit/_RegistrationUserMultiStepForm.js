@@ -6,6 +6,8 @@ import Edit_Second from './Edit_Second';
 import Edit_Third from './Edit_Third';
 import Edit_Fourth from './Edit_Fourth'; 
 
+import Edit_Fifth from './Edit_Fifth'; 
+ 
 const defaultData = {
 
     //FIRST REGISTRATION PAGE
@@ -90,7 +92,7 @@ const steps = [
     { id: 'User_email' },
       { id: 'User_intro' },
      { id: 'User_password' }, 
-    // { id: 'User_results' } 
+     { id: 'User_pref' } 
 ]
 
 const _RegistrationUserMultiStepForm = () => {
@@ -111,6 +113,8 @@ const _RegistrationUserMultiStepForm = () => {
                 return <Edit_Third {...props} />
                 case 'User_password':
                     return <Edit_Fourth {...props} />
+                    case 'User_pref':
+                    return <Edit_Fifth {...props} />
         // case 'User_about':
         //     return <Edit_Third {...props} />
 

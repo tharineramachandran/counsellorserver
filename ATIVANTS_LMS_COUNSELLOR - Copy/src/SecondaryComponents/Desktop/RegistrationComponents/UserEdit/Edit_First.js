@@ -407,10 +407,15 @@ const Edit_First = ({ formData, setForm, navigation, step }) => {
                                                     <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
-                                            <Label as='a'  className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
+                                            <Label as='a'   className="activeBreadCrumb"  circular onClick={() => navigation.go(3)}>
                                             <Icon name={icon_name} />
                                                 Change Password&nbsp;
                                             </Label>
+                                            <Label as='a'className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Icon name="circle outline" />
+                                                Preferance&nbsp;
+                                            </Label> 
+                                
                                             </List.Item>
                                         </List>
                                     </div>

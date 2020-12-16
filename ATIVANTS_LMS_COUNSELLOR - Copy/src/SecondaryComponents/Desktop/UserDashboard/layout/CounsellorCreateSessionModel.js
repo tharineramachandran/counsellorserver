@@ -39,6 +39,10 @@ class CreateSession extends React.Component {
 
   componentDidMount() {
 
+    console.log("---------------------------------");
+    console.log(this.state); 
+    console.log(this.props); 
+
     var slotOptions = [ 
     ]
     
@@ -79,22 +83,19 @@ class CreateSession extends React.Component {
   }
   isWeekday = date => {
     const day = date.getDay();
-    var today = new Date();
-    console.log(today);
-    console.log(date);
-    if (date < today) { return false; }
-    if (date > today) { console.log("date > today"); }
+    var today = new Date(); 
+    if (date < today) { return false; } 
 
     return day !== 0 && !(daysNotAvailableList.includes(day));
   };
   slotChange = (e, data) => {
-    console.log("---------------------------------");
+     
     this.setState({ slotValue: data.value, formWarning: '' });
 
     console.log(data);
   };
   programmeslotChange = (e, data) => {
-    console.log("---------------------------------");
+     
     this.setState({ programmeslotValue: data.value, formWarning: '' });
 
     console.log(data);

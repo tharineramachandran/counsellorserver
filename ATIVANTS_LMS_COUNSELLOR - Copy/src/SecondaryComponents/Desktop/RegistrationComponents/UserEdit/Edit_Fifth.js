@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 
-import ChangePassword from "../../UserDashboard/layout/ChangePasswordModel"
-const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
+import ChangePref from "../../UserDashboard/layout/ChangePref"
+const Edit_Fifth = ({ formData, setForm, navigation, step }) => {
 
     const { COUNSELLOR_VIDEO_URL } = formData;
     const [icon_name, setIcon_name] = useState('circle');
@@ -65,26 +65,15 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                                             <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
-                                        <Label as='a' circular onClick={() => navigation.go(3)}>
+                                        <Label as='a'className="activeBreadCrumb"  circular onClick={() => navigation.go(3)}>
                                             <Icon name={icon_name} />
                                                 Change Password&nbsp;
                                             </Label>
-                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Label as='a' circular onClick={() => navigation.go(4)}>
                                             <Icon name="circle outline" />
                                                 Preferance&nbsp;
                                             </Label> 
-                                        {/* <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
-                                            <Icon name="circle outline" />
-                                                Availability&nbsp;
-                                            </Label>
-                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
-                                            <Icon name="circle outline"/>
-                                                Verification&nbsp;
-                                            </Label> */}
-                                        {/* <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
-                                                    <Icon name="circle outline" />
-                                                Summary&nbsp;
-                                            </Label> */}
+                                
                                     </List.Item>
                                 </List>
                             </div>
@@ -97,7 +86,7 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                                             <Grid.Row>
                                                 <Grid.Column width={8}>
                                                     <Segment style={{ width: '100%' }}>
-                                                        <ChangePassword />
+                                                        <ChangePref /> 
                                                     </Segment>
                                                 </Grid.Column>
 
@@ -116,4 +105,4 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
 
 }
 
-export default Edit_Fourth;
+export default Edit_Fifth;

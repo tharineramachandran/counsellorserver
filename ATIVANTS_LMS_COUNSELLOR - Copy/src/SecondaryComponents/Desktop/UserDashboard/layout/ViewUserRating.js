@@ -395,8 +395,8 @@ class ViewUserRating extends React.Component {
                                               <Icon size = "huge" loading name='spinner' />
                                         </Table.Cell>
                                         </Table.Row>):( <Table.Row>
-                                            <Table.Cell>
-                                                No requests found for you today
+                                            <Table.Cell textAlign="center"> 
+                                                No review found.. create a session with counsellor to review counsellor
                                         </Table.Cell>
                                         </Table.Row>)  
                                        

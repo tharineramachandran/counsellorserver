@@ -201,6 +201,10 @@ const Edit_Second = ({ formData, setForm, navigation, step }) => {
                                             <Icon name={icon_name} />
                                                 Change Password&nbsp;
                                             </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Icon name="circle outline" />
+                                                Preferance&nbsp;
+                                            </Label> 
                                     </List.Item>
                                 </List>
                             </div>

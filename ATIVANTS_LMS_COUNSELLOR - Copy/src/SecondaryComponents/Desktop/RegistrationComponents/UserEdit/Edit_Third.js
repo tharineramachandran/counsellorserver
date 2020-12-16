@@ -205,6 +205,10 @@ const Registration_Third = ({ formData, setForm, navigation, step }) => {
                                             <Icon name={icon_name} />
                                                 Change Password&nbsp;
                                             </Label>
+                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                            <Icon name="circle outline" />
+                                                Preferance&nbsp;
+                                            </Label> 
                                             {/* <Label as='a' className="activeBreadCrumb"  circular onClick={() => navigation.go(3)}>
                                             <Icon name="circle outline" />
                                                 Video&nbsp;

@@ -65,7 +65,7 @@ class ViewNoti extends React.Component {
             })
             .catch(function (error) {
                 console.log(error);
-                this.setState({ loadingChats: "No notifications for you " })
+              
             });
     }
 

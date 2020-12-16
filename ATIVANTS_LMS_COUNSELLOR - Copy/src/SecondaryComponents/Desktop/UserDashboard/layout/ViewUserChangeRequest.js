@@ -126,10 +126,9 @@ class ViewChangeRequest extends React.Component {
                                             </Table.Row>))
                                     ) :
                                         (
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    No requests found for you today
-                                        </Table.Cell>
+                                            <Table.Row textAlign ="center">
+                                                       No requests found for you today
+                                        
                                             </Table.Row>
                                         )
                                     }

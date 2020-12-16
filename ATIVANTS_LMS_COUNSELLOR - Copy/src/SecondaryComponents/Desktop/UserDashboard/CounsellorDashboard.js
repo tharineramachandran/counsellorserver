@@ -26,6 +26,7 @@ import ViewMessages from './layout/ViewMessages'
 import ViewAccepted from './layout/ViewCounsellorAccepted'
 import ViewDeclined from './layout/ViewCounsellorDeclined'
 
+import ViewNoti from './layout/ViewNoti'
 import ViewCounsellorChangeRequest from './layout/ViewCounsellorChangeRequest'
 
 import Search from './layout/Search'
@@ -39,6 +40,7 @@ toast.configure();
 const CounsellorDashboard = (props) => {
 const [OpenMessageSelected, setOpenMessageSelected] = useState(false);
 
+const contextRefNoti = useRef();
     const [totalmessages, settotalmessages] = useState(0);
     const [newNoti, setnewNoti] = useState(false);
     const contextRef = useRef();
@@ -51,6 +53,10 @@ const [OpenMessageSelected, setOpenMessageSelected] = useState(false);
     const [isMessagesSelected, setIsMessagesSelected] = useState(false);
     const [isViewAcceptSelected, setViewAcceptSelected] = useState(false);
     const { name, email, isCounsellor, isDetailsProvided } = userDetails;
+     
+    const [OpenNotiSelected, setOpenNotiSelected] = useState(false); 
+    
+    const [totalnoti, settotalnoti] = useState(0); 
     var user = [];
     const [open, setOpen] = useState(false)
 
@@ -239,8 +245,9 @@ const [OpenMessageSelected, setOpenMessageSelected] = useState(false);
     Home </p> </Menu.Item>    
 
 {parseInt(localStorage.isCompleted) == 1 && 
-  <Menu.Item> <p onClick={() => {    setIsEditSelected(true); setIsMessagesSelected(false); setisRequestSelected(false); setViewChangeSelected(false); setIsProfileSelected(false); setViewAcceptSelected(false); }}>
-    View Profile
+  <Menu.Item> <p  onClick={() => {
+    setIsProfileSelected(!isProfileSelected); setisRequestSelected(false); setViewDeclineSelected(false); setIsMessagesSelected(false); setViewDeclineSelected(false); setViewAcceptSelected(false); setViewChangeSelected(false);
+}}  >  View Profile
 </p>  </Menu.Item>   } 
 
 <Menu.Item> <p onClick={() => { setIsMessagesSelected(false); setisRequestSelected(!isRequestSelected); setViewAcceptSelected(false); setIsProfileSelected(false); setViewChangeSelected(false); setViewDeclineSelected(false) }}>
