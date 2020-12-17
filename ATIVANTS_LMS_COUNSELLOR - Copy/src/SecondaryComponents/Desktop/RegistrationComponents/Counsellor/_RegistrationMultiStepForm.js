@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { useForm, useStep } from 'react-hooks-helper';
-import Registration_First from './_Registration_First';
-import Registration_Last from './_Registration_Last';
-import Registration_Result from './_RegistrationResult';
-import Registration_Second from './_Registration_Second';
-import Registration_Third from './_Registration_Third';
-import Registration_Fourth from './_Registration_Fourth';
-import Registration_Fifth from './_Registration_Fifth';
-import Registration_Sixth from './_Registration_Sixth';
+import Registration_First from '../Counsellor/_Registration_First';
+import Registration_Last from '../Counsellor/_Registration_Last';
+import Registration_Result from '../Counsellor/_RegistrationResult';
+import Registration_Second from '../Counsellor/_Registration_Second';
+import Registration_Third from '../Counsellor/_Registration_Third';
+import Registration_Fourth from '../Counsellor/_Registration_Fourth';
+import Registration_Fifth from '../Counsellor/_Registration_Fifth';
+import Registration_Sixth from '../Counsellor/_Registration_Sixth';
 
 const defaultData = {
 

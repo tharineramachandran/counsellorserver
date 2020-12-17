@@ -4,7 +4,7 @@ import {
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Label, Container, Breadcrumb, Divider, Popup, List, Dropdown, Select
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
-import _AxiosInstance from '../../../Store/_AxiosInstance'
+import _AxiosInstance from '../../../../Store/_AxiosInstance'
 
 const Registration_First = ({ formData, setForm, navigation, step }) => {
 
@@ -289,9 +289,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                         <center>
                             <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                                 <Container>
-                                    <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                        <h4>Registation for Counsellor</h4>
-                                    </div>
+                                    
                                     <div style={{ float: 'right', padding: '1rem;' }}>
                                         <Label as='a' onClick={() => navigation.next()}>
                                             <Icon name='hand point right outline' />

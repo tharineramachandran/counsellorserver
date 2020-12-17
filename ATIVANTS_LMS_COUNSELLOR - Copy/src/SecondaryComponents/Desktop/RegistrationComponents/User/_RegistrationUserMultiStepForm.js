@@ -1,4 +1,11 @@
 import React, { useState, useEffect, useReducer } from 'react';
+ 
+import {
+    Button, Form, Header, Image, Input,
+    Dropdown, Grid, Modal,
+    Message, Segment, Card, Img, Icon,
+    Table, Label, Container, List, Popup
+} from "semantic-ui-react";
 import { useForm, useStep } from 'react-hooks-helper';
 import Registration_First from './_Registration_First'; 
 import Registration_Result from './_RegistrationResult';
@@ -91,10 +98,10 @@ const _RegistrationUserMultiStepForm = () => {
 
     console.log("steps=", step);
 
-    return (
+    return ( 
         <React.Fragment>
         </React.Fragment>
-
+ 
     )
 
 }

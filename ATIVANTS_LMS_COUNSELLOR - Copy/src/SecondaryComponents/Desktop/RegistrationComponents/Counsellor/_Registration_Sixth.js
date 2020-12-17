@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 import { useStep } from 'react-hooks-helper';
-import demoPicture from '../../../Static/Images/demoPicture.png'
-import amazingPhoto from '../../../Static/Images/amazingPhoto.png'
+import demoPicture from '../../../../Static/Images/demoPicture.png'
+import amazingPhoto from '../../../../Static/Images/amazingPhoto.png'
 import 'react-image-crop/dist/ReactCrop.css'
 import ReactCrop from 'react-image-crop';
  
@@ -94,9 +94,7 @@ console.log(files);
                     <center>
                         <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                             <Container>
-                                <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                    <h4>Registation for Counsellor</h4>
-                                </div>
+                                 
                                 <div style={{ float: 'right', padding: '1rem;' }}>
                                     <Label as='a' onClick={() => navigation.previous()}>
                                         <Icon name='hand point left outline' />

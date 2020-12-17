@@ -9,11 +9,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import ChangeSession from "./CounsellorChangeSessionModel"
 import {baseURLAPI ,baseURL }from "../../../../Global";
 
-import _RegistrationMultiStepForm from '../../RegistrationComponents/Counsellor/_RegistrationMultiStepForm';
+import RegistrationMultiStepForm from '../../RegistrationComponents/CounsellorEdit/EditMultiStepForm';
 const axios = require('axios');
-class ViewCounsellorProfile extends React.Component {
+class ViewCounsellorEdit extends React.Component {
     state = {
         requests: [],
+         
+        
     }
  
     render() {
@@ -23,8 +25,8 @@ class ViewCounsellorProfile extends React.Component {
                 <Grid.Row textAlign='center'>
                     <Grid.Column>
                         <Container>
-                            <h1>Register Profile</h1>
-                            <_RegistrationMultiStepForm />
+                            <h1>Edit Profile</h1>
+                            <RegistrationMultiStepForm />
                         </Container>
                     </Grid.Column>
                 </Grid.Row>
@@ -33,4 +35,4 @@ class ViewCounsellorProfile extends React.Component {
     }
 }
 
-export default ViewCounsellorProfile;
+export default ViewCounsellorEdit;

@@ -7,6 +7,8 @@ import Edit_Third from './Edit_Third';
 import Edit_Fourth from './Edit_Fourth';
 import Edit_Sixth from './Edit_Sixth';
 
+import Edit_Seventh from './Edit_Seventh';
+ 
 const defaultData = {
 
     //FIRST REGISTRATION PAGE
@@ -58,7 +60,8 @@ const steps = [
     { id: 'Counsellor_about' }, 
     { id: 'Counsellor_availability' },
     { id: 'Counsellor_documents' },
-    { id: 'Counsellor_changepassword' } 
+    { id: 'Counsellor_changepassword' } ,
+    { id: 'User_pref' }  
 ]
 
 const RegistrationMultiStepForm = () => {
@@ -87,6 +90,8 @@ const RegistrationMultiStepForm = () => {
 
         case 'Counsellor_changepassword':
             return <Edit_Sixth {...props} />
+            case 'User_pref':
+            return <Edit_Seventh {...props} />
 
     }
 

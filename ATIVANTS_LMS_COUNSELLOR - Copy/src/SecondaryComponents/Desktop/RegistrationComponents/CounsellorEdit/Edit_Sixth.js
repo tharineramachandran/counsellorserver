@@ -34,9 +34,7 @@ const Edit_Sixth = ({ formData, setForm, navigation, step }) => {
                 <center>
                     <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                         <Container>
-                            <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                <h4>Registation for Counsellee</h4>
-                            </div>
+                            
                             <div style={{ float: 'right', padding: '1rem;' }}>
                                 <Label as='a' onClick={() => navigation.previous()}>
                                     <Icon name='hand point left outline' />
@@ -51,9 +49,9 @@ const Edit_Sixth = ({ formData, setForm, navigation, step }) => {
                         <br />
                         <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
                             <div style={{ backgroundColor: 'transparent' }}>
-                                <List horizontal >
-                                    <List.Item>
-                                    <Label as='a' circular  className="activeBreadCrumb"onClick={() => navigation.go(0)}>
+                            <List horizontal >
+                                            <List.Item>
+                                            <Label as='a'  className="activeBreadCrumb" circular onClick={() => navigation.go(0)}>
                                                     <Icon name={icon_name} />
                                                 Personal Details&nbsp;
                                             </Label>
@@ -65,21 +63,24 @@ const Edit_Sixth = ({ formData, setForm, navigation, step }) => {
                                                     <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
-                                                <Label as='a'  className="activeBreadCrumb"circular onClick={() => navigation.go(3)}>
+                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
                                                     <Icon name="circle outline" />
                                                     Availability&nbsp;
                                             </Label>
-                                                <Label as='a' circular className="activeBreadCrumb"onClick={() => navigation.go(4)}>
+                                                <Label as='a'  className="activeBreadCrumb"  circular onClick={() => navigation.go(4)}>
                                                     <Icon name="circle outline" />
                                                     Verification&nbsp;
                                             </Label>
-                                                <Label as='a'  circular onClick={() => navigation.go(5)}>
+                                                <Label as='a'circular onClick={() => navigation.go(5)}>
                                                     <Icon name="circle outline" />
                                                     Change Password&nbsp;
                                             </Label> 
-
-                                    </List.Item>
-                                </List>
+                                            <Label as='a' className="activeBreadCrumb"circular onClick={() => navigation.go(6)}>
+                                            <Icon name="circle outline" />
+                                                Preferance&nbsp;
+                                            </Label> 
+                                            </List.Item>
+                                        </List>
                             </div>
                         </Container>
                         <div style={{ width: '100%' }}>

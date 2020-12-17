@@ -32,11 +32,11 @@ import ViewNoti from './layout/ViewNoti'
 import ViewUserLike from './layout/ViewUserLike';
 import ViewUserRating from './layout/ViewUserRating';
 import EditUserProfile from './layout/ViewEditUserProfile';
-
+import ViewRegisterUserProfile from './layout/ViewRegisterUserProfile';
+ 
 import { baseURLAPI, baseURL } from "../../../Global";
 
-
-import RegistrationUserMultiStepForm from '../RegistrationComponents/User/_RegistrationUserMultiStepForm';
+ 
 import { useRef } from 'react';
 const axios = require('axios');
 toast.configure();
@@ -268,21 +268,21 @@ const UserDashboard = (props) => {
                             
                             <Menu   secondary >
 
-                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
+                            <Menu.Item> <p onClick={() => {  setIsEditSelected(false); setIsLikeSelected(false); setIsRatingSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(!isProfileSelected); setIsRequestAcceptSelected(false); }}>
                                 Home </p> </Menu.Item>    
 
-                          {parseInt(localStorage.isCompleted) == 1 && 
-                              <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsEditSelected(true); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                          
+                              <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsEditSelected(!isEditSelected   ); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Profile
-      </p>  </Menu.Item>   }    
-                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+      </p>  </Menu.Item>        
+                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false);  setIsEditSelected(false); setIsRatingSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Change Request
                              </p>      </Menu.Item>    
-                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsRatingSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                            <Menu.Item> <p onClick={() => { setIsLikeSelected(false);  setIsEditSelected(false); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsRatingSelected(!isRequestAcceptSelected); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Rating
                             </p>      </Menu.Item>   
 
-                            <Menu.Item> <p  onClick={() => { setIsLikeSelected(false); setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected); setIsRatingSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
+                            <Menu.Item> <p  onClick={() => { setIsLikeSelected(false); setIsEditSelected(false);  setIsMessagesSelected(false); setIsRequestSelected(!isRequestAcceptSelected); setIsRatingSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}>
                                 View Requests
                        </p>      </Menu.Item>    
 
@@ -401,12 +401,15 @@ const UserDashboard = (props) => {
             }
 
 
-            {parseInt(localStorage.isCompleted) == 1 ? (
-                <div>
-                </div>
+            {parseInt(localStorage.isCompleted) != 1 ? (
+                 <div>
+                 <div class="ui message" onClick={() => { setIsLikeSelected(false); setIsRatingSelected(false); setIsEditSelected(true); setIsMessagesSelected(false); setIsRequestSelected(false); setIsRequestChangeSelected(false); setIsProfileSelected(false); setIsRequestAcceptSelected(false); }}style={{ backgroundColor: '#EA3C53', color: 'white' }}  >
+                     <div class="header">
+                                 Click here to complete profile set up
+</div> </div><br /></div>
 
             ) : (<div>
-                <Modal
+                {/* <Modal
                     onClose={() => setOpen(false)}
                     onOpen={() => setOpen(true)}
                     open={open}
@@ -424,7 +427,7 @@ const UserDashboard = (props) => {
                     <Modal.Actions>
                         <Button onClick={() => setOpen(false)}>Cancel</Button>
                     </Modal.Actions>
-                </Modal>
+                </Modal> */}
             </div>)
             }
 
@@ -438,7 +441,10 @@ const UserDashboard = (props) => {
             {/* {!isProfileSelected && <Search />} */}
             {/* {!isProfileSelected && <DisplayProfiles />} */}
             {isProfileSelected && <Search />}
-            {isEditSelected && <EditUserProfile />}
+
+            {isEditSelected && parseInt(localStorage.isCompleted) == 1  && <EditUserProfile />}
+            {isEditSelected && parseInt(localStorage.isCompleted) == 0 && <ViewRegisterUserProfile />}
+             
             {IsLikeSelected && <ViewUserLike />}
         </>
     )

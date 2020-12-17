@@ -33,9 +33,7 @@ const Registration_Fourth = ({ formData, setForm, navigation, step }) => {
                 <center>
                     <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                         <Container>
-                            <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                <h4>Registation for Counsellor</h4>
-                            </div>
+                             
                             <div style={{ float: 'right', padding: '1rem;' }}>
                                 <Label as='a' onClick={() => navigation.previous()}>
                                     <Icon name='hand point left outline' />

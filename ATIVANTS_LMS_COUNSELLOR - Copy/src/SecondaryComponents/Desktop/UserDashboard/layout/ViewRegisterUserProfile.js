@@ -9,13 +9,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import ChangeSession from "./CounsellorChangeSessionModel"
 import {baseURLAPI ,baseURL }from "../../../../Global";
 
-import _RegistrationMultiStepForm from '../../RegistrationComponents/Counsellor/_RegistrationMultiStepForm';
+import RegistrationUserMultiStepForm from '../../RegistrationComponents/User/_RegistrationUserMultiStepForm';
 const axios = require('axios');
-class ViewCounsellorProfile extends React.Component {
-    state = {
-        requests: [],
-    }
- 
+class ViewRegisterUserProfile extends React.Component {
+  
     render() {
         return (
             <Grid columns='equal' divided>
@@ -24,7 +21,7 @@ class ViewCounsellorProfile extends React.Component {
                     <Grid.Column>
                         <Container>
                             <h1>Register Profile</h1>
-                            <_RegistrationMultiStepForm />
+                            <RegistrationUserMultiStepForm />
                         </Container>
                     </Grid.Column>
                 </Grid.Row>
@@ -33,4 +30,4 @@ class ViewCounsellorProfile extends React.Component {
     }
 }
 
-export default ViewCounsellorProfile;
+export default ViewRegisterUserProfile;

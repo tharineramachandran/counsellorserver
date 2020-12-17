@@ -98,7 +98,7 @@ router.get("/userSent/:id", authorization, async (req, res) => {
 
     var filtered_request =  await counsellor_request_filter(counsellor_request);
  
- if (filtered_request[x].ct_user_id){
+ if (filtered_request[0].ct_user_id){
     for (let x = 0; x < filtered_request.length; x++) {
  
 
@@ -130,7 +130,7 @@ router.get("/userSent/:id", authorization, async (req, res) => {
 
 
   } catch (error) {
-    console.log(["ddddddddddddddddddddddddd"+error.message]);
+    console.log(["ddddddddddddddddddddddddd  "+error.message]);
     res.json([]); 
   }
 })

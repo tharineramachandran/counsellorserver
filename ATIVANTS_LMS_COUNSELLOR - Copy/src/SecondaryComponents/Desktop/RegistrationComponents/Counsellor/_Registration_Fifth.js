@@ -299,10 +299,7 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                     <center>
 
                         <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
-                            <Container>
-                                <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                    <h4>Registation for Counsellor</h4>
-                                </div>
+                            <Container> 
                                 <div style={{ float: 'right', padding: '1rem;' }}>
                                     <Label as='a' onClick={() => navigation.previous()}>
                                         <Icon name='hand point left outline' />
@@ -316,7 +313,6 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                             </Container>
                             <br />
                             <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
-
                                 <div style={{ backgroundColor: 'transparent' }}>
                                     <List horizontal >
                                         <List.Item>

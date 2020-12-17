@@ -550,9 +550,7 @@ const Edit_First = ({ formData, setForm, navigation, step }) => {
                         <center>
                             <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                                 <Container>
-                                    <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                        <h4>Update Details</h4>
-                                    </div>
+                                    
                                     <div style={{ float: 'right', padding: '1rem;' }}>
                                         <Label as='a' onClick={() => navigation.next()}>
                                             <Icon name='hand point right outline' />
@@ -565,7 +563,7 @@ const Edit_First = ({ formData, setForm, navigation, step }) => {
                                     <div style={{ backgroundColor: 'transparent' }}>
                                         <List horizontal >
                                             <List.Item>
-                                                <Label as='a' circular onClick={() => navigation.go(0)}>
+                                            <Label as='a' circular onClick={() => navigation.go(0)}>
                                                     <Icon name={icon_name} />
                                                 Personal Details&nbsp;
                                             </Label>
@@ -581,13 +579,17 @@ const Edit_First = ({ formData, setForm, navigation, step }) => {
                                                     <Icon name="circle outline" />
                                                     Availability&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                                <Label as='a'  className="activeBreadCrumb"  circular onClick={() => navigation.go(4)}>
                                                     <Icon name="circle outline" />
                                                     Verification&nbsp;
                                             </Label>
                                                 <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
                                                     <Icon name="circle outline" />
                                                     Change Password&nbsp;
+                                            </Label> 
+                                            <Label as='a' className="activeBreadCrumb"circular onClick={() => navigation.go(6)}>
+                                            <Icon name="circle outline" />
+                                                Preferance&nbsp;
                                             </Label> 
                                             </List.Item>
                                         </List>

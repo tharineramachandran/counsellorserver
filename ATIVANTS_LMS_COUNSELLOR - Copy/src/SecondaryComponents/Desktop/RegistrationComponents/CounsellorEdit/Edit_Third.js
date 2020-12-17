@@ -196,17 +196,17 @@ const Edit_Third = ({ formData, setForm, navigation, step }) => {
                         <br />
                         <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
                             <div style={{ backgroundColor: 'transparent' }}>
-                                <List horizontal >
-                                    <List.Item>
-                                    <Label as='a'  className="activeBreadCrumb"circular onClick={() => navigation.go(0)}>
+                            <List horizontal >
+                                            <List.Item>
+                                            <Label as='a'  className="activeBreadCrumb" circular onClick={() => navigation.go(0)}>
                                                     <Icon name={icon_name} />
                                                 Personal Details&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
+                                                <Label as='a'className="activeBreadCrumb"circular onClick={() => navigation.go(1)}>
                                                     <Icon name="circle outline" />
                                                 Photo&nbsp;
                                             </Label>
-                                                <Label as='a' circular onClick={() => navigation.go(2)}>
+                                                <Label as='a'  circular onClick={() => navigation.go(2)}>
                                                     <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
@@ -214,7 +214,7 @@ const Edit_Third = ({ formData, setForm, navigation, step }) => {
                                                     <Icon name="circle outline" />
                                                     Availability&nbsp;
                                             </Label>
-                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                                <Label as='a'  className="activeBreadCrumb"  circular onClick={() => navigation.go(4)}>
                                                     <Icon name="circle outline" />
                                                     Verification&nbsp;
                                             </Label>
@@ -222,8 +222,12 @@ const Edit_Third = ({ formData, setForm, navigation, step }) => {
                                                     <Icon name="circle outline" />
                                                     Change Password&nbsp;
                                             </Label> 
-                                    </List.Item>
-                                </List>
+                                            <Label as='a' className="activeBreadCrumb"circular onClick={() => navigation.go(6)}>
+                                            <Icon name="circle outline" />
+                                                Preferance&nbsp;
+                                            </Label> 
+                                            </List.Item>
+                                        </List>
                             </div>
                         </Container>
                         <div style={{ width: '100%' }}>

@@ -3,7 +3,7 @@ import {
     Header, Icon, Form, Image, Message,
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Divider, Card, List, Container, Label, Item, Dropdown, Select
 } from 'semantic-ui-react';
-import matthew from '../../../Static/Images/matthew.png'
+import matthew from '../../../../Static/Images/matthew.png'
 import { useForm } from "react-hook-form";
 
 const Registration_Third = ({ formData, setForm, navigation, step }) => {
@@ -39,9 +39,7 @@ const Registration_Third = ({ formData, setForm, navigation, step }) => {
                     <center>
                         <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                         <Container>
-                            <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                <h4>Registation for Counsellor</h4>
-                            </div>
+                            
                             <div style={{ float: 'right', padding: '1rem;' }}>
                                 <Label as='a' onClick={() => navigation.previous()}>
                                     <Icon name='hand point left outline' />

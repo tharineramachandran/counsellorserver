@@ -4,7 +4,7 @@ import {
     Header, Icon, Form, Image, Message,
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Divider, Table, Card, List, Container, Label, Item, Dropdown, Select
 } from 'semantic-ui-react';
-import matthew from '../../../Static/Images/matthew.png'
+import matthew from '../../../../Static/Images/matthew.png'
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 

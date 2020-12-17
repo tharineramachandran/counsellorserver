@@ -14,15 +14,11 @@ const axios = require('axios');
 class ViewEditUserProfile extends React.Component {
     state = {
         requests: [],
-         
-        
     }
 
     componentDidMount() {
        this.setTable();
-       
     }
- 
 
     setTable = ( ) => {
         if (Number.isInteger(parseInt(localStorage.userID) )){  
@@ -54,8 +50,6 @@ class ViewEditUserProfile extends React.Component {
                     element.ct_session_date = day + "/" + datestrdate[1] + "/" + datestrdate[0];
 
                 });
-                
-                
                 this.setState({ requests  });
             })
             .catch(function (error) {
@@ -72,33 +66,17 @@ class ViewEditUserProfile extends React.Component {
                 draggable: true,
                 progress: '',
             });
-
-
         }
-
     }
-
- 
 
     render() {
         return (
             <Grid columns='equal' divided>
-
                 <Grid.Row textAlign='center'>
                     <Grid.Column>
                         <Container>
                             <h1>Edit Profile</h1>
-                           
-
-
-
                             <RegistrationUserMultiStepForm />
-
-
-
-
-
-
                         </Container>
                     </Grid.Column>
                 </Grid.Row>

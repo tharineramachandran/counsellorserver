@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+ import React, { useState, useEffect, useContext } from 'react';
 import {
     Header, Icon, Form, Image, Message,
     Segment, Grid, Modal, Search, Button, Dimmer, Item, Label, Container, Divider, List, Dropdown, Select
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 
-import ChangePassword from "../../UserDashboard/layout/ChangePasswordModel"
-const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
+import ChangePref from "../../UserDashboard/layout/ChangePref"
+const Edit_Seventh = ({ formData, setForm, navigation, step }) => {
 
     const { COUNSELLOR_VIDEO_URL } = formData;
     const [icon_name, setIcon_name] = useState('circle');
@@ -35,7 +35,7 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                     <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                         <Container>
                             <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                 
+                           
                             </div>
                             <div style={{ float: 'right', padding: '1rem;' }}>
                                 <Label as='a' onClick={() => navigation.previous()}>
@@ -51,42 +51,38 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                         <br />
                         <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
                             <div style={{ backgroundColor: 'transparent' }}>
-                                <List horizontal >
-                                    <List.Item>
-                                        <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(0)}>
-                                            <Icon name="circle outline" />
+                            <List horizontal >
+                                            <List.Item>
+                                            <Label as='a'  className="activeBreadCrumb" circular onClick={() => navigation.go(0)}>
+                                                    <Icon name={icon_name} />
                                                 Personal Details&nbsp;
                                             </Label>
-                                        <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
-                                            <Icon name="circle outline" />
+                                                <Label as='a'circular className="activeBreadCrumb"onClick={() => navigation.go(1)}>
+                                                    <Icon name="circle outline" />
                                                 Photo&nbsp;
                                             </Label>
-                                        <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(2)}>
-                                            <Icon name="circle outline" />
+                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(2)}>
+                                                    <Icon name="circle outline" />
                                                 Description&nbsp;
                                             </Label>
-                                        <Label as='a' circular onClick={() => navigation.go(3)}>
-                                            <Icon name={icon_name} />
-                                                Change Password&nbsp;
+                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
+                                                    <Icon name="circle outline" />
+                                                    Availability&nbsp;
                                             </Label>
-                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                                                <Label as='a'  className="activeBreadCrumb"  circular onClick={() => navigation.go(4)}>
+                                                    <Icon name="circle outline" />
+                                                    Verification&nbsp;
+                                            </Label>
+                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
+                                                    <Icon name="circle outline" />
+                                                    Change Password&nbsp;
+                                            </Label> 
+                                            <Label as='a' circular onClick={() => navigation.go(6)}>
                                             <Icon name="circle outline" />
                                                 Preferance&nbsp;
                                             </Label> 
-                                        {/* <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
-                                            <Icon name="circle outline" />
-                                                Availability&nbsp;
-                                            </Label>
-                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
-                                            <Icon name="circle outline"/>
-                                                Verification&nbsp;
-                                            </Label> */}
-                                        {/* <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
-                                                    <Icon name="circle outline" />
-                                                Summary&nbsp;
-                                            </Label> */}
-                                    </List.Item>
-                                </List>
+                                            </List.Item>
+                                        </List>
                             </div>
                         </Container>
                         <div style={{ width: '100%' }}>
@@ -97,7 +93,7 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                                             <Grid.Row>
                                                 <Grid.Column width={8}>
                                                     <Segment style={{ width: '100%' }}>
-                                                        <ChangePassword />
+                                                        <ChangePref /> 
                                                     </Segment>
                                                 </Grid.Column>
 
@@ -116,4 +112,4 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
 
 }
 
-export default Edit_Fourth;
+export default Edit_Seventh;;
