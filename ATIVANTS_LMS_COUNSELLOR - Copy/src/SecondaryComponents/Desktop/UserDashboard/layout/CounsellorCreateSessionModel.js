@@ -136,7 +136,7 @@ class CreateSession extends React.Component {
             console.log(res.data);
 
 
-            toast.success('Request is sent to counsellor!', {
+            toast.success(res.data.message, {
               position: "top-right",
               autoClose: 3000,
               hideProgressBar: true,
@@ -147,9 +147,10 @@ class CreateSession extends React.Component {
             });
 
           }).catch((error) => {
-            if (error.response) {
-
-              toast.error('Unsuccessful resquest counsellor', {
+            console.log(["eeeeeeeeeeeeeee",error])    
+            console.log(["eeeeeeeeeeeeeee",error.response.data.message])  
+            
+            toast.error(error.response.data.message, {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: true,
@@ -158,10 +159,7 @@ class CreateSession extends React.Component {
                 draggable: true,
                 progress: '',
               });
-
-
-            }
-
+             
 
           });
 

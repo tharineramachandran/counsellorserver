@@ -242,8 +242,8 @@ console.log([ session, date, userId, counsellorId, sessionDetails]);
       message: "Request is sent"
     })
     // });
-    } else { res.status(200).json({
-      message: "Request is sent"
+    } else { res.status(400).json({
+      message: "you already have a session with this user"
     })} 
     
 

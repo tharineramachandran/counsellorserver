@@ -60,6 +60,8 @@ class Search extends React.Component {
     counsellingSubjectNameOptions: [],
     counsellingDayName: 0,
     showMessage: false,
+    showVideo: false, 
+     videoURL: [],
     show: false,
     messagePerson: "",
     messageCounsellorID: " ",
@@ -345,6 +347,13 @@ class Search extends React.Component {
       messagePerson: person,
     });
   };
+
+  videoModel = (person) => {
+    this.setState({ 
+      showVideo: true, 
+     videoURL: person,
+    });
+  };
   sessionModel = (person) => {
     console.log("sdfasfsdf");
     this.setState({
@@ -356,7 +365,7 @@ class Search extends React.Component {
   };
   addtoFav = (person) => {
 
-     
+
 
     console.log(person.counsellor_details);
     const headers = {
@@ -377,7 +386,7 @@ class Search extends React.Component {
       )
       .then((res) => {
         console.log(res);
- document.getElementById( person.counsellor_details[0].CT_COUNSELLOR_ID).className   = "red heart large icon";
+        document.getElementById(person.counsellor_details[0].CT_COUNSELLOR_ID).className = "red heart large icon";
 
         toast.success("Successfully added to favourites!", {
           position: "top-right",
@@ -403,7 +412,7 @@ class Search extends React.Component {
       });
   };
   removetoFav = (person) => {
-     
+
     const headers = {
       jwtToken: localStorage.jwtToken,
     };
@@ -422,7 +431,7 @@ class Search extends React.Component {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById( person.counsellor_details[0].CT_COUNSELLOR_ID).className   = "grey heart large icon";
+        document.getElementById(person.counsellor_details[0].CT_COUNSELLOR_ID).className = "grey heart large icon";
         toast.success("Successfully removed to favourites!", {
           position: "top-right",
           autoClose: 3000,
@@ -511,8 +520,8 @@ class Search extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                <div></div>
-              )}
+                  <div></div>
+                )}
 
               {this.state.post.map((person, index) => (
                 <div class="ui card" style={{ width: "100%" }}>
@@ -549,28 +558,83 @@ class Search extends React.Component {
                       </Modal.Description>
                     </Modal.Content>
                   </Modal>{" "}
+
+                  <Modal
+                    onClose={() => this.setState({ showMessage: false })}
+                    onOpen={() => this.setState({ showMessage: true })}
+                    open={this.state.showMessage}
+                  >
+                    <Modal.Header>Message to counsellor</Modal.Header>
+                    <Modal.Content>
+                      <Modal.Description>
+                        <CreateMessage
+                          CounsellorID={this.state.messageCounsellorID}
+                          person={this.state.messagePerson}
+                          UserID={this.state.userID}
+                        />
+                      </Modal.Description>
+                    </Modal.Content>
+                  </Modal>
+                  <Modal
+                    onClose={() => this.setState({ showVideo: false })}
+                    onOpen={() => this.setState({ showVideo: true })}
+                    open={this.state.showVideo}
+                  >
+                    
+                    <Modal.Content>
+                   
+                            <h2>Counsellor Introduction Video</h2>
+                            <Segment>
+                            {   this.state.videoURL? ( 
+                                // <iframe width="700" height="315" src={
+                                //   this.state.videoURL
+                                //   } frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <iframe
+                                width="800"
+                                height="800"
+                                src={
+                                  this.state.videoURL
+                                }
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                              ></iframe>
+                                  ) : (
+                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                                // </iframe>
+
+                                <p style={{ color: "red" }}>
+                                  No video was provided
+                                </p>
+                              )}
+                          
+                          </Segment>
+                    </Modal.Content>
+                  </Modal>{" "}
+
+
                   <Card style={{ width: "100%" }}>
                     <Card.Content>
-                    <div   style={{ float: "left" , paddingRight:"2%" }} >
-                    <Image   width="200px"  bordered 
-                        src={  person.counselling_introduction[0].ct_counsellor_photo}  verticalAlign='top' /> <span>{
-                          person.counsellor_details[0].FavisAvailable == '1' ?
-                          (<Icon id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' />
-                          )
-                          :
-                          (<Icon color='grey' id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.addtoFav(person)} size='large' name='heart' />
-                          )
-                          } </span>  
-        </div> 
+                      <div style={{ float: "left", paddingRight: "2%" }} >
+                        <Image width="200px" bordered
+                          src={person.counselling_introduction[0].ct_counsellor_photo} verticalAlign='top' /> <span>{
+                            person.counsellor_details[0].FavisAvailable == '1' ?
+                              (<Icon id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' />
+                              )
+                              :
+                              (<Icon color='grey' id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.addtoFav(person)} size='large' name='heart' />
+                              )
+                          } </span>
+                      </div>
 
-                     
-                         
+
+
                       <div style={{ width: "20%", float: "right" }}>
                         <Table floated="right" basic="very" collapsing>
                           <Table.Body>
                             <Table.Row>
                               <Table.Cell>
-                              
+
                                 <p>
                                   {" "}
                                   <Rating
@@ -619,6 +683,14 @@ class Search extends React.Component {
                                   Message{" "}
                                 </Button>
                               </Table.Cell>
+                              <Table.Cell colspan="2">
+                                <Button
+                                  style={{ width: "100%" }}
+                                  onClick={() => this.videoModel(person)}
+                                >
+                            View Video{" "}
+                                </Button>
+                              </Table.Cell> 
                             </Table.Row>
                           </Table.Body>
                         </Table>
@@ -632,13 +704,10 @@ class Search extends React.Component {
                       >
                         <Card.Header>
                           {" "}
-                          <List  size='large' horizontal  >
-    <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
-    <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item>
-  
-  </List>
-                           
-                         
+                          <List size='large' horizontal  >
+                            <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
+                            <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item>
+                          </List>
                         </Card.Header>
                         <Card.Description>
                           <strong>My Counselling Group(s)</strong>
@@ -695,25 +764,25 @@ class Search extends React.Component {
                             <h2>Counsellor Introduction Video</h2>
                             {person.counselling_introduction[0]
                               .ct_counsellor_video_url ? (
-                              <iframe
-                                width="560"
-                                height="315"
-                                src={
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_video_url
-                                }
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                              ></iframe>
-                            ) : (
-                              // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                              // </iframe>
+                                <iframe
+                                  width="560"
+                                  height="315"
+                                  src={
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_video_url
+                                  }
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen
+                                ></iframe>
+                              ) : (
+                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                                // </iframe>
 
-                              <p style={{ color: "red" }}>
-                                No video was provided
-                              </p>
-                            )}
+                                <p style={{ color: "red" }}>
+                                  No video was provided
+                                </p>
+                              )}
                           </Segment>
 
                           <Segment>
@@ -753,22 +822,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Monday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Monday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -807,22 +876,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Tuesday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Tuesday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -861,22 +930,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Wednesday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Wednesday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -915,22 +984,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Thursay Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Thursay Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -969,22 +1038,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Friday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Friday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -1023,22 +1092,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
+                                            <Table.Row>
+                                              <Table.Cell>
+                                                {" "}
                                               No Saturday Sessions
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
+                                            </Table.Row>
+                                          )
                                     )
                                   ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
                                         No Saturday Sessions
                                       </Table.Cell>
-                                    </Table.Row>
-                                  )}
+                                      </Table.Row>
+                                    )}
                                 </Table.Body>
                               </Table>
                               <Container>
@@ -1066,21 +1135,21 @@ class Search extends React.Component {
                                                     </strong>{" "}
                                                   </div>
                                                 ) : (
-                                                  <div>
-                                                    <Image size="small">
-                                                      <Icon
-                                                        disabled
-                                                        name="user"
-                                                      />
-                                                      <strong>
-                                                        {" "}
-                                                        {
-                                                          details.TX_USER_NAME
-                                                        }{" "}
-                                                      </strong>
-                                                    </Image>
-                                                  </div>
-                                                )}
+                                                    <div>
+                                                      <Image size="small">
+                                                        <Icon
+                                                          disabled
+                                                          name="user"
+                                                        />
+                                                        <strong>
+                                                          {" "}
+                                                          {
+                                                            details.TX_USER_NAME
+                                                          }{" "}
+                                                        </strong>
+                                                      </Image>
+                                                    </div>
+                                                  )}
                                                 <Rating
                                                   icon="star"
                                                   defaultRating={
@@ -1110,13 +1179,13 @@ class Search extends React.Component {
                                         )
                                       )
                                     ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                        <Table.Row>
+                                          <Table.Cell>
+                                            {" "}
                                           No Rating for this counsellor yet.....
                                         </Table.Cell>
-                                      </Table.Row>
-                                    )}{" "}
+                                        </Table.Row>
+                                      )}{" "}
                                   </Table.Body>
                                 </Table>
                               </Container>
