@@ -15,7 +15,8 @@ const axios = require('axios');
 class ViewChangeRequest extends React.Component {
     state = {
         requests: [],
-        openModel: false
+        openModel: false ,
+        loading : true 
     }
     componentDidMount() {
         axios.get(baseURLAPI+'/session/getUserChangeRequests/' + localStorage.userID, {
@@ -58,10 +59,14 @@ class ViewChangeRequest extends React.Component {
                     }
                 });
                 const openModel = false;
-                this.setState({ requests, openModel });
+                var loading = false; 
+                this.setState({ requests, openModel ,loading});
             })
             .catch(function (error) {
                 console.log(error);
+
+                var loading = false; 
+                this.setState({  loading});
             });
     }
     render() {
@@ -74,12 +79,14 @@ class ViewChangeRequest extends React.Component {
                             <Table basic='very' celled collapsing>
                                 <Table.Header>
                                     <Table.Row>
-                                        <Table.HeaderCell>Session ID </Table.HeaderCell>
+                                        <Table.HeaderCell>Counsellor</Table.HeaderCell>
+                                        
+                                        <Table.HeaderCell>Counsellor Email</Table.HeaderCell>
                                         <Table.HeaderCell>Session Date </Table.HeaderCell>
                                         <Table.HeaderCell>Session Start Time </Table.HeaderCell>
                                         <Table.HeaderCell>Session End Time </Table.HeaderCell>
                                         <Table.HeaderCell>Session Time Zone </Table.HeaderCell>
-                                        <Table.HeaderCell>Session User ID </Table.HeaderCell>
+                                        <Table.HeaderCell>Option</Table.HeaderCell>
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
@@ -87,7 +94,10 @@ class ViewChangeRequest extends React.Component {
                                         this.state.requests.map((details, index) => (
                                             <Table.Row>
                                                 <Table.Cell>
-                                                    {details.request.id}
+                                                    {details.request.TX_USER_NAME}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {details.request.TX_USER_EMAIL}
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     {details.request.ct_session_date}
@@ -123,17 +133,43 @@ class ViewChangeRequest extends React.Component {
                                                         </Modal.Actions>
                                                     </Modal>
                                                 </Table.Cell>
-                                            </Table.Row>))
+                                            </Table.Row>)
+                                            
+                                            
+                                            )
                                     ) :
-                                        (
-                                            <Table.Row textAlign ="center">
-                                                       No requests found for you today
+                                        ( 
+                                              <div> </div>
+            //                                 <Table.Row >
+            //                                           {this.state.loading ? (
+              
+             
+            //   <div>   <h3> Page is loading....  </h3>
+            //         <Icon size="huge" loading name="spinner" />
+            //         </div>  
+                
+            //   ) : (
+            //     <div>No Change Request for you</div>
+            //   )}
+
                                         
-                                            </Table.Row>
+            //                                 </Table.Row>
                                         )
                                     }
                                 </Table.Body>
                             </Table>
+                            {this.state.loading ? (
+              
+             
+                <div>   <h3> Page is loading....  </h3>
+                      <Icon size="huge" loading name="spinner" />
+                      </div>  
+                  
+                ) : (  this.state.requests.length > 0 ? (<div> </div>):
+                ( <div>No Change Request for you</div>
+                    )  
+                 
+                )}
                         </Container>
                     </Grid.Column>
                 </Grid.Row>

@@ -75,7 +75,7 @@ const CounsellorDashboard = (props) => {
                     }
                 )
                 .then(function (response) {
-                    console.log(response);
+                    
                     user = response.data.counsellor;
                     var value = undefined;
 
@@ -84,7 +84,7 @@ const CounsellorDashboard = (props) => {
                     } else {
                         value = false;
                     }
-                    console.log(value);
+                   
 
                     setUserDetails({
                         name: response.data.counsellor.user_details[0].TX_USER_NAME,
@@ -109,27 +109,54 @@ const CounsellorDashboard = (props) => {
 
     async function getData() {
         try {
-            axios
-                .get(baseURLAPI + "/messages/TotalUnread/" + localStorage.userID, {
-                    headers: {
-                        jwtToken: localStorage.jwtToken,
-                    },
-                    data: {
-                        userID: localStorage.userID,
-                    },
-                })
-                .then((res) => {
-                    console.log("res.data");
-                    console.log(res.data);
 
+            axios.get(baseURLAPI + '/messages/TotalUnread/' + localStorage.userID, {
+                headers: {
+                    jwtToken: localStorage.jwtToken
+                },
+                data: {
+                    userID: localStorage.userID
+                }
+            })
+                .then((res) => {
+                    
                     if (parseInt(res.data) != totalmessages) {
+
                         settotalmessages(parseInt(res.data));
                         setnewNoti(false);
                     }
+
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+ 
+
+        } catch (error) {
+            console.log(error.message);
+        }
+        try {
+
+            axios.get(baseURLAPI + '/notification/TotalNoti/' + localStorage.userID, {
+                headers: {
+                    jwtToken: localStorage.jwtToken
+                },
+                data: {
+                    userID: localStorage.userID
+                }
+            })
+                .then((res) => {
+                  
+                    if (parseInt(res.data) != totalnoti) {
+
+                        settotalnoti(parseInt(res.data));
+                    
+                    }
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }); 
         } catch (error) {
             console.log(error.message);
         }
@@ -137,33 +164,61 @@ const CounsellorDashboard = (props) => {
     useEffect(() => {
         setInterval(() => {
             try {
-                axios
-                    .get(baseURLAPI + "/messages/TotalUnread/" + localStorage.userID, {
-                        headers: {
-                            jwtToken: localStorage.jwtToken,
-                        },
-                        data: {
-                            userID: localStorage.userID,
-                        },
-                    })
+
+                axios.get(baseURLAPI + '/messages/TotalUnread/' + localStorage.userID, {
+                    headers: {
+                        jwtToken: localStorage.jwtToken
+                    },
+                    data: {
+                        userID: localStorage.userID
+                    }
+                })
                     .then((res) => {
-                        console.log("res.data");
-                        console.log(res.data);
-                        console.log(totalmessages);
+                        
                         if (parseInt(res.data) != totalmessages) {
+
                             settotalmessages(parseInt(res.data));
                             setnewNoti(false);
                         }
+
                     })
                     .catch(function (error) {
                         console.log(error);
-                    });
+                    }); 
             } catch (error) {
                 console.log(error.message);
             }
-        }, 10000);
-    });
 
+             
+            try {
+
+                axios.get(baseURLAPI + '/notification/TotalNoti/' + localStorage.userID, {
+                    headers: {
+                        jwtToken: localStorage.jwtToken
+                    },
+                    data: {
+                        userID: localStorage.userID
+                    }
+                })
+                    .then((res) => { 
+                        if (parseInt(res.data) != totalnoti) {
+
+                            settotalnoti(parseInt(res.data));
+                        
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    }); 
+            } catch (error) {
+                console.log(error.message);
+            }
+        }, 5000);
+ 
+
+
+    });
     const logout = async () => {
         window.open(baseURLAPI + "/socialauth/logout", "_self");
         setAuth(false);

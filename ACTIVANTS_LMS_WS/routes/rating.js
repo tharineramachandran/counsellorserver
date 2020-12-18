@@ -2,6 +2,7 @@ const router = require('express').Router();
 const pool = require("../database/Db_Connection")
 const authorization = require("../middleware/authorization");
 
+const notification = require("../functions/noti");
 const getName = require("../functions/names");
 const { baseURLAPI, baseURL } = require('../Global');
 
@@ -54,7 +55,7 @@ router.post("/UpdateRating", authorization, async (req, res) => {
     let newUser = await pool.query(
       'UPDATE   "CT_COUNSELLOR_REVIEW" SET  "ct_counsellor_review" = $1 ,"ct_counsellor_stars" = $2  WHERE "id" = $3', [
     feedback,rating,reviewId])
- 
+   await notification.addNoti( cousellorID, "you received a rating update from a user"   );   
       res.status(200).json("success");
 
   } catch (error) {
@@ -72,6 +73,9 @@ router.post("/rating", authorization, async (req, res) => {
   var datetime = new Date();
   try {
     var datetime = new Date();
+    
+    await notification.addNoti( cousellorID, "you received a new rating from a user"   );   
+
   await    pool.query(
           'INSERT INTO "CT_COUNSELLOR_REVIEW" (  ct_date,   ct_request_id,  ct_counsellor_review, ct_counsellor_stars, ct_counsellor_user_id, ct_counsellor_date, ct_counsellor_id  ) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *',
           [       datetime.toISOString().slice(0, 10),                                      parseInt (requestID),feedback,rating,userID,datetime.toISOString().slice(0, 10),cousellorID   ]);

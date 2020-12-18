@@ -2,6 +2,7 @@ const router = require("express").Router();
 const pool = require("../database/Db_Connection");
 const authorization = require("../middleware/authorization");
 
+const notification = require("../functions/noti");
 router.get("/counsellor/declined", authorization, async (req, res) => {
   try {
 
@@ -47,6 +48,7 @@ router.post("/user/sessionchange", authorization, async (req, res) => {
     if (data.session.length > 0) {
       const updateRequest = await pool.query('UPDATE "CT_COUNSELLOR_REQUESTS" SET "ct_counsellor_response" = $1 WHERE "id" = $2',
         [5, data.requestID]);
+        await notification.addNoti( data.session[0].userId, "there is request to change session"   );          
       data.session.forEach(insertChangeSession);
 
       function insertChangeSession(item, index) {
@@ -67,6 +69,7 @@ router.post("/user/sessionchange", authorization, async (req, res) => {
           [startDate, startDate, endDate, item.counsellorId, item.userId, data.requestID]);
 
       }
+
 
     }
 
@@ -90,6 +93,7 @@ router.post("/sessionchange", authorization, async (req, res) => {
     const updateRequest = await pool.query('UPDATE "CT_COUNSELLOR_REQUESTS" SET "ct_counsellor_response" = $1 WHERE "id" = $2',
       [2, data.requestID]);
 
+      await notification.addNoti( data.session[0].userId, "there is request to change session from a counsellor"   );      
     if (data.session.length > 0) {
 
       data.session.forEach(insertChangeSession);
@@ -130,6 +134,8 @@ router.post("/user/acceptChange", authorization, async (req, res) => {
     console.log(req.body);
     var ChangeRequests = await pool.query('SELECT  * FROM "CT_COUNSELLOR_CHANGE_SESSIONS"  WHERE "id"  = $1 ',
       [req.body.session]);
+      await notification.addNoti( ChangeRequests.rows[0].ct_counsellor_id, "a user accepted your session change request"   );          
+
     console.log(ChangeRequests);
     const updateRequest = await pool.query('UPDATE "CT_COUNSELLOR_REQUESTS" SET "ct_counsellor_response" = $1 , "ct_session_start_time"= $2, "ct_session_end_time"= $3, ct_session_date = $4  WHERE "id" = $5',
       ['5', ChangeRequests.rows[0].ct_session_start_time, ChangeRequests.rows[0].ct_session_end_time, ChangeRequests.rows[0].ct_session_date, ChangeRequests.rows[0].ct_requestID]);

@@ -100,9 +100,8 @@ const UserDashboard = (props) => {
                 }
             })
                 .then((res) => {
-                    console.log("res.data");
-                    console.log(res.data);
-
+                   
+                    
                     if (parseInt(res.data) != totalmessages) {
 
                         settotalmessages(parseInt(res.data));
@@ -120,7 +119,7 @@ const UserDashboard = (props) => {
         }
         try {
 
-            axios.get(baseURLAPI + '/notification/getTotalNoti/' + localStorage.userID, {
+            axios.get(baseURLAPI + '/notification/TotalNoti/' + localStorage.userID, {
                 headers: {
                     jwtToken: localStorage.jwtToken
                 },
@@ -129,9 +128,8 @@ const UserDashboard = (props) => {
                 }
             })
                 .then((res) => {
-                    console.log("res.data");
-                    console.log(res.data);
-                    console.log(totalnoti);
+                
+                    
                     if (parseInt(res.data) != totalnoti) {
 
                         settotalnoti(parseInt(res.data));
@@ -150,7 +148,7 @@ const UserDashboard = (props) => {
         setInterval(() => {
             try {
 
-                axios.get(baseURLAPI + '/messages/TotalUnread2222/' + localStorage.userID, {
+                axios.get(baseURLAPI + '/messages/TotalUnread/' + localStorage.userID, {
                     headers: {
                         jwtToken: localStorage.jwtToken
                     },
@@ -159,9 +157,7 @@ const UserDashboard = (props) => {
                     }
                 })
                     .then((res) => {
-                        console.log("res.data");
-                        console.log(res.data);
-                        console.log(totalmessages);
+                        
                         if (parseInt(res.data) != totalmessages) {
 
                             settotalmessages(parseInt(res.data));
@@ -179,7 +175,7 @@ const UserDashboard = (props) => {
              
             try {
 
-                axios.get(baseURLAPI + '/notification/getTotalNoti2222/' + localStorage.userID, {
+                axios.get(baseURLAPI + '/notification/TotalNoti/' + localStorage.userID, {
                     headers: {
                         jwtToken: localStorage.jwtToken
                     },
@@ -188,9 +184,8 @@ const UserDashboard = (props) => {
                     }
                 })
                     .then((res) => {
-                        console.log("res.data");
-                        console.log(res.data);
-                        console.log(totalnoti);
+                      
+                        
                         if (parseInt(res.data) != totalnoti) {
 
                             settotalnoti(parseInt(res.data));
@@ -204,7 +199,7 @@ const UserDashboard = (props) => {
             } catch (error) {
                 console.log(error.message);
             }
-        }, 100000);
+        }, 5000);
  
 
 

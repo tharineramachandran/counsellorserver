@@ -14,7 +14,7 @@ class ViewCounsellorChangeRequest extends React.Component {
         requests: [],
         openModel: false,
         changeRequests: [],
-
+         
     }
 
     componentDidMount() {
@@ -359,6 +359,8 @@ class ViewCounsellorChangeRequest extends React.Component {
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <button class="ui positive button" onClick={() => this.acceptRequest(details.id, 1)}><Icon name='check' /> Accept </button>
+                                                    
+                                                </Table.Cell>  <Table.Cell> 
                                                     <button class="ui negative button" onClick={() => this.acceptRequest(details.id, 0)} ><Icon name='close' /> Decline </button>
                                                 </Table.Cell>
                                             </Table.Row>))

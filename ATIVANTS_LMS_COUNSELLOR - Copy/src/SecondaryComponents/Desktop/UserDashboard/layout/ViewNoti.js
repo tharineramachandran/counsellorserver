@@ -43,7 +43,7 @@ class ViewNoti extends React.Component {
     }
 
     getData = () => {
-        axios.get(baseURLAPI + '/notification/getTotalNoti/' + localStorage.userID, {
+        axios.get(baseURLAPI + '/notification/TotalNoti/' + localStorage.userID, {
             headers: {
                 jwtToken: localStorage.jwtToken
             },
@@ -65,7 +65,7 @@ class ViewNoti extends React.Component {
             })
             .catch(function (error) {
                 console.log(error);
-              
+                this.setState({ loadingChats: "No notifications for you " })
             });
     }
 
@@ -84,21 +84,32 @@ class ViewNoti extends React.Component {
                 const requests = res.data[0].ct_notification.value;
                 const openModel = false;
                 var unread = [];
-                var read = [];
+                var readlist = [];
+                var read  = [];
                 for (var i = 0; i < requests.length; i++) {
                     var item = requests[i];
-                    read.push(item);
+                    
                     if (item.unread == 1) {
                         unread.push(item);
+                    }else {readlist.push(item); 
                     }
-                    var loadingChats = "No notification "
+                    var read =  unread.concat(readlist);
+                    var loadingChats = "No notifications for you"
                     this.setState({ read, unread, loadingChats })
                 }
                 this.setState({ requests, openModel });
-            })
-            .catch(function (error) {
+            })  .catch(function (error) {
                 console.log(error);
             });
+if ( this.state.read.length < 1){
+    var unread = [];
+                var read = [];
+                var loadingChats = "No notifications for you"
+    this.setState({ read, unread,  loadingChats })
+
+
+
+}
         console.log(["-----", this.state.read])
         console.log(["-----", this.state.unread])
         var panes =
@@ -110,9 +121,28 @@ class ViewNoti extends React.Component {
                             this.state.read.map((details, index) => (
                                 <Card style={{ width: '100%', padding: '2%' }}   >
                                     <Card.Content style={{ float: "left", width: '80%' }}  >
-                                        <Card.Description>
-                                            {details.notification}
-                                        </Card.Description>
+                                       
+
+                                        {details.unread == 1 ?(<Card.Description >
+                                                
+                                                    <strong style={{ color: "black" ,  textAlign:"left" }} >  {details.notification}</strong>
+                                                    <p style={{ color: "grey" , textAlign:"left"  }}       >
+                                                    {details.date} at   {details.time}
+                                                    </p>            
+                                                    </Card.Description>
+                                        
+                                        ) :
+                                            (<Card.Description >     
+                                                <strong style={{ color: "grey"  ,textAlign:"left"  }} >  {details.notification}</strong>     
+                                                <p style={{ color: "grey" ,  textAlign:"left" }}       >
+                                                    {details.date} at   {details.time}
+                                                    </p>
+                                                            
+                                                    </Card.Description>)
+                                         }
+
+                                         
+                      
                                     </Card.Content  >
                                 </Card>
                             ))

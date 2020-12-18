@@ -9,7 +9,8 @@ const opn = require('opn');
 
 const { google } = require('googleapis');
 const passport = require('passport');
-
+ 
+const notification = require("../functions/noti");
 const window = require('window');
 const GOOGLE_CLIENT_SECRET = keys.google.clientSecret;
 const GOOGLE_CLIENT_ID = keys.google.clientID;
@@ -223,7 +224,7 @@ router.get("/google/:id", async (req, res) => {
                 console.log(err);
               } else {
                 // Update session and add session to confirm
-
+                  notification.addNoti( parseInt (updatedRequest.rows[0].ct_user_id)  , "a counsellor accepted your session"   );    
                 const updateRequest = pool.query('UPDATE "CT_COUNSELLOR_REQUESTS" SET "ct_counsellor_response" = $1 WHERE "id" = $2',
                   [response, requestID]);
                 pool.query(

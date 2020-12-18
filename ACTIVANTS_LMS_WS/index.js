@@ -45,7 +45,12 @@ app.use(bodyParser.urlencoded({ limit: "100mb", extended: true, parameterLimit: 
 //routes
 
 app.use("/rating", require("./routes/rating.js"));
+app.use("/notification", require("./routes/notification.js"));
+ 
+app.use("/notificationPref", require("./routes/notificationPref.js"));
 
+ 
+app.use("/favourites", require("./routes/favourites"));
 app.use("/password", require("./routes/password"));
 app.use("/messages", require("./routes/messages"));
 app.use("/auth", require("./routes/jwtAuth"));
@@ -58,6 +63,7 @@ app.use("/emailVerify", require("./routes/emailVerify"));
 app.use("/request", require("./routes/request"));
 app.use("/session", require("./routes/session"));
 app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
+
 
 
 //get All counsellor

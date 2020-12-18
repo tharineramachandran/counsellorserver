@@ -34,7 +34,7 @@ router.get("/getNoti/:id",  authorization,   async (req, res) => {
     console.log(error.message);
   }
 })
-router.get("/getTotalNoti/:id",  authorization,  async (req, res) => {
+router.get("/TotalNoti/:id",  authorization,  async (req, res) => {
   try {
     var id = req.params.id;
     var totalunread=0;
@@ -42,7 +42,7 @@ router.get("/getTotalNoti/:id",  authorization,  async (req, res) => {
       [parseInt (id)]);
     if (noti.rowCount > 0) {  
        var value = await noti.rows[0].ct_notification.value ; 
-      console.log(value);
+     
       for ( var i = 0; i < value.length; i++) {
         if (value[i].unread == 1){
           ++totalunread;
