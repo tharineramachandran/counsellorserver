@@ -60,14 +60,15 @@ class Search extends React.Component {
     counsellingSubjectNameOptions: [],
     counsellingDayName: 0,
     showMessage: false,
-    showVideo: false, 
-     videoURL: [],
+    showVideo: false,
+    videoURL: {},
     show: false,
     messagePerson: "",
     messageCounsellorID: " ",
     sessionCounsellorID: " ",
     sessionPerson: " ",
     userID: "",
+    displayReview: 2,
   };
 
   handleClick = (e, titleProps) => {
@@ -75,9 +76,12 @@ class Search extends React.Component {
     const { activeIndex } = this.state;
     const newIndex = activeIndex === index ? -1 : index;
 
-    this.setState({ activeIndex: newIndex });
+    this.setState({ activeIndex: newIndex, displayReview: 2 });
   };
-
+  loadMore = (person) => {
+    console.log(person);
+    this.setState({ displayReview: this.state.displayReview + 2 });
+  };
   subjectCheck = (subjectCode, post) => {
     var filteredpost = [];
     if (subjectCode == "00") {
@@ -349,10 +353,11 @@ class Search extends React.Component {
   };
 
   videoModel = (person) => {
-    this.setState({ 
-      showVideo: true, 
-     videoURL: person,
+    this.setState({
+      showVideo: true,
+      videoURL: person.counselling_introduction[0].ct_counsellor_video_url,
     });
+    console.log(this.state.videoURL);
   };
   sessionModel = (person) => {
     console.log("sdfasfsdf");
@@ -364,9 +369,6 @@ class Search extends React.Component {
     });
   };
   addtoFav = (person) => {
-
-
-
     console.log(person.counsellor_details);
     const headers = {
       jwtToken: localStorage.jwtToken,
@@ -386,7 +388,9 @@ class Search extends React.Component {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById(person.counsellor_details[0].CT_COUNSELLOR_ID).className = "red heart large icon";
+        document.getElementById(
+          person.counsellor_details[0].CT_COUNSELLOR_ID
+        ).className = "red heart large icon";
 
         toast.success("Successfully added to favourites!", {
           position: "top-right",
@@ -412,7 +416,6 @@ class Search extends React.Component {
       });
   };
   removetoFav = (person) => {
-
     const headers = {
       jwtToken: localStorage.jwtToken,
     };
@@ -431,7 +434,9 @@ class Search extends React.Component {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById(person.counsellor_details[0].CT_COUNSELLOR_ID).className = "grey heart large icon";
+        document.getElementById(
+          person.counsellor_details[0].CT_COUNSELLOR_ID
+        ).className = "grey heart large icon";
         toast.success("Successfully removed to favourites!", {
           position: "top-right",
           autoClose: 3000,
@@ -457,6 +462,18 @@ class Search extends React.Component {
   };
   render() {
     const { activeIndex } = this.state;
+ 
+
+    function Date(props) {
+      var date = props.date.split("-");
+
+      return (
+        <span>
+          {" "}
+          {date[2]}-{date[1]}-{date[0]}{" "}
+        </span>
+      );
+    }
 
     return (
       <Grid columns="equal" divided>
@@ -515,7 +532,7 @@ class Search extends React.Component {
               {this.state.loading ? (
                 <Segment>
                   <div textAlign="center">
-                    <h3> Page is loading........... </h3>
+                    <h3> Page is loading..</h3>
                     <Icon size="huge" loading name="spinner" />
                   </div>{" "}
                 </Segment>
@@ -542,6 +559,7 @@ class Search extends React.Component {
                     </Modal.Content>
                   </Modal>
                   <Modal
+                    closeIcon
                     onClose={() => this.setState({ show: false })}
                     onOpen={() => this.setState({ show: true })}
                     open={this.state.show}
@@ -558,8 +576,8 @@ class Search extends React.Component {
                       </Modal.Description>
                     </Modal.Content>
                   </Modal>{" "}
-
                   <Modal
+                    closeIcon
                     onClose={() => this.setState({ showMessage: false })}
                     onOpen={() => this.setState({ showMessage: true })}
                     open={this.state.showMessage}
@@ -576,65 +594,67 @@ class Search extends React.Component {
                     </Modal.Content>
                   </Modal>
                   <Modal
+                    closeIcon
                     onClose={() => this.setState({ showVideo: false })}
                     onOpen={() => this.setState({ showVideo: true })}
                     open={this.state.showVideo}
                   >
-                    
                     <Modal.Content>
-                   
-                            <h2>Counsellor Introduction Video</h2>
-                            <Segment>
-                            {   this.state.videoURL? ( 
-                                // <iframe width="700" height="315" src={
-                                //   this.state.videoURL
-                                //   } frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                <iframe
-                                width="800"
-                                height="800"
-                                src={
-                                  this.state.videoURL
-                                }
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                              ></iframe>
-                                  ) : (
-                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                // </iframe>
-
-                                <p style={{ color: "red" }}>
-                                  No video was provided
-                                </p>
-                              )}
-                          
-                          </Segment>
+                      <h2>Counsellor Introduction Video</h2>
+                      <Segment textAlign="center">
+                        {this.state.videoURL ? (
+                          <iframe
+                            width="900"
+                            height="400"
+                            src={this.state.videoURL}
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                          ></iframe>
+                        ) : (
+                            <p style={{ color: "red" }}>No video was provided</p>
+                          )}
+                      </Segment>
                     </Modal.Content>
                   </Modal>{" "}
-
-
                   <Card style={{ width: "100%" }}>
                     <Card.Content>
-                      <div style={{ float: "left", paddingRight: "2%" }} >
-                        <Image width="200px" bordered
-                          src={person.counselling_introduction[0].ct_counsellor_photo} verticalAlign='top' /> <span>{
-                            person.counsellor_details[0].FavisAvailable == '1' ?
-                              (<Icon id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' />
-                              )
-                              :
-                              (<Icon color='grey' id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.addtoFav(person)} size='large' name='heart' />
-                              )
-                          } </span>
+                      <div style={{ float: "left", paddingRight: "2%" }}>
+                        <Image
+                          width="200px"
+                          bordered
+                          src={
+                            person.counselling_introduction[0]
+                              .ct_counsellor_photo
+                          }
+                          verticalAlign="top"
+                        />{" "}
+                        <span>
+                          {person.counsellor_details[0].FavisAvailable ==
+                            "1" ? (
+                              <Icon
+                                id={person.counsellor_details[0].CT_COUNSELLOR_ID}
+                                onClick={() => this.removetoFav(person)}
+                                color="red"
+                                size="large"
+                                name="heart"
+                              />
+                            ) : (
+                              <Icon
+                                color="grey"
+                                id={person.counsellor_details[0].CT_COUNSELLOR_ID}
+                                onClick={() => this.addtoFav(person)}
+                                size="large"
+                                name="heart"
+                              />
+                            )}{" "}
+                        </span>
                       </div>
-
-
-
                       <div style={{ width: "20%", float: "right" }}>
                         <Table floated="right" basic="very" collapsing>
                           <Table.Body>
                             <Table.Row>
                               <Table.Cell>
-
                                 <p>
                                   {" "}
                                   <Rating
@@ -670,7 +690,8 @@ class Search extends React.Component {
                                   style={{ width: "100%" }}
                                   onClick={() => this.sessionModel(person)}
                                 >
-                                  Session{" "}
+                                  <Icon name="add to calendar" />
+                                  Book a session
                                 </Button>
                               </Table.Cell>
                             </Table.Row>
@@ -680,18 +701,32 @@ class Search extends React.Component {
                                   style={{ width: "100%" }}
                                   onClick={() => this.messageModel(person)}
                                 >
-                                  Message{" "}
+                                  {" "}
+                                  <Icon name="inbox" />
+                                  Send a message
                                 </Button>
                               </Table.Cell>
-                              <Table.Cell colspan="2">
-                                <Button
-                                  style={{ width: "100%" }}
-                                  onClick={() => this.videoModel(person)}
-                                >
-                            View Video{" "}
-                                </Button>
-                              </Table.Cell> 
                             </Table.Row>
+                            {person.counselling_introduction[0]
+                              .ct_counsellor_video_url ? (
+                                <Table.Row>
+                                  <Table.Cell colspan="2">
+                                    <Button
+                                      style={{ width: "100%" }}
+                                      onClick={() => this.videoModel(person)}
+                                      color="youtube"
+                                    >
+                                      <Icon name="youtube" />
+                                    View Video
+                                  </Button>
+                                  </Table.Cell>
+                                </Table.Row>
+                              ) : (
+                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                                // </iframe>
+
+                                <p style={{ color: "red" }}></p>
+                              )}
                           </Table.Body>
                         </Table>
                       </div>
@@ -704,14 +739,18 @@ class Search extends React.Component {
                       >
                         <Card.Header>
                           {" "}
-                          <List size='large' horizontal  >
-                            <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
-                            <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item>
+                          <List size="large" horizontal>
+                            <List.Item as="a">
+                              {" "}
+                              {person.counsellor_details[0].CT_FIRST_NAME}{" "}
+                            </List.Item>
+                            <List.Item as="a">
+                              {person.counsellor_details[0].CT_LAST_NAME}{" "}
+                            </List.Item>
                           </List>
                         </Card.Header>
                         <Card.Description>
                           <strong>My Counselling Group(s)</strong>
-
                           {person.counselling_details.map((details, index) => (
                             <p>
                               <span>
@@ -760,31 +799,6 @@ class Search extends React.Component {
                           Read More{" "}
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === index}>
-                          <Segment>
-                            <h2>Counsellor Introduction Video</h2>
-                            {person.counselling_introduction[0]
-                              .ct_counsellor_video_url ? (
-                                <iframe
-                                  width="560"
-                                  height="315"
-                                  src={
-                                    person.counselling_introduction[0]
-                                      .ct_counsellor_video_url
-                                  }
-                                  frameborder="0"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowfullscreen
-                                ></iframe>
-                              ) : (
-                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                // </iframe>
-
-                                <p style={{ color: "red" }}>
-                                  No video was provided
-                                </p>
-                              )}
-                          </Segment>
-
                           <Segment>
                             <h2>Available Counselling Sessions</h2>
                             <div
@@ -861,7 +875,6 @@ class Search extends React.Component {
                                     </Table.HeaderCell>
                                   </Table.Row>
                                 </Table.Header>
-
                                 <Table.Body>
                                   {person.counselling_tuesday.length > 0 ? (
                                     person.counselling_tuesday.map(
@@ -915,7 +928,6 @@ class Search extends React.Component {
                                     </Table.HeaderCell>
                                   </Table.Row>
                                 </Table.Header>
-
                                 <Table.Body>
                                   {person.counselling_wednesday.length > 0 ? (
                                     person.counselling_wednesday.map(
@@ -969,7 +981,6 @@ class Search extends React.Component {
                                     </Table.HeaderCell>
                                   </Table.Row>
                                 </Table.Header>
-
                                 <Table.Body>
                                   {person.counselling_thursday.length > 0 ? (
                                     person.counselling_thursday.map(
@@ -1110,85 +1121,121 @@ class Search extends React.Component {
                                     )}
                                 </Table.Body>
                               </Table>
-                              <Container>
-                                <h2>Ratings</h2>
-                                <Table basic="very" width="100%">
-                                  {" "}
-                                  <Table.Body>
-                                    {person.counsellor_review.length > 0 ? (
-                                      person.counsellor_review.map(
-                                        (details, index) => (
-                                          <Table.Row>
+                            </div>
+
+                            <div>
+                              <h2 textAlign="center">Ratings</h2>
+                              <Table basic="very" width="100%">
+                                <Table.Body>
+                                  {person.counsellor_review.length > 0 ? (
+                                    person.counsellor_review.map(
+                                      (details, index) => (
+                                        <Table.Row>
+                                          {index < this.state.displayReview ? (
                                             <Table.Cell>
-                                              <Message width="100%">
-                                                {details.TX_PICTURE ? (
-                                                  <div>
+                                              <div>
+                                                <div
+                                                  style={{
+                                                    float: "left",
+                                                    width: "10% ",
+                                                  }}
+                                                >
+                                                  {details.TX_PICTURE ? (
                                                     <Image
+                                                      style={{
+                                                        padding: "5px ",
+                                                      }}
+                                                      size="tiny"
                                                       src={details.TX_PICTURE}
-                                                      avatar
+                                                      circular
                                                     />
-                                                    <strong>
-                                                      {" "}
-                                                      {
-                                                        details.TX_USER_NAME
-                                                      }{" "}
-                                                    </strong>{" "}
-                                                  </div>
-                                                ) : (
-                                                    <div>
-                                                      <Image size="small">
+                                                  ) : (
+                                                      <Image
+                                                        size="tiny"
+                                                        style={{
+                                                          padding: "5px ",
+                                                        }}
+                                                        circular
+                                                      >
                                                         <Icon
                                                           disabled
                                                           name="user"
                                                         />
-                                                        <strong>
+                                                      </Image>
+                                                    )}
+                                                </div>
+                                                <div
+                                                  style={{
+                                                    float: "left",
+                                                    width: "80% ",
+                                                  }}
+                                                >
+                                                  <List horizontal>
+                                                    <List.Item>
+                                                      <Message.Header>
+                                                        {details.TX_USER_NAME}
+                                                      </Message.Header>
+                                                      <Rating
+                                                        icon="star"
+                                                        defaultRating={
+                                                          details.ct_counsellor_stars
+                                                        }
+                                                        maxRating={5}
+                                                        disabled
+                                                      />{" "}
+                                                      <br />
+                                                      <span>
+                                                        <Date
+                                                          date={details.ct_date}
+                                                        />
+                                                        |{" "}
+                                                        {
+                                                          details.ct_counselling_level_name
+                                                        }{" "}
+                                                        |{" "}
+                                                        {
+                                                          details.ct_counselling_subject_name
+                                                        }{" "}
+                                                      </span>
+                                                      <Container fluid>
+                                                        <p>
                                                           {" "}
                                                           {
-                                                            details.TX_USER_NAME
-                                                          }{" "}
-                                                        </strong>
-                                                      </Image>
-                                                    </div>
-                                                  )}
-                                                <Rating
-                                                  icon="star"
-                                                  defaultRating={
-                                                    details.ct_counsellor_stars
-                                                  }
-                                                  maxRating={5}
-                                                  disabled
-                                                />{" "}
-                                                <br />
-                                                <span>
-                                                  {" "}
-                                                  {
-                                                    details.ct_counselling_level_name
-                                                  }{" "}
-                                                  |{" "}
-                                                  {
-                                                    details.ct_counselling_subject_name
-                                                  }{" "}
-                                                </span>
-                                                <p>
-                                                  {" "}
-                                                  {details.ct_counsellor_review}
-                                                </p>
-                                              </Message>
+                                                            details.ct_counsellor_review
+                                                          }
+                                                        </p>{" "}
+                                                      </Container>
+                                                    </List.Item>
+                                                  </List>
+                                                </div>
+                                              </div>
                                             </Table.Cell>
-                                          </Table.Row>
-                                        )
-                                      )
-                                    ) : (
-                                        <Table.Row>
-                                          <Table.Cell>
-                                            {" "}
-                                          No Rating for this counsellor yet.....
-                                        </Table.Cell>
+                                          ) : (
+                                              <Table.Cell textAlign="center" >
+                                                {this.state.displayReview ==
+                                                  index ? (
+
+                                                    <Button onClick={() => this.loadMore(person)}>
+                                                      Load More
+                                                    </Button>
+                                                  ) : (
+                                                    <p></p>
+                                                  )}
+                                              </Table.Cell>
+                                            )}
                                         </Table.Row>
-                                      )}{" "}
-                                  </Table.Body>
-                                </Table>
-                              </Container>
+                                      )
+                                    )
+                                  ) : (
+                                      <Table.Row>
+                                        <Table.Cell>
+                                          {" "}
+                                        No Rating for this counsellor yet..
+                                      </Table.Cell>
+                                      </Table.Row>
+                                    )}{" "}
+                                </Table.Body>
+                              </Table>
                             </div>
                           </Segment>
                         </Accordion.Content>

@@ -31,8 +31,8 @@ class ViewUserRating extends React.Component {
         cousellorID: " ",
         formwarning: "",
         updateopenModel: false,
-        deleteModel:false,
-        loading :true
+        deleteModel: false,
+        loading: true
     }
 
     componentDidMount() {
@@ -52,13 +52,13 @@ class ViewUserRating extends React.Component {
             .then((res) => {
                 const requests = res.data;
 
-                this.setState({ requests: requests , loading:false});
+                this.setState({ requests: requests, loading: false });
                 console.log(requests);
             })
             .catch(function (error) {
                 console.log(error);
             });
-             
+
     }
     handleRate = (e, { rating, maxRating }) =>
         this.setState({ rating, maxRating })
@@ -101,7 +101,7 @@ class ViewUserRating extends React.Component {
                         draggable: true,
                         progress: '',
                     });
-                    
+
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -118,17 +118,13 @@ class ViewUserRating extends React.Component {
         } else {
 
             this.setState({ formwarning: 'form incomplete' });
-
         }
     }
- 
-
-
-    DeletefeebackModel  = (details) => {
+    DeletefeebackModel = (details) => {
         console.log(details.review_details.id)
 
-        this.setState({ 
-           deleteModel: true, 
+        this.setState({
+            deleteModel: true,
             reviewId: details.review_details.id
         });
     };
@@ -149,45 +145,45 @@ class ViewUserRating extends React.Component {
     };
     deleteFeedback = () => {
         console.log(this.state.feedback);
-       
-            const headers = {
-                jwtToken: localStorage.jwtToken
-            }
-            const data = {
-                reviewId: this.state.reviewId,
-                 
-            }
-            console.log(data);
-            axios.post(baseURLAPI + '/rating/Delete', { formData: data }, {
-                headers: headers
-            })
-                .then((res) => {
-                    console.log(res); this.setTable();
-                    this.setState({ formwarning: ' ', deleteModel:false });
-                    toast.success('Feedback Deleted Successfully Sent!', {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                        progress: '',
-                    });
-                   
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    toast.error('An error occurred!', {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                        progress: '',
-                    });
+
+        const headers = {
+            jwtToken: localStorage.jwtToken
+        }
+        const data = {
+            reviewId: this.state.reviewId,
+
+        }
+        console.log(data);
+        axios.post(baseURLAPI + '/rating/Delete', { formData: data }, {
+            headers: headers
+        })
+            .then((res) => {
+                console.log(res); this.setTable();
+                this.setState({ formwarning: ' ', deleteModel: false });
+                toast.success('Feedback Deleted Successfully Sent!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: '',
                 });
-        
+
+            })
+            .catch(function (error) {
+                console.log(error);
+                toast.error('An error occurred!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: '',
+                });
+            });
+
     }
     sendUpdate = () => {
         console.log(this.state.feedback);
@@ -207,7 +203,7 @@ class ViewUserRating extends React.Component {
                 headers: headers
             })
                 .then((res) => {
-                    console.log(res);this.setTable();
+                    console.log(res); this.setTable();
                     this.setState({ formwarning: ' ' });
                     toast.success('Feedback Successfully Sent!', {
                         position: "top-right",
@@ -218,7 +214,7 @@ class ViewUserRating extends React.Component {
                         draggable: true,
                         progress: '',
                     });
-                    
+
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -240,25 +236,26 @@ class ViewUserRating extends React.Component {
     }
 
     render() {
- 
-        return (
-            <Grid columns='equal' divided style={{ padding: '1%' }}>
+
+        return ( 
+                   
+            <Grid columns='equal' divided style={{ padding: '1%' }} >
                 <Grid.Row textAlign='center'>
-                    <Grid.Column>
+                    <Grid.Column textAlign= "center" >  <Container  style={{ width: "70%" }}  >
                         <h1>Counsellor in the  list of your review</h1>
                         <Table style={{ width: "100%" }} basic='very' celled collapsing padded>
                             <Table.Body>
                                 {this.state.requests.length > 0 ? (
                                     this.state.requests.map((details, index) => (
                                         <Table.Row>
-                                            <Table.Cell  >
+                                            <Table.Cell width= "3"  >
                                                 <div  >
                                                     {details.TX_PICTURE ? (<div ><div style={{ float: "left", paddingRight: "5px" }}>
                                                         <Image size="tiny" src={details.TX_PICTURE} avatar /> </div><div  >
                                                             <p> <strong>{details.TX_USER_NAME}    </strong> <br />
                                                     Programme attended :     {details.ct_counselling_subject_name} <br />
                                                         Level :     {details.ct_counselling_level_name} <br />
-                                                        Last Attended :   {details.ct_session_date.substring(0,10)} <br /> </p>
+                                                        Last Attended :   {details.ct_session_date.substring(0, 10)} <br /> </p>
                                                         </div>    </div>) :
                                                         (
                                                             <div ><div style={{ float: "left", paddingRight: "5px" }}>
@@ -266,27 +263,18 @@ class ViewUserRating extends React.Component {
                                                                     <p> <strong>{details.TX_USER_NAME}    </strong> <br />
                                                         Programme attended :     {details.ct_counselling_subject_name} <br />
                                                             Level :     {details.ct_counselling_level_name} <br />
-                                                            Last Attended :  {details.ct_session_date.substring(0,10)} <br /> </p>
+                                                            Last Attended :  {details.ct_session_date.substring(0, 10)} <br /> </p>
                                                                 </div>    </div>
                                                         )}</div> </Table.Cell>
-                                            <Table.Cell textAlign='right'>
-
-
+                                            <Table.Cell width= "3" textAlign="right">
                                                 <div  >
-
-
-                                                {/* <Review details={details} /> */}
-
                                                     {details.review == 1 ? (<div>
-                                                        <p>  Feedback  :  {details.review_details.ct_counsellor_review}< br/><Rating icon='star' rating={details.review_details.ct_counsellor_stars} maxRating={5} disabled />   <br />
-                                                       
+                                                        <p>  Feedback  :  {details.review_details.ct_counsellor_review}< br /><Rating icon='star' rating={details.review_details.ct_counsellor_stars} maxRating={5} disabled />   <br />
+
                                                                 Posted date : {details.review_details.ct_date}
-                                                        </p> <Label  padded   size="medium" as='a' color="red" onClick={() => this.DeletefeebackModel(details)}   ><Icon name='trash' size='large' /> Delete</Label>
-                                                            <Label   size="medium" as='a' onClick={() => this.UpdatefeebackModel(details)}   >   <Icon name='edit' size='large' /> Update Feedback </Label>
-
-                                                             
-
-                                                            <Modal
+                                                        </p> <Label padded size="medium" as='a' color="red" onClick={() => this.DeletefeebackModel(details)}   ><Icon name='trash' size='large' /> Delete</Label>
+                                                        <Label size="medium" as='a' onClick={() => this.UpdatefeebackModel(details)}   >   <Icon name='edit' size='large' /> Update Feedback </Label>
+                                                        <Modal
                                                             onClose={() => this.setState({ updateopenModel: false, formwarning: " ", rating: "", feedback: "" })}
                                                             onOpen={() => this.setState({ updateopenModel: true, formwarning: " ", rating: "", feedback: "" })}
                                                             open={this.state.updateopenModel}
@@ -305,7 +293,7 @@ class ViewUserRating extends React.Component {
                                                                             placeholder="FeedBack"
                                                                         /> </Form.Group>
                                                                     <Form.Group>
-                                                                        <Rating maxRating={5}  rating={this.state.rating} onRate={this.handleRate} /></Form.Group>
+                                                                        <Rating maxRating={5} rating={this.state.rating} onRate={this.handleRate} /></Form.Group>
                                                                     <Form.Group>  <Form.Button style={{ width: "100px" }} onClick={() => this.sendUpdate()}>  Send </Form.Button>
                                                                     </Form.Group>
                                                                     <strong style={{ color: "red" }}> {this.state.formwarning}</strong>
@@ -317,42 +305,33 @@ class ViewUserRating extends React.Component {
                                                                 </Button>
                                                             </Modal.Actions>
                                                         </Modal>
+                                                        <Modal
+                                                            onClose={() => this.setState({ deleteModel: false, formwarning: " ", updaterating: "", updatefeedback: "" })}
+                                                            onOpen={() => this.setState({ deleteModel: true, formwarning: " ", updaterating: "", updatefeedback: "" })}
+                                                            open={this.state.deleteModel}
 
-
-
-
-
-                                                            <Modal
-                                                                onClose={() => this.setState({ deleteModel: false, formwarning: " ", updaterating: "", updatefeedback: "" })}
-                                                                onOpen={() => this.setState({ deleteModel: true, formwarning: " ", updaterating: "", updatefeedback: "" })}
-                                                                open={this.state.deleteModel}
-
-                                                            >
-                                                                <Modal.Header>Delete Rating</Modal.Header>
-                                                                <Modal.Content  >
-                                                                    <p> Are you sure to delete this review? </p>
-
-
-                                                                </Modal.Content  >
-                                                                <Modal.Actions>
-                                                                    <Button color='black' onClick={() => this.setState({ deleteModel: false })}>
-                                                                        No
+                                                        >
+                                                            <Modal.Header>Delete Rating</Modal.Header>
+                                                            <Modal.Content  >
+                                                                <p> Are you sure to delete this review? </p>
+                                                            </Modal.Content  >
+                                                            <Modal.Actions>
+                                                                <Button color='black' onClick={() => this.setState({ deleteModel: false })}>
+                                                                    No
                                                                 </Button>
                                                                 <Button color='blue' onClick={() => this.deleteFeedback()}>
-                                                                        Delete anyway
+                                                                    Delete anyway
                                                                 </Button>
-                                                                </Modal.Actions>
-                                                            </Modal>
-                                                        
-                                                        </div>
+                                                            </Modal.Actions>
+                                                        </Modal>
+                                                    </div>
                                                     ) : (<div>
-                                                        <p> Not yet rated </p> 
-                                                        <Label    size="medium" as='a'     onClick={() => this.feebackModel(details)}   >   <Icon name='add circle' size='large' /> Add Feedback </Label>
+                                                        <p> Not yet rated </p>
+                                                        <Label size="medium" as='a' onClick={() => this.feebackModel(details)}   >   <Icon name='add circle' size='large' /> Add Feedback </Label>
                                                         <Modal
                                                             onClose={() => this.setState({ openModel: false, formwarning: " ", rating: "", feedback: "" })}
                                                             onOpen={() => this.setState({ openModel: true, formwarning: " ", rating: "", feedback: "" })}
                                                             open={this.state.openModel}
-
                                                         >
                                                             <Modal.Header>Add Rating</Modal.Header>
                                                             <Modal.Content  >
@@ -367,7 +346,7 @@ class ViewUserRating extends React.Component {
                                                                             placeholder="FeedBack"
                                                                         /> </Form.Group>
                                                                     <Form.Group>
-                                                                        <Rating maxRating={5}  rating={this.state.rating} onRate={this.handleRate} /></Form.Group>
+                                                                        <Rating maxRating={5} rating={this.state.rating} onRate={this.handleRate} /></Form.Group>
                                                                     <Form.Group>  <Form.Button style={{ width: "100px" }} onClick={() => this.sendMessage()}>  Send </Form.Button>
                                                                     </Form.Group>
                                                                     <strong style={{ color: "red" }}> {this.state.formwarning}</strong>
@@ -379,31 +358,26 @@ class ViewUserRating extends React.Component {
                                                                 </Button>
                                                             </Modal.Actions>
                                                         </Modal>
-
                                                     </div>)}
                                                 </div>
                                             </Table.Cell>
                                         </Table.Row>))
                                 ) :
                                     (
-
-
-
-                                         this.state.loading ? (<Table.Row>
+                                        this.state.loading ? (<Table.Row>
                                             <Table.Cell textAlign="center">
-                                            <h3>  Page is loading...........   </h3>
-                                              <Icon size = "huge" loading name='spinner' />
-                                        </Table.Cell>
-                                        </Table.Row>):( <Table.Row>
-                                            <Table.Cell textAlign="center"> 
+                                                <h3>  Page is loading...........   </h3>
+                                                <Icon size="huge" loading name='spinner' />
+                                            </Table.Cell>
+                                        </Table.Row>) : (<Table.Row>
+                                            <Table.Cell textAlign="center">
                                                 No review found.. create a session with counsellor to review counsellor
                                         </Table.Cell>
-                                        </Table.Row>)  
-                                       
+                                        </Table.Row>)
                                     )
                                 }
                             </Table.Body>
-                        </Table>
+                        </Table>  </Container>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
