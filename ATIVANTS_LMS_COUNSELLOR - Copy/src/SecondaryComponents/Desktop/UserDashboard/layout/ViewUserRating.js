@@ -1,5 +1,5 @@
 import React from "react";
-import {
+import {Menu,
   Button,
   Form,
   Header,
@@ -28,9 +28,6 @@ import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-// import FullCalendar from '@fullcalendar/react'
-// import interactionPlugin from '@fullcalendar/interaction'
-// import timeGridPlugin from ' ullcalendar/timegrid'
 import matthew from "../../../../Static/Images/matthew.png";
 import { baseURLAPI, baseURL } from "../../../../Global";
 const axios = require("axios");
@@ -52,12 +49,39 @@ class ViewUserRating extends React.Component {
     deleteModel: false,
     loading: true,
     panes: [],
+    sort: "Date-down",
+    sortOptions: [
+      {
+        key: "Date-up",
+        text: "Latest First",
+        value: "Date-up",
+        icon: "clock outline",
+      },
+      {
+        key: "Date-down",
+        text: "Earliest First",
+        value: "Date-down",
+        icon: "clock outline",
+      },
+      {
+        key: "Level-down",
+        text: "Counselling Level ",
+        value: "Level-down",
+        icon: "sort alphabet descending",
+      },
+      {
+        key: "Level-up",
+        text: "Counselling Level ",
+        value: "Level-up",
+        icon: "sort alphabet ascending",
+      },
+    ],
 
     activeIndex: 0,
   };
 
   componentDidMount() {
-    this.setTable(); 
+    this.setTable();
   }
 
   setTable = () => {
@@ -72,28 +96,40 @@ class ViewUserRating extends React.Component {
       })
       .then((res) => {
         const requests = res.data;
-
-        this.setState({ requests: requests, loading: false         });
         console.log(requests);
-        this.sortbydate(true);
+        this.setState({ requests: requests, loading: false });
+        this.sortbydate("e", { value: "Date-up" });
       })
       .catch(function (error) {
         console.log(error);
       });
 
     var panes = [
+
+       
       {
         menuItem: "All",
         render: () => (
           <Tab.Pane>
+          {this.state.requests.length > 0 && (  
+                     <div style={{color:"black" , float : "right",paddingBottom:"1%",paddingLeft:"1%"}}>
+              Sort By {"  "}
+              <Dropdown
+                inline
+                options={this.state.sortOptions}
+                value={this.state.sort}
+                onChange={this.sortbydate}
+              />
+            </div>)} 
+
             {this.state.requests.length > 0 ? (
               this.state.requests.map((person, index) => (
                 <div style={{ paddingTop: "1%", paddingBottom: "1%" }}>
                   <div
-                    class="ui card"
+                    
                     style={{ width: "100%", margin: "auto" }}
                   >
-                    <Card style={{ width: "100%" }}>
+                    <Card  style={{ width: "100%"  }}>
                       <Card.Content>
                         <div style={{ float: "left", paddingRight: "2%" }}>
                           {person.TX_PICTURE ? (
@@ -104,13 +140,13 @@ class ViewUserRating extends React.Component {
                               verticalAlign="top"
                             />
                           ) : (
-                              <Image
-                                width="100px"
-                                bordered
-                                src={matthew}
-                                verticalAlign="top"
-                              />
-                            )}
+                            <Image
+                              width="100px"
+                              bordered
+                              src={matthew}
+                              verticalAlign="top"
+                            />
+                          )}
                         </div>
 
                         {person.review == 1 ? (
@@ -138,14 +174,14 @@ class ViewUserRating extends React.Component {
                             </List>
                           </div>
                         ) : (
-                            <div style={{ width: "30%", float: "right" }}>
-                              <List floated="right" horizontal>
-                                <List.Item>
-                                  <Icon color="blue" name="circle" />
-                                </List.Item>
-                              </List>
-                            </div>
-                          )}
+                          <div style={{ width: "30%", float: "right" }}>
+                            <List floated="right" horizontal>
+                              <List.Item>
+                                <Icon color="blue" name="circle" />
+                              </List.Item>
+                            </List>
+                          </div>
+                        )}
 
                         <div
                           style={{
@@ -331,6 +367,274 @@ class ViewUserRating extends React.Component {
                                 </Modal> */}
                               </div>
                             ) : (
+                              <div>
+                                <Card.Header style={{ width: "100%" }}>
+                                  <List horizontal>
+                                    <List.Item as="a">
+                                      {person.TX_USER_NAME}
+                                    </List.Item>
+                                  </List>
+                                </Card.Header>
+                                <Card.Description>
+                                  <p
+                                    style={{
+                                      color: "grey",
+                                      paddingBottom: "2%",
+                                    }}
+                                  >
+                                    {person.ct_counselling_subject_name} ,{" "}
+                                    {person.ct_counselling_level_name}
+                                    <br />
+                                    {person.ct_session_start_time.substring(
+                                      11,
+                                      16
+                                    )}{" "}
+                                    -{" "}
+                                    {person.ct_session_end_time.substring(
+                                      11,
+                                      16
+                                    )}{" "}
+                                    on {person.ct_session_date.substring(8, 10)}
+                                    /{person.ct_session_date.substring(5, 7)}/
+                                    {person.ct_session_date.substring(0, 4)}
+                                  </p>{" "}
+                                </Card.Description>
+
+                                <Label
+                                  size="medium"
+                                  as="a"
+                                  onClick={() => this.feebackModel(person)}
+                                >
+                                  {" "}
+                                  <Icon name="add circle" size="large" /> Add
+                                  Feedback{" "}
+                                </Label>
+                                <Modal
+                                  onClose={() =>
+                                    this.setState({
+                                      openModel: false,
+                                      formwarning: " ",
+                                      rating: "",
+                                      feedback: "",
+                                    })
+                                  }
+                                  onOpen={() =>
+                                    this.setState({
+                                      openModel: true,
+                                      formwarning: " ",
+                                      rating: "",
+                                      feedback: "",
+                                    })
+                                  }
+                                  open={this.state.openModel}
+                                >
+                                  <Modal.Header>Add Rating</Modal.Header>
+                                  <Modal.Content>
+                                    <Form>
+                                      <Form.Group>
+                                        <Form.Input
+                                          style={{ width: "300px" }}
+                                          type="FeedBack"
+                                          onChange={this._onKeyUp}
+                                          name="m"
+                                          id="m"
+                                          placeholder="FeedBack"
+                                        />{" "}
+                                      </Form.Group>
+                                      <Form.Group>
+                                        <Rating
+                                          maxRating={5}
+                                          rating={this.state.rating}
+                                          onRate={this.handleRate}
+                                        />
+                                      </Form.Group>
+                                      <Form.Group>
+                                        {" "}
+                                        <Form.Button
+                                          style={{ width: "100px" }}
+                                          onClick={() => this.sendMessage()}
+                                        >
+                                          {" "}
+                                          Send{" "}
+                                        </Form.Button>
+                                      </Form.Group>
+                                      <strong style={{ color: "red" }}>
+                                        {" "}
+                                        {this.state.formwarning}
+                                      </strong>
+                                    </Form>
+                                  </Modal.Content>
+                                  <Modal.Actions>
+                                    <Button
+                                      color="black"
+                                      onClick={() =>
+                                        this.setState({ openModel: false })
+                                      }
+                                    >
+                                      Close
+                                    </Button>
+                                  </Modal.Actions>
+                                </Modal>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </Card.Content>
+                    </Card>
+                  </div>{" "}
+                </div>
+              ))
+            ) : this.state.loading ? (
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <h3> Page is loading.. </h3>
+                <Icon size="huge" loading name="spinner" />
+              </div>
+            ) : (
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <p style={{ padding: "3%" }}>
+                  {" "}
+                  No review found. create a session with counsellor to review
+                  counsellor
+                </p>
+              </div>
+            )}
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: "Unreviewed Counsellors",
+        render: () => (
+          <Tab.Pane>
+            {this.state.requests.length > 0 && (  
+                     <div style={{color:"black" , float : "right",paddingBottom:"1%",paddingLeft:"1%"}}>
+              Sort By {"  "}
+              <Dropdown
+                inline
+                options={this.state.sortOptions}
+                value={this.state.sort}
+                onChange={this.sortbydate}
+              />
+            </div>)} 
+            {this.state.requests.length > 0 ? (
+              this.state.requests.map((person, index) => (
+                <div style={{ paddingTop: "1%", paddingBottom: "1%" }}>
+                  {person.review == 0 && (
+                    <div
+                      class="ui card"
+                      style={{ width: "100%", margin: "auto" }}
+                    >
+                      <Card style={{ width: "100%" }}>
+                        <Card.Content>
+                          <div style={{ float: "left", paddingRight: "2%" }}>
+                            {person.TX_PICTURE ? (
+                              <Image
+                                width="100px"
+                                bordered
+                                src={person.TX_PICTURE}
+                                verticalAlign="top"
+                              />
+                            ) : (
+                              <Image
+                                width="100px"
+                                bordered
+                                src={matthew}
+                                verticalAlign="top"
+                              />
+                            )}
+                          </div>
+
+                          {person.review == 1 ? (
+                            <div style={{ width: "30%", float: "right" }}>
+                              <List floated="right" horizontal>
+                                <List.Item>
+                                  <p style={{ color: "grey" }}>
+                                    Posted on :{" "}
+                                    {person.review_details.ct_date.substring(
+                                      8,
+                                      10
+                                    )}
+                                    /
+                                    {person.review_details.ct_date.substring(
+                                      5,
+                                      7
+                                    )}
+                                    /
+                                    {person.review_details.ct_date.substring(
+                                      0,
+                                      4
+                                    )}
+                                  </p>
+                                </List.Item>
+                              </List>
+                            </div>
+                          ) : (
+                            <div style={{ width: "30%", float: "right" }}>
+                              <List floated="right" horizontal>
+                                <List.Item>
+                                  <Icon color="blue" name="circle" />
+                                </List.Item>
+                              </List>
+                            </div>
+                          )}
+
+                          <div
+                            style={{
+                              float: "left",
+                              width: "50%",
+                              textAlign: "left",
+                            }}
+                          >
+                            <div>
+                              {person.review == 1 ? (
+                                <div>
+                                  <Card.Header style={{ width: "100%" }}>
+                                    <List horizontal>
+                                      <List.Item as="a">
+                                        {person.TX_USER_NAME}
+                                      </List.Item>
+                                      <List.Item>
+                                        <Rating
+                                          icon="star"
+                                          rating={
+                                            person.review_details
+                                              .ct_counsellor_stars
+                                          }
+                                          maxRating={5}
+                                          disabled
+                                        />
+                                      </List.Item>
+                                    </List>
+                                  </Card.Header>
+                                  <Card.Description>
+                                    <p style={{ color: "grey" }}>
+                                      {person.ct_counselling_subject_name} ,{" "}
+                                      {person.ct_counselling_level_name}
+                                      <br />
+                                      {person.ct_session_start_time.substring(
+                                        11,
+                                        16
+                                      )}{" "}
+                                      -{" "}
+                                      {person.ct_session_end_time.substring(
+                                        11,
+                                        16
+                                      )}{" "}
+                                      on{" "}
+                                      {person.ct_session_date.substring(8, 10)}/
+                                      {person.ct_session_date.substring(5, 7)}/
+                                      {person.ct_session_date.substring(0, 4)}
+                                    </p>
+                                    <p>
+                                      Feedback :{" "}
+                                      {
+                                        person.review_details
+                                          .ct_counsellor_review
+                                      }
+                                      <br />
+                                    </p>{" "}
+                                  </Card.Description>
+                                </div>
+                              ) : (
                                 <div>
                                   <Card.Header style={{ width: "100%" }}>
                                     <List horizontal>
@@ -353,14 +657,15 @@ class ViewUserRating extends React.Component {
                                         11,
                                         16
                                       )}{" "}
-                                    -{" "}
+                                      -{" "}
                                       {person.ct_session_end_time.substring(
                                         11,
                                         16
                                       )}{" "}
-                                    on {person.ct_session_date.substring(8, 10)}
-                                    /{person.ct_session_date.substring(5, 7)}/
-                                    {person.ct_session_date.substring(0, 4)}
+                                      on{" "}
+                                      {person.ct_session_date.substring(8, 10)}/
+                                      {person.ct_session_date.substring(5, 7)}/
+                                      {person.ct_session_date.substring(0, 4)}
                                     </p>{" "}
                                   </Card.Description>
 
@@ -371,7 +676,7 @@ class ViewUserRating extends React.Component {
                                   >
                                     {" "}
                                     <Icon name="add circle" size="large" /> Add
-                                  Feedback{" "}
+                                    Feedback{" "}
                                   </Label>
                                   <Modal
                                     onClose={() =>
@@ -419,7 +724,7 @@ class ViewUserRating extends React.Component {
                                             onClick={() => this.sendMessage()}
                                           >
                                             {" "}
-                                          Send{" "}
+                                            Send{" "}
                                           </Form.Button>
                                         </Form.Group>
                                         <strong style={{ color: "red" }}>
@@ -436,16 +741,17 @@ class ViewUserRating extends React.Component {
                                         }
                                       >
                                         Close
-                                    </Button>
+                                      </Button>
                                     </Modal.Actions>
                                   </Modal>
                                 </div>
                               )}
+                            </div>
                           </div>
-                        </div>
-                      </Card.Content>
-                    </Card>
-                  </div>{" "}
+                        </Card.Content>
+                      </Card>
+                    </div>
+                  )}
                 </div>
               ))
             ) : this.state.loading ? (
@@ -454,41 +760,50 @@ class ViewUserRating extends React.Component {
                 <Icon size="huge" loading name="spinner" />
               </div>
             ) : (
-                  <div style={{ width: "100%", textAlign: "center" }}>
-                    <p style={{ padding: "3%" }}>
-                      {" "}
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <p style={{ padding: "3%" }}>
+                  {" "}
                   No review found. create a session with counsellor to review
                   counsellor
                 </p>
-                  </div>
-                )}
+              </div>
+            )}
           </Tab.Pane>
         ),
       },
       {
-        menuItem: "clear inbox",
+        menuItem: "Reviewed Counsellors",
         render: () => (
-
-
           <Tab.Pane>
-            {this.state.requests ? (
+            {this.state.requests.length > 0 && (  
+            <div style={{color:"black" , float : "right",paddingBottom:"1%",paddingLeft:"1%"}}>
+     Sort By {"  "}
+     <Dropdown
+       inline
+       options={this.state.sortOptions}
+       value={this.state.sort}
+       onChange={this.sortbydate}
+     />
+   </div>)} 
+            {this.state.requests.length > 0 ? (
               this.state.requests.map((person, index) => (
                 <div style={{ paddingTop: "1%", paddingBottom: "1%" }}>
-                  <div
-                    class="ui card"
-                    style={{ width: "100%", margin: "auto" }}
-                  >
-                    <Card style={{ width: "100%" }}>
-                      <Card.Content>
-                        <div style={{ float: "left", paddingRight: "2%" }}>
-                          {person.TX_PICTURE ? (
-                            <Image
-                              width="100px"
-                              bordered
-                              src={person.TX_PICTURE}
-                              verticalAlign="top"
-                            />
-                          ) : (
+                  {person.review == 1 && (
+                    <div
+                      class="ui card"
+                      style={{ width: "100%", margin: "auto" }}
+                    >
+                      <Card style={{ width: "100%" }}>
+                        <Card.Content>
+                          <div style={{ float: "left", paddingRight: "2%" }}>
+                            {person.TX_PICTURE ? (
+                              <Image
+                                width="100px"
+                                bordered
+                                src={person.TX_PICTURE}
+                                verticalAlign="top"
+                              />
+                            ) : (
                               <Image
                                 width="100px"
                                 bordered
@@ -496,40 +811,217 @@ class ViewUserRating extends React.Component {
                                 verticalAlign="top"
                               />
                             )}
-                        </div>
-                        <div style={{ width: "20%", float: "right" }}></div>
-                        <div
-                          style={{
-                            float: "left",
-                            width: "50%",
-                            textAlign: "left",
-                          }}
-                        >
-                          <Card.Header>
-                            {" "}
-                            <List size="large" horizontal>
-                              <List.Item as="a">
-                                {" "}
-                                {person.TX_USER_NAME}
-                              </List.Item>
-                            </List>
-                          </Card.Header>
-                          <Card.Description>
-                            <p>
-                              {person.ct_counselling_subject_name} ,{" "}
-                              {person.ct_counselling_level_name} ,{" "}
-                              {person.ct_session_start_time.substring(11, 16)} -{" "}
-                              {person.ct_session_end_time.substring(11, 16)} ,
-                              {person.ct_session_date.substring(8, 10)}/
-                              {person.ct_session_date.substring(5, 7)}/
-                              {person.ct_session_date.substring(0, 4)}
-                              <br />
-                            </p>
-                          </Card.Description>
-                        </div>
-                      </Card.Content>
-                    </Card>
-                  </div>{" "}
+                          </div>
+
+                          {person.review == 1 ? (
+                            <div style={{ width: "30%", float: "right" }}>
+                              <List floated="right" horizontal>
+                                <List.Item>
+                                  <p style={{ color: "grey" }}>
+                                    Posted on :{" "}
+                                    {person.review_details.ct_date.substring(
+                                      8,
+                                      10
+                                    )}
+                                    /
+                                    {person.review_details.ct_date.substring(
+                                      5,
+                                      7
+                                    )}
+                                    /
+                                    {person.review_details.ct_date.substring(
+                                      0,
+                                      4
+                                    )}
+                                  </p>
+                                </List.Item>
+                              </List>
+                            </div>
+                          ) : (
+                            <div style={{ width: "30%", float: "right" }}>
+                              <List floated="right" horizontal>
+                                <List.Item>
+                                  <Icon color="blue" name="circle" />
+                                </List.Item>
+                              </List>
+                            </div>
+                          )}
+
+                          <div
+                            style={{
+                              float: "left",
+                              width: "50%",
+                              textAlign: "left",
+                            }}
+                          >
+                            <div>
+                              {person.review == 1 ? (
+                                <div>
+                                  <Card.Header style={{ width: "100%" }}>
+                                    <List horizontal>
+                                      <List.Item as="a">
+                                        {person.TX_USER_NAME}
+                                      </List.Item>
+                                      <List.Item>
+                                        <Rating
+                                          icon="star"
+                                          rating={
+                                            person.review_details
+                                              .ct_counsellor_stars
+                                          }
+                                          maxRating={5}
+                                          disabled
+                                        />
+                                      </List.Item>
+                                    </List>
+                                  </Card.Header>
+                                  <Card.Description>
+                                    <p style={{ color: "grey" }}>
+                                      {person.ct_counselling_subject_name} ,{" "}
+                                      {person.ct_counselling_level_name}
+                                      <br />
+                                      {person.ct_session_start_time.substring(
+                                        11,
+                                        16
+                                      )}{" "}
+                                      -{" "}
+                                      {person.ct_session_end_time.substring(
+                                        11,
+                                        16
+                                      )}{" "}
+                                      on{" "}
+                                      {person.ct_session_date.substring(8, 10)}/
+                                      {person.ct_session_date.substring(5, 7)}/
+                                      {person.ct_session_date.substring(0, 4)}
+                                    </p>
+                                    <p>
+                                      Feedback :{" "}
+                                      {
+                                        person.review_details
+                                          .ct_counsellor_review
+                                      }
+                                      <br />
+                                    </p>{" "}
+                                  </Card.Description>
+                                </div>
+                              ) : (
+                                <div>
+                                  <Card.Header style={{ width: "100%" }}>
+                                    <List horizontal>
+                                      <List.Item as="a">
+                                        {person.TX_USER_NAME}
+                                      </List.Item>
+                                    </List>
+                                  </Card.Header>
+                                  <Card.Description>
+                                    <p
+                                      style={{
+                                        color: "grey",
+                                        paddingBottom: "2%",
+                                      }}
+                                    >
+                                      {person.ct_counselling_subject_name} ,{" "}
+                                      {person.ct_counselling_level_name}
+                                      <br />
+                                      {person.ct_session_start_time.substring(
+                                        11,
+                                        16
+                                      )}{" "}
+                                      -{" "}
+                                      {person.ct_session_end_time.substring(
+                                        11,
+                                        16
+                                      )}{" "}
+                                      on{" "}
+                                      {person.ct_session_date.substring(8, 10)}/
+                                      {person.ct_session_date.substring(5, 7)}/
+                                      {person.ct_session_date.substring(0, 4)}
+                                    </p>{" "}
+                                  </Card.Description>
+
+                                  <Label
+                                    size="medium"
+                                    as="a"
+                                    onClick={() => this.feebackModel(person)}
+                                  >
+                                    {" "}
+                                    <Icon name="add circle" size="large" /> Add
+                                    Feedback{" "}
+                                  </Label>
+                                  <Modal
+                                    onClose={() =>
+                                      this.setState({
+                                        openModel: false,
+                                        formwarning: " ",
+                                        rating: "",
+                                        feedback: "",
+                                      })
+                                    }
+                                    onOpen={() =>
+                                      this.setState({
+                                        openModel: true,
+                                        formwarning: " ",
+                                        rating: "",
+                                        feedback: "",
+                                      })
+                                    }
+                                    open={this.state.openModel}
+                                  >
+                                    <Modal.Header>Add Rating</Modal.Header>
+                                    <Modal.Content>
+                                      <Form>
+                                        <Form.Group>
+                                          <Form.Input
+                                            style={{ width: "300px" }}
+                                            type="FeedBack"
+                                            onChange={this._onKeyUp}
+                                            name="m"
+                                            id="m"
+                                            placeholder="FeedBack"
+                                          />{" "}
+                                        </Form.Group>
+                                        <Form.Group>
+                                          <Rating
+                                            maxRating={5}
+                                            rating={this.state.rating}
+                                            onRate={this.handleRate}
+                                          />
+                                        </Form.Group>
+                                        <Form.Group>
+                                          {" "}
+                                          <Form.Button
+                                            style={{ width: "100px" }}
+                                            onClick={() => this.sendMessage()}
+                                          >
+                                            {" "}
+                                            Send{" "}
+                                          </Form.Button>
+                                        </Form.Group>
+                                        <strong style={{ color: "red" }}>
+                                          {" "}
+                                          {this.state.formwarning}
+                                        </strong>
+                                      </Form>
+                                    </Modal.Content>
+                                    <Modal.Actions>
+                                      <Button
+                                        color="black"
+                                        onClick={() =>
+                                          this.setState({ openModel: false })
+                                        }
+                                      >
+                                        Close
+                                      </Button>
+                                    </Modal.Actions>
+                                  </Modal>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </Card.Content>
+                      </Card>
+                    </div>
+                  )}
                 </div>
               ))
             ) : this.state.loading ? (
@@ -538,29 +1030,17 @@ class ViewUserRating extends React.Component {
                 <Icon size="huge" loading name="spinner" />
               </div>
             ) : (
-                  <div style={{ width: "100%", textAlign: "center" }}>
-                    <p style={{ padding: "3%" }}>
-                      {" "}
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <p style={{ padding: "3%" }}>
+                  {" "}
                   No review found. create a session with counsellor to review
                   counsellor
                 </p>
-                  </div>
-                )}
+              </div>
+            )}
           </Tab.Pane>
         ),
-      },
-      {
-        menuItem: "clear inbsdfsgox",
-        render: () => (
-          <Tab.Pane>
-            <Card style={{ width: "100%" }}>
-              <Card.Content>
-                <Card.Header>No sdffsfsdfs for you </Card.Header>
-              </Card.Content>
-            </Card>
-          </Tab.Pane>
-        ),
-      },
+      } 
     ];
     this.setState({ panes });
   };
@@ -581,7 +1061,6 @@ class ViewUserRating extends React.Component {
     });
   };
   sendMessage = () => {
-    console.log(this.state.feedback);
     if (this.state.feedback && this.state.rating) {
       const headers = {
         jwtToken: localStorage.jwtToken,
@@ -593,7 +1072,7 @@ class ViewUserRating extends React.Component {
         userID: this.state.userID,
         cousellorID: this.state.cousellorID,
       };
-      console.log(data);
+
       axios
         .post(
           baseURLAPI + "/rating/rating",
@@ -603,7 +1082,6 @@ class ViewUserRating extends React.Component {
           }
         )
         .then((res) => {
-          console.log(res);
           this.setTable();
           this.setState({ formwarning: " " });
           toast.success("Feedback Successfully Sent!", {
@@ -673,7 +1151,6 @@ class ViewUserRating extends React.Component {
         }
       )
       .then((res) => {
-        console.log(res);
         this.setTable();
         this.setState({ formwarning: " ", deleteModel: false });
         toast.success("Feedback Deleted Successfully Sent!", {
@@ -700,54 +1177,66 @@ class ViewUserRating extends React.Component {
       });
   };
 
-
-
-
-
-
-  sortbydate = (value) => { 
-
+  sortbydate = (e, data) => {
+    var dropdownValue = data.value;
+    console.log(dropdownValue);
+    if (dropdownValue) {
+      this.setState({ sort: dropdownValue });
+    }
+    var sortdata = dropdownValue.split("-");
+    console.log(sortdata);
     var arr1 = this.state.requests;
 
     for (var i = 0; i < arr1.length; ++i) {
-      arr1[i].ct_sort_date = new Date(arr1[i].ct_session_date.substring(0, 4) + "/" + arr1[i].ct_session_date.substring(5, 7) + "/" + arr1[i].ct_session_date.substring(8, 10));
-
+      arr1[i].ct_sort_date = new Date(
+        arr1[i].ct_session_date.substring(0, 4) +
+          "/" +
+          arr1[i].ct_session_date.substring(5, 7) +
+          "/" +
+          arr1[i].ct_session_date.substring(8, 10)
+      );
     }
     var points2 = arr1;
 
-    if (value == true) {
-      points2.sort(function (w, q) {
+    if (sortdata[0] == "Date") {
+      if (sortdata[1] == "up") {
+        points2.sort(function (w, q) {
+          var c = new Date(w.ct_session_date);
+          var d = new Date(q.ct_session_date);
+          return d - c;
+        });
+      } else {
+        points2.sort(function (w, q) {
+          var c = new Date(w.ct_session_date);
+          var d = new Date(q.ct_session_date);
+          return c - d;
+        });
+      }
+    } else if (sortdata[0] == "Level") {
+      points2.sort(compare);
 
-        var c = new Date(w.ct_session_date);
-        var d = new Date(q.ct_session_date);
-        return d - c
-      });
+      function compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        const bandA = a.ct_counselling_level_name.toLowerCase();
+        const bandB = b.ct_counselling_level_name.toLowerCase();
 
+        let comparison = 0;
+        if (bandA > bandB) {
+          comparison = 1;
+        } else if (bandA < bandB) {
+          comparison = -1;
+        }
+        return comparison;
+      }
 
+      if (sortdata[1] == "down") {
+        points2.reverse();
+      }
     } else {
-      points2.sort(function (w, q) {
-
-        var c = new Date(w.ct_session_date);
-        var d = new Date(q.ct_session_date);
-        return c - d
-      });
     }
-
-    this.setState({ requests: points2 })
-    console.log("Date Sort");
     console.log(points2);
-    console.log(value)
-  }
-
-
-
-
-
-
-
-
-
-
+    this.setState({ requests: points2 });
+  };
 
   sendUpdate = () => {
     console.log(this.state.feedback);
@@ -808,8 +1297,9 @@ class ViewUserRating extends React.Component {
         <Grid.Row textAlign="center">
           <Grid.Column textAlign="center">
             {" "}
-            <h1>Counsellor in the list of your review</h1>
-            <Button onClick={() =>
+            <h1>Counsellor in the list of your review</h1>{" "}
+            
+            {/* <Button onClick={() =>
               this.sortbydate(true)
             }
 
@@ -823,6 +1313,18 @@ class ViewUserRating extends React.Component {
             >
               false
                                     </Button>
+
+
+                                   
+            {this.state.direction ?( 
+
+
+<p><Icon name='long arrow alternate down' /> Oldest first</p>
+
+            ):(
+              <p><Icon name='long arrow alternate up' />Latest first</p> )}
+                 </span>
+  </div> */}
             {/* <Table
                 style={{ width: "100%" }}
                 basic="very"
@@ -1153,26 +1655,41 @@ class ViewUserRating extends React.Component {
                   )}
                 </Table.Body>
               </Table> */}
-          </Grid.Column>{" "}
-        </Grid.Row>{" "}
+          </Grid.Column> 
+        </Grid.Row> 
         <Grid.Row>
           <Grid.Column>
-
-
-
-
-            <Tab
-              menu={{ color: "teal", attached: false, tabular: false }}
+            <Tab fluid
+              menu={{    widths: 3   , color: "teal", attached: false, tabular: false }}
               //   renderActiveOnly={true}
               style={{
-                width: "50%",
+                width: "60%",
                 margin: "auto",
-                width: "50%",
+             
               }}
               //   defaultActiveIndex={0}
 
               panes={this.state.panes}
+            /> 
+
+{/* <div style={{color:"black"}}>
+              Sort By{" "}
+              <Dropdown
+                inline
+                options={this.state.sortOptions}
+                value={this.state.sort}
+                onChange={this.sortbydate}
+              />
+            </div> */}
+            {/* <div>
+            Sort By{" "}
+            <Dropdown
+              inline
+              options={this.state.sortOptions}
+              value={this.state.sort}
+              onChange={this.sortbydate}
             />
+          </div> */}
           </Grid.Column>
         </Grid.Row>
       </Grid>

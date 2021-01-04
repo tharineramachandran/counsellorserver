@@ -69,7 +69,9 @@ const UserDashboard = (props) => {
   const [isRatingSelected, setIsRatingSelected] = useState(false);
   const [IsLikeSelected, setIsLikeSelected] = useState(false);
   const [OpenMessageSelected, setOpenMessageSelected] = useState(false);
-
+  
+  const [activeItem, setactiveItem] = useState(false);
+   
   const [OpenNotiSelected, setOpenNotiSelected] = useState(false);
   const [totalmessages, settotalmessages] = useState(0);
 
@@ -192,8 +194,7 @@ const UserDashboard = (props) => {
   useEffect(() => {
     getName();
     getData();
-  }, []);
-
+  }, []); 
   const logout = async () => {
     window.open(baseURLAPI + "/socialauth/logout", "_self");
     localStorage.removeItem("userID");
@@ -229,8 +230,11 @@ const UserDashboard = (props) => {
                   </Label>
                 </Menu.Item>
                 <Menu.Menu position="right">
-                  <Menu.Item
+                  <Menu.Item 
+                    active={activeItem === 'home'}
+                
                     onClick={() => {
+                      setactiveItem(  "home"  ) 
                       setIsEditSelected(false);
                       setIsLikeSelected(false);
                       setIsRatingSelected(false);
@@ -245,7 +249,10 @@ const UserDashboard = (props) => {
                   </Menu.Item>
 
                   <Menu.Item
-                    onClick={() => {
+                   active={activeItem === 'profile'}
+                
+                   onClick={() => {
+                     setactiveItem(  "profile"  ) 
                       setIsLikeSelected(false);
                       setIsRatingSelected(false);
                       setIsEditSelected(!isEditSelected);
@@ -259,7 +266,10 @@ const UserDashboard = (props) => {
                     View Profile
                   </Menu.Item>
                   <Menu.Item
+                    active={activeItem === 'changeRequest'}
+                
                     onClick={() => {
+                      setactiveItem(  "changeRequest"  ) 
                       setIsLikeSelected(false);
                       setIsEditSelected(false);
                       setIsRatingSelected(false);
@@ -273,7 +283,10 @@ const UserDashboard = (props) => {
                     View Change Request
                   </Menu.Item>
                   <Menu.Item
-                    onClick={() => {
+                     active={activeItem === 'rating'}
+                
+                     onClick={() => {
+                       setactiveItem(  "rating"  ) 
                       setIsLikeSelected(false);
                       setIsEditSelected(false);
                       setIsMessagesSelected(false);
@@ -288,7 +301,10 @@ const UserDashboard = (props) => {
                   </Menu.Item>
 
                   <Menu.Item
+                    active={activeItem === 'allRequest'}
+                
                     onClick={() => {
+                      setactiveItem(  "allRequest"  ) 
                       setIsLikeSelected(false);
                       setIsEditSelected(false);
                       setIsMessagesSelected(false);
@@ -302,10 +318,12 @@ const UserDashboard = (props) => {
                     View Requests
                   </Menu.Item>
 
-                  <Menu.Item>
+                  <Menu.Item  >
                     <Menu text>
-                      <Menu.Item
-                        onClick={() => {
+                      <Menu.Item 
+                
+                    
+                        onClick={() => {     setactiveItem(  "cc"  ) ;
                           setOpenNotiSelected(false);
                           setOpenMessageSelected(!OpenMessageSelected);
                         }}
@@ -353,7 +371,7 @@ const UserDashboard = (props) => {
                       <Menu.Item
                         onClick={() => {
                           setOpenNotiSelected(!OpenNotiSelected);
-                          setOpenMessageSelected(false);
+                          setOpenMessageSelected(false); setactiveItem(  "cc"  ) ;
                         }}
                       >
                         <Icon name="alarm" style={{ margin: "0px" }} />
@@ -393,8 +411,8 @@ const UserDashboard = (props) => {
                   </Menu.Item>
                   <Menu.Item>
                     <Menu text>
-                      <Menu.Item
-                        onClick={() => {
+                      <Menu.Item 
+                        onClick={() => { setactiveItem(  "cc"  ) ;
                           setIsMessagesSelected(false);
                           setIsLikeSelected(!IsLikeSelected);
                           setIsRequestSelected(false);
@@ -447,7 +465,7 @@ const UserDashboard = (props) => {
         <div>
           <div
             class="ui message"
-            onClick={() => {
+            onClick={() => { setactiveItem(  "cc"  ) ;
               setIsLikeSelected(false);
               setIsRatingSelected(false);
               setIsEditSelected(true);
