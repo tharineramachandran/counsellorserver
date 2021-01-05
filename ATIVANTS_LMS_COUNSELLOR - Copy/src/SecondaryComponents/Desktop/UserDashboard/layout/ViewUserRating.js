@@ -75,6 +75,30 @@ class ViewUserRating extends React.Component {
         value: "Level-up",
         icon: "sort alphabet ascending",
       },
+      {
+        key: "Subject-down",
+        text: "Counselling subject",
+        value: "Subject-down",
+        icon: "sort alphabet descending",
+      },
+      {
+        key: "Subject-up",
+        text: "Counselling subject",
+        value: "Subject-up",
+        icon: "sort alphabet ascending",
+      },
+      {
+        key: "Counsellor-down",
+        text: "Counsellor name",
+        value: "Counsellor-down",
+        icon: "sort alphabet descending",
+      },
+      {
+        key: "Counsellor-up",
+        text: "Counsellor name",
+        value: "Counsellor-up",
+        icon: "sort alphabet ascending",
+      },
     ],
 
     activeIndex: 0,
@@ -1083,7 +1107,8 @@ class ViewUserRating extends React.Component {
         )
         .then((res) => {
           this.setTable();
-          this.setState({ formwarning: " " });
+           
+          this.setState({    openModel: false, formwarning: " " });
           toast.success("Feedback Successfully Sent!", {
             position: "top-right",
             autoClose: 3000,
@@ -1212,7 +1237,9 @@ class ViewUserRating extends React.Component {
           return c - d;
         });
       }
-    } else if (sortdata[0] == "Level") {
+    } 
+    
+    if (sortdata[0] == "Level") {
       points2.sort(compare);
 
       function compare(a, b) {
@@ -1232,8 +1259,55 @@ class ViewUserRating extends React.Component {
       if (sortdata[1] == "down") {
         points2.reverse();
       }
-    } else {
-    }
+    } 
+
+
+     
+
+    if (sortdata[0] == "Subject") {
+      points2.sort(compare);
+
+      function compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        const bandA = a.ct_counselling_subject_name.toLowerCase();
+        const bandB = b.ct_counselling_subject_name.toLowerCase();
+
+        let comparison = 0;
+        if (bandA > bandB) {
+          comparison = 1;
+        } else if (bandA < bandB) {
+          comparison = -1;
+        }
+        return comparison;
+      }
+
+      if (sortdata[1] == "down") {
+        points2.reverse();
+      }
+    } 
+     
+
+    if (sortdata[0] == "Counsellor") {
+      points2.sort(compare);
+
+      function compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        const bandA = a.TX_USER_NAME.toLowerCase();
+        const bandB = b.TX_USER_NAME.toLowerCase();
+
+        let comparison = 0;
+        if (bandA > bandB) {
+          comparison = 1;
+        } else if (bandA < bandB) {
+          comparison = -1;
+        }
+        return comparison;
+      }
+
+      if (sortdata[1] == "down") {
+        points2.reverse();
+      }
+    } 
     console.log(points2);
     this.setState({ requests: points2 });
   };

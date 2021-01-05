@@ -25,6 +25,10 @@ import {
 } from "semantic-ui-react";
 import CreateSession from "./CounsellorCreateSessionModel";
 
+import FullCalendar, { formatDate } from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import CreateMessage from "./CounsellorCreateMessageModel";
 
 import { baseURLAPI, baseURL } from "../../../../Global";
@@ -45,7 +49,7 @@ var dayCheck;
 var subjectCheck;
 var k = 0;
 for (var i = 0; k < 1000; i++) {
-  priceRange.push({ key: i, text: k, value: k });
+  priceRange.push({ key: i, text: "S$" + k, value: k });
   k += 50;
 }
 class Search extends React.Component {
@@ -53,11 +57,15 @@ class Search extends React.Component {
     loading: true,
     activeIndex: 0,
     post: [],
+    searchdata: "",
     allPosts: [],
     minValue: 0,
     maxValue: 0,
     counsellingSubjectName: 0,
     counsellingSubjectNameOptions: [],
+    counsellingLevelNameOptions: [],
+    counsellingLevelName: 0,
+
     counsellingDayName: 0,
     showMessage: false,
     showVideo: false,
@@ -69,6 +77,47 @@ class Search extends React.Component {
     sessionPerson: " ",
     userID: "",
     displayReview: 2,
+    sort: "Date-down",
+    sortOptions: [
+      {
+        key: "Review-down",
+        text: "Review ",
+        value: "Review-down",
+        icon: "sort alphabet descending",
+      },
+      {
+        key: "Review-up",
+        text: "Review   ",
+        value: "Review-up",
+        icon: "sort alphabet ascending",
+      },
+
+      {
+        key: "Name-down",
+        text: "Name   ",
+        value: "Name-down",
+        icon: "sort alphabet descending",
+      },
+      {
+        key: "Name-up",
+        text: "Name ",
+        value: "Name-up",
+        icon: "sort alphabet ascending",
+      },
+
+      {
+        key: "Price-down",
+        text: "Price ",
+        value: "Price-down",
+        icon: "sort alphabet descending",
+      },
+      {
+        key: "Price-up",
+        text: "Price ",
+        value: "Price-up",
+        icon: "sort alphabet ascending",
+      },
+    ],
   };
 
   handleClick = (e, titleProps) => {
@@ -92,6 +141,25 @@ class Search extends React.Component {
       function checkEachPost(item, index) {
         for (let detail of item.counselling_details) {
           if (Number(detail.ct_counselling_subject_code) == subjectCode) {
+            filteredpost.push(item);
+            break;
+          }
+        }
+      }
+    }
+    return filteredpost;
+  };
+
+  levelCheck = (levelCode, post) => {
+    var filteredpost = [];
+    if (levelCode == "00") {
+      filteredpost = post;
+    } else {
+      post.forEach(checkEachPost);
+
+      function checkEachPost(item, index) {
+        for (let detail of item.counselling_details) {
+          if (Number(detail.ct_counselling_level_code) == levelCode) {
             filteredpost.push(item);
             break;
           }
@@ -181,6 +249,11 @@ class Search extends React.Component {
     var counsellingSubjectNameOptions = [
       { key: "00", text: "Any Subject", value: "00" },
     ];
+
+    var counsellingLevelNameOptions = [
+      { key: "00", text: "Any Level", value: "00" },
+    ];
+
     axios
       .get(
         baseURLAPI + "/Counsellor/GetCounsellorDetails/" + localStorage.userID
@@ -189,13 +262,13 @@ class Search extends React.Component {
         const persons = res.data.counsellor;
         const minValue = 0;
         const maxValue = 950;
-        const counsellingSubjectName = 2;
         this.setState({
           post: persons,
           allPosts: persons,
           minValue: minValue,
           maxValue: maxValue,
           counsellingSubjectName: "00",
+          counsellingLevelName: "00",
           show: false,
           loading: false,
           counsellingDayName: "Anyday",
@@ -204,7 +277,7 @@ class Search extends React.Component {
 
     axios.get(baseURLAPI + "/form/list").then((res) => {
       var counsellingSubjectNameOptionsArray = res.data.COUNSELLING_SUBJECTS;
-
+      var counsellingLevelNameOptionsArray = res.data.COUNSELLING_LEVELS;
       counsellingSubjectNameOptionsArray.forEach(
         setcounsellingSubjectNameOptions
       );
@@ -216,9 +289,18 @@ class Search extends React.Component {
           value: item.CT_COUNSELLING_SUBJECT_CODE,
         });
       }
+      counsellingLevelNameOptionsArray.forEach(setcounsellingLevelNameOptions);
 
+      function setcounsellingLevelNameOptions(item, index) {
+        counsellingLevelNameOptions.push({
+          key: item.CT_COUNSELLING_LEVEL_CODE,
+          text: item.CT_COUNSELLING_LEVEL_NAME,
+          value: item.CT_COUNSELLING_LEVEL_CODE,
+        });
+      }
       this.setState({
         counsellingSubjectNameOptions: counsellingSubjectNameOptions,
+        counsellingLevelNameOptions: counsellingLevelNameOptions,
         counsellingDayOptions: [],
       });
     });
@@ -275,7 +357,39 @@ class Search extends React.Component {
       }
     }
 
-    this.setState({ post });
+    this.setState({ post: post, searchdata: value });
+  };
+
+  resetSearch = () => {
+    this.setState({
+      minValue: 0,
+      searchdata: "",
+      maxValue: 950,
+      counsellingSubjectName: "00",
+      counsellingLevelName: "00",
+      counsellingDayName: "Anyday",
+    });
+
+    var post = this.priceRange(
+      this.state.minValue,
+      this.state.maxValue,
+      this.state.allPosts
+    );
+    var filteredpost = this.subjectCheck(
+      this.state.counsellingSubjectName,
+      post
+    );
+    var dayfilteredpost = this.dayCheck(
+      this.state.counsellingDayName,
+      filteredpost
+    );
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      dayfilteredpost
+    );
+
+    this.setState({ post: levelfilteredpost });
   };
 
   _onMaxPrice = (e, data) => {
@@ -293,7 +407,13 @@ class Search extends React.Component {
       this.state.counsellingDayName,
       filteredpost
     );
-    this.setState({ post: dayfilteredpost, maxValue: maxValue });
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      dayfilteredpost
+    );
+
+    this.setState({ post: levelfilteredpost, maxValue: maxValue });
   };
 
   _onMinPrice = (e, data) => {
@@ -311,7 +431,12 @@ class Search extends React.Component {
       this.state.counsellingDayName,
       filteredpost
     );
-    this.setState({ post: dayfilteredpost, minValue: minValue });
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      dayfilteredpost
+    );
+
+    this.setState({ post: levelfilteredpost, minValue: minValue });
   };
 
   _onSubjectChange = (e, data) => {
@@ -326,7 +451,34 @@ class Search extends React.Component {
       this.state.maxValue,
       dayfilteredpost
     );
-    this.setState({ post: post, counsellingSubjectName: subjectValue });
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      post
+    );
+    this.setState({
+      post: levelfilteredpost,
+      counsellingSubjectName: subjectValue,
+    });
+  };
+
+  _onLevelChange = (e, data) => {
+    var levelValue = data.value;
+    var filteredpost = this.levelCheck(levelValue, this.state.allPosts);
+    var dayfilteredpost = this.dayCheck(
+      this.state.counsellingDayName,
+      filteredpost
+    );
+    var post = this.priceRange(
+      this.state.minValue,
+      this.state.maxValue,
+      dayfilteredpost
+    );
+    var filteredpost = this.subjectCheck(
+      this.state.counsellingSubjectName,
+      post
+    );
+    this.setState({ post: filteredpost, counsellingLevelName: levelValue });
   };
 
   _onDayChange = (e, data) => {
@@ -341,7 +493,12 @@ class Search extends React.Component {
       this.state.counsellingSubjectName,
       pricefilteredpost
     );
-    this.setState({ post: post, counsellingDayName: DayValue });
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      post
+    );
+    this.setState({ post: levelfilteredpost, counsellingDayName: DayValue });
   };
   messageModel = (person) => {
     this.setState({
@@ -460,9 +617,88 @@ class Search extends React.Component {
         });
       });
   };
+
+  sortbydate = (e, data) => {
+    var dropdownValue = data.value;
+    console.log(dropdownValue);
+    if (dropdownValue) {
+      this.setState({ sort: dropdownValue });
+    }
+    var sortdata = dropdownValue.split("-");
+    console.log(sortdata);
+
+    var points2 = this.state.post;
+
+    if (sortdata[0] == "Review") {
+      if (sortdata[1] == "up") {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_review;
+          var d = q.counselling_average_review;
+          return d - c;
+        });
+      } else {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_review;
+          var d = q.counselling_average_review;
+          return c - d;
+        });
+      }
+    }
+
+    if (sortdata[0] == "Price") {
+      if (sortdata[1] == "up") {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_price;
+          var d = q.counselling_average_price;
+          return d - c;
+        });
+      } else {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_price;
+          var d = q.counselling_average_price;
+          return c - d;
+        });
+      }
+    }
+
+    if (sortdata[0] == "Name") {
+      points2.sort(compare);
+
+      function compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        var name1 =
+          a.counsellor_details[0].CT_FIRST_NAME +
+          " " +
+          a.counsellor_details[0].CT_LAST_NAME;
+        var name2 =
+          b.counsellor_details[0].CT_FIRST_NAME +
+          " " +
+          b.counsellor_details[0].CT_LAST_NAME;
+
+        var bandA = name1.toLowerCase();
+        var bandB = name2.toLowerCase();
+
+        let comparison = 0;
+        if (bandA > bandB) {
+          comparison = 1;
+        } else if (bandA < bandB) {
+          comparison = -1;
+        }
+        return comparison;
+      }
+
+      if (sortdata[1] == "down") {
+        points2.reverse();
+      }
+    }
+
+    console.log("points2");
+    console.log(points2);
+    this.setState({ post: points2 });
+  };
+
   render() {
     const { activeIndex } = this.state;
- 
 
     function Date(props) {
       var date = props.date.split("-");
@@ -476,59 +712,121 @@ class Search extends React.Component {
     }
 
     return (
-      <Grid columns="equal" divided>
-        <Grid.Row>
+      <Grid>
+        <Grid.Row padded>
           <Grid.Column>
-            <Segment>
-              <Input
-                type="search"
-                onChange={this._onKeyUp}
-                name="s"
-                id="s"
-                placeholder="Search"
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.minValue}
-                options={priceRange}
-                onChange={this._onMinPrice}
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.maxValue}
-                options={priceRange}
-                onChange={this._onMaxPrice}
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.counsellingSubjectName}
-                options={this.state.counsellingSubjectNameOptions}
-                onChange={this._onSubjectChange}
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.counsellingDayName}
-                options={dayOptions}
-                onChange={this._onDayChange}
-              />
-            </Segment>
+            <Segment.Group horizontal compact>
+              <Segment textAlign="center">
+                <Input
+                  icon="search"
+                  fluid
+                  onChange={this._onKeyUp}
+                  placeholder="Search"
+                  value={this.state.searchdata}
+                />
+              </Segment>
+
+              <Segment>
+                <div>
+                  Price Range : {"    "}
+                  <Dropdown
+                    style={{ paddingLeft: "5%", paddingRight: "5%" }}
+                    value={this.state.minValue}
+                    options={priceRange}
+                    onChange={this._onMinPrice}
+                    placeholder="min"
+                  />
+                  -
+                  <Dropdown
+                    style={{ paddingLeft: "5%" }}
+                    value={this.state.maxValue}
+                    options={priceRange}
+                    onChange={this._onMaxPrice}
+                    placeholder="max"
+                  />
+                </div>
+              </Segment>
+
+              <Segment>
+                <div>
+                  {" "}
+                  Level : {"    "}
+                  <Dropdown
+                    value={this.state.counsellingLevelName}
+                    options={this.state.counsellingLevelNameOptions}
+                    onChange={this._onLevelChange}
+                  />
+                </div>
+              </Segment>
+              <Segment>
+                {" "}
+                <div>
+                  {" "}
+                  Subject : {"    "}
+                  <Dropdown
+                    value={this.state.counsellingSubjectName}
+                    options={this.state.counsellingSubjectNameOptions}
+                    onChange={this._onSubjectChange}
+                  />
+                </div>
+              </Segment>
+              <Segment>
+                {" "}
+                <div>
+                  Available day : {"    "}
+                  <Dropdown
+                    value={this.state.counsellingDayName}
+                    options={dayOptions}
+                    onChange={this._onDayChange}
+                  />
+                  <div style={{ paddingLeft: "2px", float: "right" }}>
+                    <Label
+                      size="large"
+                      as="a"
+                      color="blue"
+                      onClick={this.resetSearch}
+                    >
+                      Clear search
+                    </Label>
+                  </div>
+                </div>{" "}
+              </Segment>
+            </Segment.Group>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row textAlign="center">
           <Grid.Column>
             <Container>
+              {this.state.post.length > 0 && (
+                <div
+                  style={{
+                    color: "black",
+                    float: "right",
+                    paddingBottom: "1%",
+                    paddingLeft: "1%",
+                  }}
+                >
+                  Sort By {"  "}
+                  <Dropdown
+                    inline
+                    options={this.state.sortOptions}
+                    value={this.state.sort}
+                    onChange={this.sortbydate}
+                  />
+                </div>
+              )}
+              <Container>
+                <FullCalendar
+                  nowIndicator={false}
+                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                  headerToolbar={false}
+                  initialView="timeGridWeek"
+                  duration={{ days: 7 }}
+                  dayHeaderFormat={{
+                    weekday: "long",
+                  }}
+                />
+              </Container>
               {this.state.loading ? (
                 <Segment>
                   <div textAlign="center">
@@ -537,8 +835,15 @@ class Search extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                  <div></div>
-                )}
+                this.state.post.length == 0 && (
+                  <div class="ui card" style={{ width: "100%" }}>
+                    <h3 style={{ padding: "3%", color: "grey" }}>
+                      Sorry, we cannot match for your search.Please try a
+                      different search{" "}
+                    </h3>
+                  </div>
+                )
+              )}
 
               {this.state.post.map((person, index) => (
                 <div class="ui card" style={{ width: "100%" }}>
@@ -612,8 +917,8 @@ class Search extends React.Component {
                             allowfullscreen
                           ></iframe>
                         ) : (
-                            <p style={{ color: "red" }}>No video was provided</p>
-                          )}
+                          <p style={{ color: "red" }}>No video was provided</p>
+                        )}
                       </Segment>
                     </Modal.Content>
                   </Modal>{" "}
@@ -631,23 +936,23 @@ class Search extends React.Component {
                         />{" "}
                         <span>
                           {person.counsellor_details[0].FavisAvailable ==
-                            "1" ? (
-                              <Icon
-                                id={person.counsellor_details[0].CT_COUNSELLOR_ID}
-                                onClick={() => this.removetoFav(person)}
-                                color="red"
-                                size="large"
-                                name="heart"
-                              />
-                            ) : (
-                              <Icon
-                                color="grey"
-                                id={person.counsellor_details[0].CT_COUNSELLOR_ID}
-                                onClick={() => this.addtoFav(person)}
-                                size="large"
-                                name="heart"
-                              />
-                            )}{" "}
+                          "1" ? (
+                            <Icon
+                              id={person.counsellor_details[0].CT_COUNSELLOR_ID}
+                              onClick={() => this.removetoFav(person)}
+                              color="red"
+                              size="large"
+                              name="heart"
+                            />
+                          ) : (
+                            <Icon
+                              color="grey"
+                              id={person.counsellor_details[0].CT_COUNSELLOR_ID}
+                              onClick={() => this.addtoFav(person)}
+                              size="large"
+                              name="heart"
+                            />
+                          )}{" "}
                         </span>
                       </div>
                       <div style={{ width: "20%", float: "right" }}>
@@ -709,24 +1014,24 @@ class Search extends React.Component {
                             </Table.Row>
                             {person.counselling_introduction[0]
                               .ct_counsellor_video_url ? (
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.videoModel(person)}
-                                      color="youtube"
-                                    >
-                                      <Icon name="youtube" />
+                              <Table.Row>
+                                <Table.Cell colspan="2">
+                                  <Button
+                                    style={{ width: "100%" }}
+                                    onClick={() => this.videoModel(person)}
+                                    color="youtube"
+                                  >
+                                    <Icon name="youtube" />
                                     View Video
                                   </Button>
-                                  </Table.Cell>
-                                </Table.Row>
-                              ) : (
-                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                // </iframe>
+                                </Table.Cell>
+                              </Table.Row>
+                            ) : (
+                              // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                              // </iframe>
 
-                                <p style={{ color: "red" }}></p>
-                              )}
+                              <p style={{ color: "red" }}></p>
+                            )}
                           </Table.Body>
                         </Table>
                       </div>
@@ -836,22 +1141,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
+                                          <Table.Row>
+                                            <Table.Cell>
+                                              {" "}
                                               No Monday Sessions
                                             </Table.Cell>
-                                            </Table.Row>
-                                          )
+                                          </Table.Row>
+                                        )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Monday Sessions
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}
+                                    </Table.Row>
+                                  )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -889,22 +1194,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
+                                          <Table.Row>
+                                            <Table.Cell>
+                                              {" "}
                                               No Tuesday Sessions
                                             </Table.Cell>
-                                            </Table.Row>
-                                          )
+                                          </Table.Row>
+                                        )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Tuesday Sessions
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}
+                                    </Table.Row>
+                                  )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -942,22 +1247,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
+                                          <Table.Row>
+                                            <Table.Cell>
+                                              {" "}
                                               No Wednesday Sessions
                                             </Table.Cell>
-                                            </Table.Row>
-                                          )
+                                          </Table.Row>
+                                        )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Wednesday Sessions
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}
+                                    </Table.Row>
+                                  )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -995,22 +1300,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
+                                          <Table.Row>
+                                            <Table.Cell>
+                                              {" "}
                                               No Thursay Sessions
                                             </Table.Cell>
-                                            </Table.Row>
-                                          )
+                                          </Table.Row>
+                                        )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Thursay Sessions
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}
+                                    </Table.Row>
+                                  )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -1049,22 +1354,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
+                                          <Table.Row>
+                                            <Table.Cell>
+                                              {" "}
                                               No Friday Sessions
                                             </Table.Cell>
-                                            </Table.Row>
-                                          )
+                                          </Table.Row>
+                                        )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Friday Sessions
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}
+                                    </Table.Row>
+                                  )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -1103,22 +1408,22 @@ class Search extends React.Component {
                                             </Table.Cell>
                                           </Table.Row>
                                         ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
+                                          <Table.Row>
+                                            <Table.Cell>
+                                              {" "}
                                               No Saturday Sessions
                                             </Table.Cell>
-                                            </Table.Row>
-                                          )
+                                          </Table.Row>
+                                        )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Saturday Sessions
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}
+                                    </Table.Row>
+                                  )}
                                 </Table.Body>
                               </Table>
                             </div>
@@ -1150,19 +1455,19 @@ class Search extends React.Component {
                                                       circular
                                                     />
                                                   ) : (
-                                                      <Image
-                                                        size="tiny"
-                                                        style={{
-                                                          padding: "5px ",
-                                                        }}
-                                                        circular
-                                                      >
-                                                        <Icon
-                                                          disabled
-                                                          name="user"
-                                                        />
-                                                      </Image>
-                                                    )}
+                                                    <Image
+                                                      size="tiny"
+                                                      style={{
+                                                        padding: "5px ",
+                                                      }}
+                                                      circular
+                                                    >
+                                                      <Icon
+                                                        disabled
+                                                        name="user"
+                                                      />
+                                                    </Image>
+                                                  )}
                                                 </div>
                                                 <div
                                                   style={{
@@ -1211,29 +1516,32 @@ class Search extends React.Component {
                                               </div>
                                             </Table.Cell>
                                           ) : (
-                                              <Table.Cell textAlign="center" >
-                                                {this.state.displayReview ==
-                                                  index ? (
-
-                                                    <Button onClick={() => this.loadMore(person)}>
-                                                      Load More
-                                                    </Button>
-                                                  ) : (
-                                                    <p></p>
-                                                  )}
-                                              </Table.Cell>
-                                            )}
+                                            <Table.Cell textAlign="center">
+                                              {this.state.displayReview ==
+                                              index ? (
+                                                <Button
+                                                  onClick={() =>
+                                                    this.loadMore(person)
+                                                  }
+                                                >
+                                                  Load More
+                                                </Button>
+                                              ) : (
+                                                <p></p>
+                                              )}
+                                            </Table.Cell>
+                                          )}
                                         </Table.Row>
                                       )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Rating for this counsellor yet..
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}{" "}
+                                    </Table.Row>
+                                  )}{" "}
                                 </Table.Body>
                               </Table>
                             </div>

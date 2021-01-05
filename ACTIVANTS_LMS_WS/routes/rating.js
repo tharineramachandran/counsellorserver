@@ -27,6 +27,23 @@ const { baseURLAPI, baseURL } = require('../Global');
   return filtered_request;}catch(error) {console.log(["eeeeeeeeeeeeee",error])}
 }
 
+function counsellor_request_filter_date(counsellor_request) {
+  var filtered_request = [ ];
+  var today=  new Date();
+  try{
+  for (let i = 0; i < counsellor_request.rowCount; i++) { 
+
+    
+    if (  new Date(     counsellor_request.rows[i].ct_session_date   )      <= today             ){
+
+       
+      filtered_request.push(counsellor_request.rows[i]);
+    }
+  }
+  
+   console.log(["filetered",filtered_request]);
+  return filtered_request;}catch(error) {console.log(["eeeeeeeeeeeeee",error])}
+}
 
  
 router.post("/Delete", authorization, async (req, res) => {
@@ -100,15 +117,13 @@ router.get("/userSent/:id", authorization, async (req, res) => {
     var view_counsellor_review = []
 
 
-    var filtered_request =  await counsellor_request_filter(counsellor_request);
+    var filtered_request = await counsellor_request_filter_date(counsellor_request);
  
  if (filtered_request[0].ct_user_id){
     for (let x = 0; x < filtered_request.length; x++) {
  
 
-      var review_request = await pool.query('SELECT * FROM "CT_COUNSELLOR_REVIEW" where "ct_counsellor_user_id" = $1   AND "ct_counsellor_id"  = $2   ', [parseInt(filtered_request[x].ct_user_id    ),parseInt(filtered_request[x].ct_counsellor_id    )]);
-
-
+      var review_request = await pool.query('SELECT * FROM "CT_COUNSELLOR_REVIEW" where "ct_request_id" = $1  ', [parseInt(filtered_request[x].id    ) ]);
 
       var counsellingLevelName = await getName.getCounsellingLevelName(filtered_request[x].ct_counselling_level_code);
       filtered_request[x].ct_counselling_level_name = counsellingLevelName;
