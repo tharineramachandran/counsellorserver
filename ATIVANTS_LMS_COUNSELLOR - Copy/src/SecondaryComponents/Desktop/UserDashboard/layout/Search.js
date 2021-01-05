@@ -259,7 +259,9 @@ class Search extends React.Component {
         baseURLAPI + "/Counsellor/GetCounsellorDetails/" + localStorage.userID
       )
       .then((res) => {
-        const persons = res.data.counsellor;
+        const persons = res.data.counsellor;      
+        console.log("persons");        console.log(persons);
+
         const minValue = 0;
         const maxValue = 950;
         this.setState({
@@ -815,18 +817,7 @@ class Search extends React.Component {
                   />
                 </div>
               )}
-              <Container>
-                <FullCalendar
-                  nowIndicator={false}
-                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                  headerToolbar={false}
-                  initialView="timeGridWeek"
-                  duration={{ days: 7 }}
-                  dayHeaderFormat={{
-                    weekday: "long",
-                  }}
-                />
-              </Container>
+              
               {this.state.loading ? (
                 <Segment>
                   <div textAlign="center">
@@ -1099,6 +1090,7 @@ class Search extends React.Component {
                           active={activeIndex === index}
                           index={index}
                           onClick={this.handleClick}
+ 
                         >
                           <Icon name="dropdown" />
                           Read More{" "}
@@ -1106,7 +1098,23 @@ class Search extends React.Component {
                         <Accordion.Content active={activeIndex === index}>
                           <Segment>
                             <h2>Available Counselling Sessions</h2>
-                            <div
+                      <Container>
+                      {activeIndex === index &&(    <FullCalendar
+                expandRows ={true}
+                handleWindowResize ={true}
+                nowIndicator={false}
+                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                  headerToolbar={false}
+                  height={500}
+                  initialView="timeGridWeek"
+                  duration={{ days: 7 }}
+                  dayHeaderFormat={{
+                    weekday: "long",
+                  }}
+                  events={person.calendar}
+                />)} 
+              </Container>
+                            {/* <div
                               style={{
                                 float: "left",
                                 width: "50%",
@@ -1426,7 +1434,7 @@ class Search extends React.Component {
                                   )}
                                 </Table.Body>
                               </Table>
-                            </div>
+                            </div> */}
 
                             <div>
                               <h2 textAlign="center">Ratings</h2>

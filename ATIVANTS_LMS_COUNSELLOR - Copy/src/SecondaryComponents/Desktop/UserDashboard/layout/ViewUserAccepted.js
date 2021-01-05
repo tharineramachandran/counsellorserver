@@ -45,22 +45,7 @@ class ViewAccepted extends React.Component {
                 var display = [];
 
                 requests.forEach(element => {
-
-                    // var datestr = element.ct_session_start_time.split("T");
-
-                    // var datestrdate = datestr[0].split("-");
-                    // var datestr3 = datestr[1].split(":");
-
-                    // var enddatestr = element.ct_session_end_time.split("T");
-
-                    // var enddatestr3 = enddatestr[1].split(":");
-                    // var day = (parseInt(datestrdate[2])).toString();
-
-                    // element.ct_session_start_time = datestr3[0] + ":" + datestr3[1];
-                    // element.ct_session_end_time = enddatestr3[0] + ":" + enddatestr3[1];
-                    // element.ct_session_date = day + "/" + datestrdate[1] + "/" + datestrdate[0];
-
-          
+ 
                     let strsa = element.ct_session_start_time;
                     var st = strsa.split('T');
                     var stDF = st[1].split(':');
@@ -100,6 +85,8 @@ class ViewAccepted extends React.Component {
                 });
               
                 const openModel = false;
+                console.log("display");
+                   console.log(display)
                 this.setState({ requests : display, openModel :openModel });
             })
             .catch(function (error) {

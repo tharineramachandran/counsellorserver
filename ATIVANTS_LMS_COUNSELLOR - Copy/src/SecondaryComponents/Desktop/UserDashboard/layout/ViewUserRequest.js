@@ -65,7 +65,7 @@ class ViewRequest extends React.Component {
                 const requests = res.data;
                 var display = this.dateTimeFormat(requests, "#21ba45", "Confirmed sessions");
                 var final = this.state.requests.concat(display);
-
+                console.log("final"); console.log(final);  
                 const openModel = false;
                 this.setState({ requests: final, openModel: openModel });
             })

@@ -188,7 +188,7 @@ const UserDashboard = (props) => {
       } catch (error) {
         console.log(error.message);
       }
-    }, 5000);
+    }, 500000);
   });
 
   useEffect(() => {

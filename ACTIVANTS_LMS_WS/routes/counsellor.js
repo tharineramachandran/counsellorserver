@@ -9,15 +9,64 @@ const getName = require("../functions/names");
 const awsS3 = require("../functions/awsS3");
 const createCounsellorValidation = require("../middleware/createCounsellorValidation");
 
+
+
+
+function calendarDisplay(monday, tuesday){
+
+    const date = new Date();
+    const today = date.getDate();
+    const dayOfTheWeek = date.getDay();
+    const sundayDate =new Date(    date.setDate(today - dayOfTheWeek ));
+    const mondayDate = new Date(     date.setDate(today - dayOfTheWeek + 1));
+    const tuesdayDate = new Date(  date.setDate(today - dayOfTheWeek + 2));
+    const wednesdayDate = new Date(     date.setDate(today - dayOfTheWeek + 3));
+    const thusdayDate = new Date(  date.setDate(today - dayOfTheWeek + 4));
+    const fridayDate = new Date(  date.setDate(today - dayOfTheWeek + 5));
+    const saturdayDate = new Date(  date.setDate(today - dayOfTheWeek + 6));
+        var display=[];
+ 
+        monday.forEach(calendarEdit , {Date: mondayDate, Day:"Monday"});
+        tuesday.forEach(calendarEdit , {Date: tuesdayDate, Day:"Tuesday"}  );
+
+    function calendarEdit(item,index){ 
+        var obj =   this.valueOf()   ;
+         var date =  new Date(  obj.Date ).toISOString() ;
+        var st = date.split('T');
+        var stDF =  item.ct_from.split(':');
+        let str = st[0] + "T" + stDF[0]  + ":" + stDF[1] + ":00";
+        
+          var endstDF = item.ct_to.split(':');
+        let endstr = st[0] + "T" + endstDF[0] + ":" + endstDF[1] + ":00";
+
+        
+        var obj = {
+            title: "Available slot", start: str, end: endstr,startStr :obj.Day,
+            color: "#21ba45",
+            extendedProps: { element: item }
+        };
+        display.push(obj);
+
+    }  
+    console.log(display)
+return display;
+};
+
+
+
+
+
+
+
 router.get("/GetCounsellorDetails/:id", async (req, res) => {
- var id=  req.params.id; 
- console.log( parseInt(id)) ;
-    try { 
-        var user_fav =[];
-        if(   Number.isInteger ( parseInt(id))    ){ 
+    var id = req.params.id;
+    console.log(parseInt(id));
+    try {
+        var user_fav = [];
+        if (Number.isInteger(parseInt(id))) {
             user_fav = await pool.query('SELECT  * FROM "T_USER_FAVORITES" WHERE "ct_user_id" = $1', [parseInt(id)]);
-         
-        } 
+
+        }
 
         var details = [];
         var final_details = [];
@@ -85,19 +134,19 @@ router.get("/GetCounsellorDetails/:id", async (req, res) => {
                 counselling_total_price += parseInt(counselling_details.rows[x].ct_counsellor_hourly_rate);
             }
 
-            var view_counsellor_review= []
+            var view_counsellor_review = []
 
- 
+
             for (let x = 0; x < counsellor_review.rowCount; x++) {
 
 
                 var review_request = await pool.query('SELECT * FROM "CT_COUNSELLOR_REQUESTS" where "id" = $1', [counsellor_review.rows[x].ct_request_id]);
-               var counsellingLevelName = await getName.getCounsellingLevelName(review_request.rows[0].ct_counselling_level_code);
+                var counsellingLevelName = await getName.getCounsellingLevelName(review_request.rows[0].ct_counselling_level_code);
                 counsellor_review.rows[x].ct_counselling_level_name = counsellingLevelName;
                 var counsellingSubjectsName = await getName.getCounsellingSubjectsName(review_request.rows[0].ct_counselling_subject_code);
                 counsellor_review.rows[x].ct_counselling_subject_name = counsellingSubjectsName;
                 view_counsellor_review.push(counsellor_review.rows[x]);
- 
+
             }
 
 
@@ -105,25 +154,25 @@ router.get("/GetCounsellorDetails/:id", async (req, res) => {
             var counselling_average_review = counselling_total_review / counsellor_review.rowCount;
             var FavisAvailable = false;
             var counsellor_detailsFav = [];
-       
-                if(user_fav.rowCount > 0){
-                    var FavisAvailable = true;
 
-                   
-  console.log(user_fav.rows[0].ct_user_fav)
-                    if ( user_fav.rows[0].ct_user_fav.includes( counsellor_details.rows[0].CT_COUNSELLOR_ID  ))
-                    {counsellor_details.rows[0].FavisAvailable =1 ; 
-                    } else { counsellor_details.rows[0].FavisAvailable = 0 ; }
-                        
-         
-                  
-                }
-   
+            if (user_fav.rowCount > 0) {
+                var FavisAvailable = true;
 
+
+                console.log(user_fav.rows[0].ct_user_fav)
+                if (user_fav.rows[0].ct_user_fav.includes(counsellor_details.rows[0].CT_COUNSELLOR_ID)) {
+                    counsellor_details.rows[0].FavisAvailable = 1;
+                } else { counsellor_details.rows[0].FavisAvailable = 0; }
+
+
+
+            }
+
+            var calendar = await calendarDisplay(counselling_monday.rows,  counselling_tuesday.rows)
 
             var account = {
                 counsellor_details: counsellor_details.rows,
-                FavisAvailable :FavisAvailable , 
+                FavisAvailable: FavisAvailable,
                 counsellor_review: view_counsellor_review,
                 counselling_details: counselling_details_values,
                 counselling_introduction: counselling_introduction.rows,
@@ -133,7 +182,8 @@ router.get("/GetCounsellorDetails/:id", async (req, res) => {
                 counselling_friday: counselling_friday.rows, counselling_saturday: counselling_saturday.rows,
                 counselling_average_review: Math.floor(counselling_average_review),
                 counselling_average_price: Math.floor(counselling_average_price),
-                counselling_total_review: counsellor_review.rowCount
+                counselling_total_review: counsellor_review.rowCount,
+                calendar : calendar,
             };
 
             final_details.push(account);
@@ -403,7 +453,7 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
     }
 })
 
- 
+
 
 //update counsellee
 router.post("/UpdatePhoto", authorization, async (req, res) => {
