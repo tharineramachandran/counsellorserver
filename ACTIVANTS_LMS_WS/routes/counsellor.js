@@ -12,12 +12,12 @@ const createCounsellorValidation = require("../middleware/createCounsellorValida
 
 
 
-function calendarDisplay(monday, tuesday){
+function calendarDisplay(monday, tuesday,wednesday,thursday,friday,saturday){
 
     const date = new Date();
     const today = date.getDate();
     const dayOfTheWeek = date.getDay();
-    const sundayDate =new Date(    date.setDate(today - dayOfTheWeek ));
+    //const sundayDate =new Date(    date.setDate(today - dayOfTheWeek ));
     const mondayDate = new Date(     date.setDate(today - dayOfTheWeek + 1));
     const tuesdayDate = new Date(  date.setDate(today - dayOfTheWeek + 2));
     const wednesdayDate = new Date(     date.setDate(today - dayOfTheWeek + 3));
@@ -26,9 +26,15 @@ function calendarDisplay(monday, tuesday){
     const saturdayDate = new Date(  date.setDate(today - dayOfTheWeek + 6));
         var display=[];
  
-        monday.forEach(calendarEdit , {Date: mondayDate, Day:"Monday"});
-        tuesday.forEach(calendarEdit , {Date: tuesdayDate, Day:"Tuesday"}  );
+        monday.forEach(calendarEdit , {Date: mondayDate, Day:"Monday" ,Color : "#e04a4a"});
+        tuesday.forEach(calendarEdit , {Date: tuesdayDate, Day:"Tuesday",Color : "#f27522   "}  );
+        wednesday.forEach(calendarEdit , {Date: wednesdayDate, Day:"Wednesday",Color : "#fbbd08"}  );
+        thursday.forEach(calendarEdit , {Date: thusdayDate, Day:"Thursday",Color : "#64cf7d"}  );
+        friday.forEach(calendarEdit , {Date: fridayDate, Day:"Friday",Color : "#31c3bd"}  );
+        saturday.forEach(calendarEdit , {Date: saturdayDate, Day:"Saturday",Color : "#2285d0"}  ); 
 
+
+        
     function calendarEdit(item,index){ 
         var obj =   this.valueOf()   ;
          var date =  new Date(  obj.Date ).toISOString() ;
@@ -41,14 +47,14 @@ function calendarDisplay(monday, tuesday){
 
         
         var obj = {
-            title: "Available slot", start: str, end: endstr,startStr :obj.Day,
-            color: "#21ba45",
-            extendedProps: { element: item }
+            title: " ", start: str, end: endstr,startStr :obj.Day,
+            color: obj.Color,
+            editable:false,resourceEditable: false 
+        //    extendedProps: { element: item }
         };
         display.push(obj);
 
-    }  
-    console.log(display)
+    }   
 return display;
 };
 
@@ -168,7 +174,7 @@ router.get("/GetCounsellorDetails/:id", async (req, res) => {
 
             }
 
-            var calendar = await calendarDisplay(counselling_monday.rows,  counselling_tuesday.rows)
+            var calendar = await calendarDisplay(counselling_monday.rows,  counselling_tuesday.rows, counselling_wednesday.rows,counselling_thursday.rows, counselling_friday.rows, counselling_saturday.rows)
 
             var account = {
                 counsellor_details: counsellor_details.rows,

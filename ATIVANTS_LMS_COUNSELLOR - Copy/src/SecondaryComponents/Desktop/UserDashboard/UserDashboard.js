@@ -60,9 +60,9 @@ const UserDashboard = (props) => {
     image: "",
     isCompleted: "",
   });
-  const [isProfileSelected, setIsProfileSelected] = useState(true);
+  const [isProfileSelected, setIsProfileSelected] = useState(false);
   const [isRequestAcceptSelected, setIsRequestAcceptSelected] = useState(false);
-  const [isRequestChangeSelected, setIsRequestChangeSelected] = useState(false);
+  const [isRequestChangeSelected, setIsRequestChangeSelected] = useState(true);
   const [open, setOpen] = useState(false);
   const [isMessagesSelected, setIsMessagesSelected] = useState(false);
   const [isRequestSelected, setIsRequestSelected] = useState(false);

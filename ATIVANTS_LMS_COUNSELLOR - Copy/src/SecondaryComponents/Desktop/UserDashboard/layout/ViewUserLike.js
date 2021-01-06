@@ -27,6 +27,10 @@ import CreateSession from "./CounsellorCreateSessionModel";
 
 import CreateMessage from "./CounsellorCreateMessageModel";
 
+import FullCalendar, { formatDate } from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import { baseURLAPI, baseURL } from "../../../../Global";
 import { Slider } from "react-semantic-ui-range";
 const axios = require("axios");
@@ -67,7 +71,49 @@ class ViewUserLike extends React.Component {
     messageCounsellorID: " ",
     sessionCounsellorID: " ",
     sessionPerson: " ",
-    userID: "", displayReview: 2
+    userID: "",
+    displayReview: 2,
+    sort: "Date-down",
+    sortOptions: [
+      {
+        key: "Review-down",
+        text: "Review ",
+        value: "Review-down",
+        icon: "sort numeric descending",
+      },
+      {
+        key: "Review-up",
+        text: "Review   ",
+        value: "Review-up",
+        icon: "sort numeric ascending",
+      },
+
+      {
+        key: "Name-down",
+        text: "Name   ",
+        value: "Name-down",
+        icon: "sort alphabet descending",
+      },
+      {
+        key: "Name-up",
+        text: "Name ",
+        value: "Name-up",
+        icon: "sort alphabet ascending",
+      },
+
+      {
+        key: "Price-down",
+        text: "Price ",
+        value: "Price-down",
+        icon: "sort numeric descending",
+      },
+      {
+        key: "Price-up",
+        text: "Price ",
+        value: "Price-up",
+        icon: "sort numeric ascending",
+      },
+    ],
   };
 
   handleClick = (e, titleProps) => {
@@ -75,7 +121,6 @@ class ViewUserLike extends React.Component {
     const { activeIndex } = this.state;
     const newIndex = activeIndex === index ? -1 : index;
     this.setState({ activeIndex: newIndex, displayReview: 2 });
-
   };
   loadMore = (person) => {
     console.log(person);
@@ -183,12 +228,35 @@ class ViewUserLike extends React.Component {
     return filteredpost;
   };
 
+  levelCheck = (levelCode, post) => {
+    var filteredpost = [];
+    if (levelCode == "00") {
+      filteredpost = post;
+    } else {
+      post.forEach(checkEachPost);
+
+      function checkEachPost(item, index) {
+        for (let detail of item.counselling_details) {
+          if (Number(detail.ct_counselling_level_code) == levelCode) {
+            filteredpost.push(item);
+            break;
+          }
+        }
+      }
+    }
+    return filteredpost;
+  };
   componentDidMount() {
     var counsellingSubjectNameOptions = [
       { key: "00", text: "Any Subject", value: "00" },
     ];
 
-    axios.get(baseURLAPI + '/favourites/userfavourites/' + localStorage.userID)
+    var counsellingLevelNameOptions = [
+      { key: "00", text: "Any Level", value: "00" },
+    ];
+
+    axios
+      .get(baseURLAPI + "/favourites/userfavourites/" + localStorage.userID)
       .then((res) => {
         const persons = res.data.counsellor;
         const minValue = 0;
@@ -203,12 +271,13 @@ class ViewUserLike extends React.Component {
           show: false,
           loading: false,
           counsellingDayName: "Anyday",
+          counsellingLevelName: "00",
         });
       });
 
     axios.get(baseURLAPI + "/form/list").then((res) => {
       var counsellingSubjectNameOptionsArray = res.data.COUNSELLING_SUBJECTS;
-
+      var counsellingLevelNameOptionsArray = res.data.COUNSELLING_LEVELS;
       counsellingSubjectNameOptionsArray.forEach(
         setcounsellingSubjectNameOptions
       );
@@ -220,9 +289,18 @@ class ViewUserLike extends React.Component {
           value: item.CT_COUNSELLING_SUBJECT_CODE,
         });
       }
+      counsellingLevelNameOptionsArray.forEach(setcounsellingLevelNameOptions);
 
+      function setcounsellingLevelNameOptions(item, index) {
+        counsellingLevelNameOptions.push({
+          key: item.CT_COUNSELLING_LEVEL_CODE,
+          text: item.CT_COUNSELLING_LEVEL_NAME,
+          value: item.CT_COUNSELLING_LEVEL_CODE,
+        });
+      }
       this.setState({
         counsellingSubjectNameOptions: counsellingSubjectNameOptions,
+        counsellingLevelNameOptions: counsellingLevelNameOptions,
         counsellingDayOptions: [],
       });
     });
@@ -249,12 +327,13 @@ class ViewUserLike extends React.Component {
       }
 
       if (
-        item.counselling_introduction[0].ct_counsellor_about_description
+        item.counselling_introduction[0].ct_counsellor_headline
           .toLowerCase()
           .includes(value.toLowerCase()) &&
         itemNotPushed
       ) {
         post.push(item);
+        console.log("---------------intro----------------");
         itemNotPushed = false;
       }
 
@@ -277,9 +356,74 @@ class ViewUserLike extends React.Component {
         post.push(item);
         itemNotPushed = false;
       }
+
+      if (
+        item.counsellor_details[0].CT_FIRST_NAME.toLowerCase().includes(
+          value.toLowerCase()
+        ) &&
+        itemNotPushed
+      ) {
+        post.push(item);
+        itemNotPushed = false;
+      }
+      for (var i = 0; i < item.counselling_education.length; i++) {
+        console.log(i);
+        console.log(item.counselling_education[i]);
+        if (
+          item.counselling_education[i].ct_qualification_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) &&
+          itemNotPushed
+        ) {
+          post.push(item);
+          itemNotPushed = false;
+        }
+
+        if (
+          item.counselling_education[i].ct_institute_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) &&
+          itemNotPushed
+        ) {
+          post.push(item);
+          itemNotPushed = false;
+        }
+      }
     }
 
-    this.setState({ post });
+    this.setState({ post: post, searchdata: value });
+  };
+
+  resetSearch = () => {
+    this.setState({
+      minValue: 0,
+      searchdata: "",
+      maxValue: 950,
+      counsellingSubjectName: "00",
+      counsellingLevelName: "00",
+      counsellingDayName: "Anyday",
+    });
+
+    var post = this.priceRange(
+      this.state.minValue,
+      this.state.maxValue,
+      this.state.allPosts
+    );
+    var filteredpost = this.subjectCheck(
+      this.state.counsellingSubjectName,
+      post
+    );
+    var dayfilteredpost = this.dayCheck(
+      this.state.counsellingDayName,
+      filteredpost
+    );
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      dayfilteredpost
+    );
+
+    this.setState({ post: levelfilteredpost });
   };
 
   _onMaxPrice = (e, data) => {
@@ -297,7 +441,13 @@ class ViewUserLike extends React.Component {
       this.state.counsellingDayName,
       filteredpost
     );
-    this.setState({ post: dayfilteredpost, maxValue: maxValue });
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      dayfilteredpost
+    );
+
+    this.setState({ post: levelfilteredpost, maxValue: maxValue });
   };
 
   _onMinPrice = (e, data) => {
@@ -315,7 +465,12 @@ class ViewUserLike extends React.Component {
       this.state.counsellingDayName,
       filteredpost
     );
-    this.setState({ post: dayfilteredpost, minValue: minValue });
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      dayfilteredpost
+    );
+
+    this.setState({ post: levelfilteredpost, minValue: minValue });
   };
 
   _onSubjectChange = (e, data) => {
@@ -330,7 +485,34 @@ class ViewUserLike extends React.Component {
       this.state.maxValue,
       dayfilteredpost
     );
-    this.setState({ post: post, counsellingSubjectName: subjectValue });
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      post
+    );
+    this.setState({
+      post: levelfilteredpost,
+      counsellingSubjectName: subjectValue,
+    });
+  };
+
+  _onLevelChange = (e, data) => {
+    var levelValue = data.value;
+    var filteredpost = this.levelCheck(levelValue, this.state.allPosts);
+    var dayfilteredpost = this.dayCheck(
+      this.state.counsellingDayName,
+      filteredpost
+    );
+    var post = this.priceRange(
+      this.state.minValue,
+      this.state.maxValue,
+      dayfilteredpost
+    );
+    var filteredpost = this.subjectCheck(
+      this.state.counsellingSubjectName,
+      post
+    );
+    this.setState({ post: filteredpost, counsellingLevelName: levelValue });
   };
 
   _onDayChange = (e, data) => {
@@ -345,7 +527,12 @@ class ViewUserLike extends React.Component {
       this.state.counsellingSubjectName,
       pricefilteredpost
     );
-    this.setState({ post: post, counsellingDayName: DayValue });
+
+    var levelfilteredpost = this.levelCheck(
+      this.state.counsellingLevelName,
+      post
+    );
+    this.setState({ post: levelfilteredpost, counsellingDayName: DayValue });
   };
   messageModel = (person) => {
     this.setState({
@@ -365,9 +552,6 @@ class ViewUserLike extends React.Component {
     });
   };
   addtoFav = (person) => {
-
-
-
     console.log(person.counsellor_details);
     const headers = {
       jwtToken: localStorage.jwtToken,
@@ -387,7 +571,9 @@ class ViewUserLike extends React.Component {
       )
       .then((res) => {
         console.log(res);
-        document.getElementById(person.counsellor_details[0].CT_COUNSELLOR_ID).className = "red heart large icon";
+        document.getElementById(
+          person.counsellor_details[0].CT_COUNSELLOR_ID
+        ).className = "red heart large icon";
 
         toast.success("Successfully added to favourites!", {
           position: "top-right",
@@ -413,7 +599,6 @@ class ViewUserLike extends React.Component {
       });
   };
   removetoFav = (person) => {
-
     const headers = {
       jwtToken: localStorage.jwtToken,
     };
@@ -456,8 +641,6 @@ class ViewUserLike extends React.Component {
         });
       });
 
-
-
     var post = [];
 
     this.state.allPosts.forEach(checkItem);
@@ -469,16 +652,105 @@ class ViewUserLike extends React.Component {
 
       console.log(parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
 
-      console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) == parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
-      console.log(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) == parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID));
-      if (!(parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) == parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID))) {
+      console.log(
+        parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) ==
+          parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID)
+      );
+      console.log(
+        parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) ==
+          parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID)
+      );
+      if (
+        !(
+          parseInt(item.counsellor_details[0].CT_COUNSELLOR_ID) ==
+          parseInt(person.counsellor_details[0].CT_COUNSELLOR_ID)
+        )
+      ) {
         post.push(item);
-
       }
     }
     this.setState({ post: post });
-
   };
+
+  sortbydate = (e, data) => {
+    var dropdownValue = data.value;
+    console.log(dropdownValue);
+    if (dropdownValue) {
+      this.setState({ sort: dropdownValue });
+    }
+    var sortdata = dropdownValue.split("-");
+    console.log(sortdata);
+
+    var points2 = this.state.post;
+
+    if (sortdata[0] == "Review") {
+      if (sortdata[1] == "up") {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_review;
+          var d = q.counselling_average_review;
+          return d - c;
+        });
+      } else {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_review;
+          var d = q.counselling_average_review;
+          return c - d;
+        });
+      }
+    }
+
+    if (sortdata[0] == "Price") {
+      if (sortdata[1] == "up") {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_price;
+          var d = q.counselling_average_price;
+          return d - c;
+        });
+      } else {
+        points2.sort(function (w, q) {
+          var c = w.counselling_average_price;
+          var d = q.counselling_average_price;
+          return c - d;
+        });
+      }
+    }
+
+    if (sortdata[0] == "Name") {
+      points2.sort(compare);
+
+      function compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        var name1 =
+          a.counsellor_details[0].CT_FIRST_NAME +
+          " " +
+          a.counsellor_details[0].CT_LAST_NAME;
+        var name2 =
+          b.counsellor_details[0].CT_FIRST_NAME +
+          " " +
+          b.counsellor_details[0].CT_LAST_NAME;
+
+        var bandA = name1.toLowerCase();
+        var bandB = name2.toLowerCase();
+
+        let comparison = 0;
+        if (bandA > bandB) {
+          comparison = 1;
+        } else if (bandA < bandB) {
+          comparison = -1;
+        }
+        return comparison;
+      }
+
+      if (sortdata[1] == "down") {
+        points2.reverse();
+      }
+    }
+
+    console.log("points2");
+    console.log(points2);
+    this.setState({ post: points2 });
+  };
+
   render() {
     const { activeIndex } = this.state;
 
@@ -496,66 +768,117 @@ class ViewUserLike extends React.Component {
       <Grid columns="equal" divided>
         <Grid.Row>
           <Grid.Column>
-            <Segment>
-              <Input
-                type="search"
-                onChange={this._onKeyUp}
-                name="s"
-                id="s"
-                placeholder="Search"
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.minValue}
-                options={priceRange}
-                onChange={this._onMinPrice}
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.maxValue}
-                options={priceRange}
-                onChange={this._onMaxPrice}
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.counsellingSubjectName}
-                options={this.state.counsellingSubjectNameOptions}
-                onChange={this._onSubjectChange}
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <Dropdown
-                value={this.state.counsellingDayName}
-                options={dayOptions}
-                onChange={this._onDayChange}
-              />
-            </Segment>
+            <Segment.Group horizontal compact>
+              <Segment textAlign="center">
+                <Input
+                  icon="search"
+                  fluid
+                  onChange={this._onKeyUp}
+                  placeholder="Search"
+                  value={this.state.searchdata}
+                />
+              </Segment>
+
+              <Segment>
+                <div>
+                  Price Range : {"    "}
+                  <Dropdown
+                    style={{ paddingLeft: "5%", paddingRight: "5%" }}
+                    value={this.state.minValue}
+                    options={priceRange}
+                    onChange={this._onMinPrice}
+                    placeholder="min"
+                  />
+                  -
+                  <Dropdown
+                    style={{ paddingLeft: "5%" }}
+                    value={this.state.maxValue}
+                    options={priceRange}
+                    onChange={this._onMaxPrice}
+                    placeholder="max"
+                  />
+                </div>
+              </Segment>
+
+              <Segment>
+                <div>
+                  {" "}
+                  Level : {"    "}
+                  <Dropdown
+                    value={this.state.counsellingLevelName}
+                    options={this.state.counsellingLevelNameOptions}
+                    onChange={this._onLevelChange}
+                  />
+                </div>
+              </Segment>
+              <Segment>
+                {" "}
+                <div>
+                  {" "}
+                  Subject : {"    "}
+                  <Dropdown
+                    value={this.state.counsellingSubjectName}
+                    options={this.state.counsellingSubjectNameOptions}
+                    onChange={this._onSubjectChange}
+                  />
+                </div>
+              </Segment>
+              <Segment>
+                {" "}
+                <div>
+                  Available day : {"    "}
+                  <Dropdown
+                    value={this.state.counsellingDayName}
+                    options={dayOptions}
+                    onChange={this._onDayChange}
+                  />
+                  <div style={{ paddingLeft: "2px", float: "right" }}>
+                    <Label
+                      size="large"
+                      as="a"
+                      color="blue"
+                      onClick={this.resetSearch}
+                    >
+                      Clear search
+                    </Label>
+                  </div>
+                </div>{" "}
+              </Segment>
+            </Segment.Group>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row textAlign="center">
           <Grid.Column>
             <Container>
+              {this.state.post.length > 0 && (
+                <div
+                  style={{
+                    color: "black",
+                    float: "right",
+                    paddingBottom: "1%",
+                    paddingLeft: "1%",
+                  }}
+                >
+                  Sort By {"  "}
+                  <Dropdown
+                    inline
+                    options={this.state.sortOptions}
+                    value={this.state.sort}
+                    onChange={this.sortbydate}
+                  />
+                </div>
+              )}
+
               {this.state.loading ? (
                 <Segment>
                   <div textAlign="center">
-                    <h3> Page is loading...  </h3>
+                    <h3> Page is loading... </h3>
                     <Icon size="huge" loading name="spinner" />
                   </div>{" "}
                 </Segment>
               ) : (
-                  <div></div>
-                )}
+                <div></div>
+              )}
 
               {this.state.post.map((person, index) => (
                 <div class="ui card" style={{ width: "100%" }}>
@@ -623,38 +946,50 @@ class ViewUserLike extends React.Component {
                           <iframe
                             width="900"
                             height="400"
-                            src={
-                              this.state.videoURL
-                            }
+                            src={this.state.videoURL}
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen
                           ></iframe>
                         ) : (
-
-                            <p style={{ color: "red" }}>
-                              No video was provided
-                            </p>
-                          )}
-
+                          <p style={{ color: "red" }}>No video was provided</p>
+                        )}
                       </Segment>
                     </Modal.Content>
                   </Modal>
                   <Card style={{ width: "100%" }}>
                     <Card.Content>
-                      <div style={{ float: "left", paddingRight: "2%" }} >
-                        <Image width="200px" bordered
-                          src={person.counselling_introduction[0].ct_counsellor_photo} verticalAlign='top' /> <span>{
-                            person.counsellor_details[0].FavisAvailable == '1' ?
-                              (<Icon id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.removetoFav(person)} color='red' size='large' name='heart' />
-                              )
-                              :
-                              (<Icon color='grey' id={person.counsellor_details[0].CT_COUNSELLOR_ID} onClick={() => this.addtoFav(person)} size='large' name='heart' />
-                              )
-                          } </span>
+                      <div style={{ float: "left", paddingRight: "2%" }}>
+                        <Image
+                          width="200px"
+                          bordered
+                          src={
+                            person.counselling_introduction[0]
+                              .ct_counsellor_photo
+                          }
+                          verticalAlign="top"
+                        />{" "}
+                        <span>
+                          {person.counsellor_details[0].FavisAvailable ==
+                          "1" ? (
+                            <Icon
+                              id={person.counsellor_details[0].CT_COUNSELLOR_ID}
+                              onClick={() => this.removetoFav(person)}
+                              color="red"
+                              size="large"
+                              name="heart"
+                            />
+                          ) : (
+                            <Icon
+                              color="grey"
+                              id={person.counsellor_details[0].CT_COUNSELLOR_ID}
+                              onClick={() => this.addtoFav(person)}
+                              size="large"
+                              name="heart"
+                            />
+                          )}{" "}
+                        </span>
                       </div>
-
-
 
                       {/* <Image
                         width="200px"
@@ -720,7 +1055,8 @@ class ViewUserLike extends React.Component {
                                 <Button
                                   style={{ width: "100%" }}
                                   onClick={() => this.sessionModel(person)}
-                                ><Icon name='add to calendar' />
+                                >
+                                  <Icon name="add to calendar" />
                                   Book a session
                                 </Button>
                               </Table.Cell>
@@ -730,33 +1066,33 @@ class ViewUserLike extends React.Component {
                                 <Button
                                   style={{ width: "100%" }}
                                   onClick={() => this.messageModel(person)}
-                                >  <Icon name='inbox' />
+                                >
+                                  {" "}
+                                  <Icon name="inbox" />
                                   Send a message
                                 </Button>
                               </Table.Cell>
-
                             </Table.Row>
                             {person.counselling_introduction[0]
                               .ct_counsellor_video_url ? (
-                                < Table.Row>
-                                  <Table.Cell colspan="2">
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.videoModel(person)}
-                                      color='youtube'>
-                                      <Icon name='youtube' />
-                                View Video
-                                    </Button>
-                                  </Table.Cell>
-                                </Table.Row>
-                              ) : (
-                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                // </iframe>
+                              <Table.Row>
+                                <Table.Cell colspan="2">
+                                  <Button
+                                    style={{ width: "100%" }}
+                                    onClick={() => this.videoModel(person)}
+                                    color="youtube"
+                                  >
+                                    <Icon name="youtube" />
+                                    View Video
+                                  </Button>
+                                </Table.Cell>
+                              </Table.Row>
+                            ) : (
+                              // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                              // </iframe>
 
-                                <p style={{ color: "red" }}>
-
-                                </p>
-                              )}
+                              <p style={{ color: "red" }}></p>
+                            )}
                           </Table.Body>
                         </Table>
                       </div>
@@ -769,9 +1105,14 @@ class ViewUserLike extends React.Component {
                       >
                         <Card.Header>
                           {" "}
-                          <List size='large' horizontal  >
-                            <List.Item as='a'> {person.counsellor_details[0].CT_FIRST_NAME}{" "} </List.Item>
-                            <List.Item as='a'>{person.counsellor_details[0].CT_LAST_NAME}{" "}  </List.Item>
+                          <List size="large" horizontal>
+                            <List.Item as="a">
+                              {" "}
+                              {person.counsellor_details[0].CT_FIRST_NAME}{" "}
+                            </List.Item>
+                            <List.Item as="a">
+                              {person.counsellor_details[0].CT_LAST_NAME}{" "}
+                            </List.Item>
                           </List>
                         </Card.Header>
                         <Card.Description>
@@ -824,352 +1165,36 @@ class ViewUserLike extends React.Component {
                           Read More{" "}
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === index}>
-                          {/* <Segment>
-                            <h2>Counsellor Introduction Video</h2>
-                            {person.counselling_introduction[0]
-                              .ct_counsellor_video_url ? (
-                                <iframe
-                                  width="560"
-                                  height="315"
-                                  src={
-                                    person.counselling_introduction[0]
-                                      .ct_counsellor_video_url
-                                  }
-                                  frameborder="0"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowfullscreen
-                                ></iframe>
-                              ) : (
-                                // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                // </iframe>
-
-                                <p style={{ color: "red" }}>
-                                  No video was provided
-                                </p>
-                              )}
-                          </Segment> */}
                           <Segment>
                             <h2>Available Counselling Sessions</h2>
                             <div
                               style={{
-                                float: "left",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
+                                position: "relative",
                               }}
                             >
-                              <h3>Monday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_monday.length > 0 ? (
-                                    person.counselling_monday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
-                                              No Monday Sessions
-                                            </Table.Cell>
-                                            </Table.Row>
-                                          )
-                                    )
-                                  ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
-                                        No Monday Sessions
-                                      </Table.Cell>
-                                      </Table.Row>
-                                    )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Tuesday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_tuesday.length > 0 ? (
-                                    person.counselling_tuesday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
-                                              No Tuesday Sessions
-                                            </Table.Cell>
-                                            </Table.Row>
-                                          )
-                                    )
-                                  ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
-                                        No Tuesday Sessions
-                                      </Table.Cell>
-                                      </Table.Row>
-                                    )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "left",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Wednesday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_wednesday.length > 0 ? (
-                                    person.counselling_wednesday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
-                                              No Wednesday Sessions
-                                            </Table.Cell>
-                                            </Table.Row>
-                                          )
-                                    )
-                                  ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
-                                        No Wednesday Sessions
-                                      </Table.Cell>
-                                      </Table.Row>
-                                    )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Thursday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_thursday.length > 0 ? (
-                                    person.counselling_thursday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
-                                              No Thursay Sessions
-                                            </Table.Cell>
-                                            </Table.Row>
-                                          )
-                                    )
-                                  ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
-                                        No Thursay Sessions
-                                      </Table.Cell>
-                                      </Table.Row>
-                                    )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "left",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Friday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_friday.length > 0 ? (
-                                    person.counselling_friday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
-                                              No Friday Sessions
-                                            </Table.Cell>
-                                            </Table.Row>
-                                          )
-                                    )
-                                  ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
-                                        No Friday Sessions
-                                      </Table.Cell>
-                                      </Table.Row>
-                                    )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-
-                            <div
-                              style={{
-                                float: "right",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Saturday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_saturday.length > 0 ? (
-                                    person.counselling_saturday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                            <Table.Row>
-                                              <Table.Cell>
-                                                {" "}
-                                              No Saturday Sessions
-                                            </Table.Cell>
-                                            </Table.Row>
-                                          )
-                                    )
-                                  ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
-                                        No Saturday Sessions
-                                      </Table.Cell>
-                                      </Table.Row>
-                                    )}
-                                </Table.Body>
-                              </Table>
+                              {activeIndex === index && (
+                                <FullCalendar
+                                  expandRows={true}
+                                  handleWindowResize={true}
+                                  nowIndicator={false}
+                                  plugins={[
+                                    dayGridPlugin,
+                                    timeGridPlugin,
+                                    interactionPlugin,
+                                  ]}
+                                  headerToolbar={false}
+                                  height={500}
+                                  initialView="timeGridWeek"
+                                  duration={{ days: 7 }}
+                                  dayHeaderFormat={{
+                                    weekday: "long",
+                                  }}
+                                  events={person.calendar}
+                                />
+                              )}
                             </div>
                             <div>
+                              <br />
                               <h2 textAlign="center">Ratings</h2>
                               <Table basic="very" width="100%">
                                 <Table.Body>
@@ -1196,19 +1221,19 @@ class ViewUserLike extends React.Component {
                                                       circular
                                                     />
                                                   ) : (
-                                                      <Image
-                                                        size="tiny"
-                                                        style={{
-                                                          padding: "5px ",
-                                                        }}
-                                                        circular
-                                                      >
-                                                        <Icon
-                                                          disabled
-                                                          name="user"
-                                                        />
-                                                      </Image>
-                                                    )}
+                                                    <Image
+                                                      size="tiny"
+                                                      style={{
+                                                        padding: "5px ",
+                                                      }}
+                                                      circular
+                                                    >
+                                                      <Icon
+                                                        disabled
+                                                        name="user"
+                                                      />
+                                                    </Image>
+                                                  )}
                                                 </div>
                                                 <div
                                                   style={{
@@ -1257,29 +1282,32 @@ class ViewUserLike extends React.Component {
                                               </div>
                                             </Table.Cell>
                                           ) : (
-                                              <Table.Cell textAlign="center" >
-                                                {this.state.displayReview ==
-                                                  index ? (
-
-                                                    <Button onClick={() => this.loadMore(person)}>
-                                                      Load More
-                                                    </Button>
-                                                  ) : (
-                                                    <p></p>
-                                                  )}
-                                              </Table.Cell>
-                                            )}
+                                            <Table.Cell textAlign="center">
+                                              {this.state.displayReview ==
+                                              index ? (
+                                                <Button
+                                                  onClick={() =>
+                                                    this.loadMore(person)
+                                                  }
+                                                >
+                                                  Load More
+                                                </Button>
+                                              ) : (
+                                                <p></p>
+                                              )}
+                                            </Table.Cell>
+                                          )}
                                         </Table.Row>
                                       )
                                     )
                                   ) : (
-                                      <Table.Row>
-                                        <Table.Cell>
-                                          {" "}
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        {" "}
                                         No Rating for this counsellor yet..
                                       </Table.Cell>
-                                      </Table.Row>
-                                    )}{" "}
+                                    </Table.Row>
+                                  )}{" "}
                                 </Table.Body>
                               </Table>
                             </div>

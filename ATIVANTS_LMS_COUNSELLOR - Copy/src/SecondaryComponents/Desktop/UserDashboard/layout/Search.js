@@ -329,12 +329,13 @@ class Search extends React.Component {
       }
 
       if (
-        item.counselling_introduction[0].ct_counsellor_about_description
+        item.counselling_introduction[0].ct_counsellor_headline
           .toLowerCase()
           .includes(value.toLowerCase()) &&
         itemNotPushed
       ) {
         post.push(item);
+        console.log("---------------intro----------------");
         itemNotPushed = false;
       }
 
@@ -357,11 +358,43 @@ class Search extends React.Component {
         post.push(item);
         itemNotPushed = false;
       }
+
+      if (
+        item.counsellor_details[0].CT_FIRST_NAME.toLowerCase().includes(
+          value.toLowerCase()
+        ) &&
+        itemNotPushed
+      ) {
+        post.push(item);
+        itemNotPushed = false;
+      }
+      for (var i = 0; i < item.counselling_education.length; i++) {
+        console.log(i);
+        console.log(item.counselling_education[i]);
+        if (
+          item.counselling_education[i].ct_qualification_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) &&
+          itemNotPushed
+        ) {
+          post.push(item);
+          itemNotPushed = false;
+        }
+
+        if (
+          item.counselling_education[i].ct_institute_name
+            .toLowerCase()
+            .includes(value.toLowerCase()) &&
+          itemNotPushed
+        ) {
+          post.push(item);
+          itemNotPushed = false;
+        }
+      }
     }
 
     this.setState({ post: post, searchdata: value });
   };
-
   resetSearch = () => {
     this.setState({
       minValue: 0,
@@ -1098,14 +1131,18 @@ class Search extends React.Component {
                         <Accordion.Content active={activeIndex === index}>
                           <Segment>
                             <h2>Available Counselling Sessions</h2>
-                      <Container>
+                      <div  style={{
+                              position:"relative" }} >
                       {activeIndex === index &&(    <FullCalendar
                 expandRows ={true}
                 handleWindowResize ={true}
-                nowIndicator={false}
+                nowIndicator={false} 
+                     
                   plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                   headerToolbar={false}
                   height={500}
+                   
+
                   initialView="timeGridWeek"
                   duration={{ days: 7 }}
                   dayHeaderFormat={{
@@ -1113,330 +1150,8 @@ class Search extends React.Component {
                   }}
                   events={person.calendar}
                 />)} 
-              </Container>
-                            {/* <div
-                              style={{
-                                float: "left",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Monday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-
-                                <Table.Body>
-                                  {person.counselling_monday.length > 0 ? (
-                                    person.counselling_monday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
-                                              No Monday Sessions
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        )
-                                    )
-                                  ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
-                                        No Monday Sessions
-                                      </Table.Cell>
-                                    </Table.Row>
-                                  )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Tuesday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_tuesday.length > 0 ? (
-                                    person.counselling_tuesday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
-                                              No Tuesday Sessions
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        )
-                                    )
-                                  ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
-                                        No Tuesday Sessions
-                                      </Table.Cell>
-                                    </Table.Row>
-                                  )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "left",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Wednesday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_wednesday.length > 0 ? (
-                                    person.counselling_wednesday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
-                                              No Wednesday Sessions
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        )
-                                    )
-                                  ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
-                                        No Wednesday Sessions
-                                      </Table.Cell>
-                                    </Table.Row>
-                                  )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Thursday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_thursday.length > 0 ? (
-                                    person.counselling_thursday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
-                                              No Thursay Sessions
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        )
-                                    )
-                                  ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
-                                        No Thursay Sessions
-                                      </Table.Cell>
-                                    </Table.Row>
-                                  )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-                            <div
-                              style={{
-                                float: "left",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Friday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-
-                                <Table.Body>
-                                  {person.counselling_friday.length > 0 ? (
-                                    person.counselling_friday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
-                                              No Friday Sessions
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        )
-                                    )
-                                  ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
-                                        No Friday Sessions
-                                      </Table.Cell>
-                                    </Table.Row>
-                                  )}
-                                </Table.Body>
-                              </Table>
-                            </div>
-
-                            <div
-                              style={{
-                                float: "right",
-                                width: "50%",
-                                textAlign: "left",
-                                padding: "3%",
-                              }}
-                            >
-                              <h3>Saturday</h3>
-                              <Table basic="very" celled collapsing>
-                                <Table.Header>
-                                  <Table.Row>
-                                    <Table.HeaderCell>
-                                      Session Start Time{" "}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                      Session End Time{" "}
-                                    </Table.HeaderCell>
-                                  </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                  {person.counselling_saturday.length > 0 ? (
-                                    person.counselling_saturday.map(
-                                      (details, index) =>
-                                        details.ct_to && details.ct_from ? (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {details.ct_from}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                              {details.ct_to}
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        ) : (
-                                          <Table.Row>
-                                            <Table.Cell>
-                                              {" "}
-                                              No Saturday Sessions
-                                            </Table.Cell>
-                                          </Table.Row>
-                                        )
-                                    )
-                                  ) : (
-                                    <Table.Row>
-                                      <Table.Cell>
-                                        {" "}
-                                        No Saturday Sessions
-                                      </Table.Cell>
-                                    </Table.Row>
-                                  )}
-                                </Table.Body>
-                              </Table>
-                            </div> */}
-
-                            <div>
+              </div>  
+                            <div><br/>
                               <h2 textAlign="center">Ratings</h2>
                               <Table basic="very" width="100%">
                                 <Table.Body>

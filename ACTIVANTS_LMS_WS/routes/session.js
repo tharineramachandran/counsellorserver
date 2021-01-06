@@ -21,20 +21,28 @@ router.get("/getUserChangeRequests/:id", authorization, async (req, res) => {
 
   try {
     console.log(id)
-    const userChangeRequests = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_user_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
+    const userChangeRequests2 = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_PICTURE","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_user_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
       [id, '2']);
+      const userChangeRequests1 = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_PICTURE","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_user_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
+      [id, '5']);
+      const declined = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_PICTURE","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_user_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
+      [id, '0']);
 
-    var sessionList = [];
+      console.log(userChangeRequests1.rowCount);
+      console.log(userChangeRequests2.rowCount);
+      const  userChangeRequests = await userChangeRequests2.rows.concat(userChangeRequests1.rows);
+      console.log(userChangeRequests); 
+      var sessionList = [];
 
-    for (let x = 0; x < userChangeRequests.rowCount; x++) {
+    for (let x = 0; x < userChangeRequests.length; x++) {
 
       var ChangeRequests = await pool.query('SELECT  * FROM "CT_COUNSELLOR_CHANGE_SESSIONS"  WHERE "ct_requestID"  = $1 ',
-        [userChangeRequests.rows[x].id.toString()]);
-      var objectRequest = userChangeRequests.rows[x];
+        [userChangeRequests[x].id.toString()]);
+      var objectRequest = userChangeRequests[x];
       var object = { request: objectRequest, changeRequests: ChangeRequests.rows };
       sessionList.push(object);
     }
-    res.json(sessionList);
+    res.json({sessionList:sessionList,declined:declined});
 
   } catch (error) {
     console.log(error.message);

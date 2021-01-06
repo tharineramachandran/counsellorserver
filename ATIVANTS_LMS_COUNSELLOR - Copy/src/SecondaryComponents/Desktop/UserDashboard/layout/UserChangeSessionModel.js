@@ -27,26 +27,25 @@ class UserChangeSession extends React.Component {
   state = {
     request: [],
     slots: [],
-    slotValue: '',
+    slotValue: '' ,
     formWarning: '',
     slotOptions: []
-  }
-
+  } 
   componentDidMount() {
 
     const slotOptions = [];
     var element = this.props.Request;
     for (let x = 0; x < element.changeRequests.length; x++) {
       slotOptions.push({ key: element.changeRequests[x].id, value: element.changeRequests[x].id, text: element.changeRequests[x].ct_session_start_time + " to " + element.changeRequests[x].ct_session_end_time + " on " + element.changeRequests[x].ct_session_date });
-    }
-    this.setState({ slots: slotOptions, slotOptions: slotOptions, formWarning: '', slotValue: '' });
+    } 
+    this.setState({     slots: slotOptions, slotOptions: slotOptions, formWarning: '', slotValue: '' });
   };
   slotChange = (e, data) => {
     this.setState({ slotValue: data.value, formWarning: '' });
 
     console.log(data);
   };
-  submitRequest = () => {
+  submitRequest = () => { 
 
     if (this.state.slotValue) {
       const data = {
@@ -72,6 +71,9 @@ class UserChangeSession extends React.Component {
             draggable: true,
             progress: '',
           });
+          
+
+    this.props.openModelFunc(false);
           var els = document.getElementsByClassName('appBanner');
           for (var i = 0; i < els.length; i++) {
             els[i].style.display = els[i].style.display == "none" ? "block" : "none";
