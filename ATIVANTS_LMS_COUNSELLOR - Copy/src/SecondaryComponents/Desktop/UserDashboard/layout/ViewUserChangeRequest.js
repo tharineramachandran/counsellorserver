@@ -68,6 +68,26 @@ class ViewChangeRequest extends React.Component {
           menuItem: "All",
           render: () => (
             <Tab.Pane>
+              
+{this.state.requests.length > 0 && (
+                <div
+                  style={{
+                    color: "black",
+                    float: "right",
+                    paddingBottom: "1%",
+                    paddingLeft: "1%",
+                  }}
+                >
+                  Sort By {"  "}
+                  <Dropdown
+                    inline
+                    options={this.state.sortOptions}
+                    value={this.state.sort}
+                    onChange={this.sortbydate}
+                  />
+                </div>
+              )}
+
               {this.state.requests.length > 0 ? (
                 this.state.requests.map((person, index) => (
                   <div style={{ paddingTop: "1%", paddingBottom: "1%" }}>
@@ -192,6 +212,27 @@ class ViewChangeRequest extends React.Component {
         {
           menuItem: "Change Requests",
           render: () => <Tab.Pane>
+
+            
+{this.state.requests.length > 0 && (
+                <div
+                  style={{
+                    color: "black",
+                    float: "right",
+                    paddingBottom: "1%",
+                    paddingLeft: "1%",
+                  }}
+                >
+                  Sort By {"  "}
+                  <Dropdown
+                    inline
+                    options={this.state.sortOptions}
+                    value={this.state.sort}
+                    onChange={this.sortbydate}
+                  />
+                </div>
+              )}
+              
           {this.state.requests.length > 0 ? (
             this.state.requests.map((person, index) => (
                 <div>
@@ -566,21 +607,33 @@ this.setTable();
      
         var points2 = arr1;
         for (var i = 0; i < arr1.length; ++i) {
-            arr1[i].ct_sort_date = new Date(
-              arr1[i].request.ct_session_date1
+            arr1[i].ct_sort_date1    = new Date(
+              arr1[i].request.ct_session_date.substring(3,5) +
+              "/" +
+              arr1[i].request.ct_session_date.substring(0,2) +
+              "/" +
+              arr1[i].request.ct_session_date.substring(6, 10)  
             );
-          }
+
+            
+            }
+       
+ 
+
+
         if (sortdata[0] == "Date") {
           if (sortdata[1] == "up") {
             points2.sort(function (w, q) {
-              var c = new Date(w.request.ct_session_date1);
-              var d = new Date(q.request.ct_session_date1);
+              
+              var c = new Date(w.ct_sort_date1);
+              var d = new Date(q.ct_sort_date1);
               return d - c;
             });
           } else {
             points2.sort(function (w, q) {
-              var c = new Date(w.request.ct_session_date1);
-              var d = new Date(q.request.ct_session_date1);
+              var c = new Date(w.ct_sort_date1);
+              
+              var d = new Date(q.ct_sort_date1);
               return c - d;
             });
           }
