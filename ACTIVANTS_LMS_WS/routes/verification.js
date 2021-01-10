@@ -5,50 +5,52 @@ const authorization = require("../middleware/authorization");
 const getName = require("../functions/names");
 const { baseURLAPI, baseURL } = require("../Global");
 
-function calendarDisplay(monday, tuesday,wednesday,thursday,friday,saturday){
+const awsS3 = require("../functions/awsS3");
 
-    const date = new Date();
-    const today = date.getDate();
-    const dayOfTheWeek = date.getDay();
-    //const sundayDate =new Date(    date.setDate(today - dayOfTheWeek ));
-    const mondayDate = new Date(     date.setDate(today - dayOfTheWeek + 1));
-    const tuesdayDate = new Date(  date.setDate(today - dayOfTheWeek + 2));
-    const wednesdayDate = new Date(     date.setDate(today - dayOfTheWeek + 3));
-    const thusdayDate = new Date(  date.setDate(today - dayOfTheWeek + 4));
-    const fridayDate = new Date(  date.setDate(today - dayOfTheWeek + 5));
-    const saturdayDate = new Date(  date.setDate(today - dayOfTheWeek + 6));
-        var display=[];
- 
-        monday.forEach(calendarEdit , {Date: mondayDate, Day:"Monday" ,Color : "#e04a4a"});
-        tuesday.forEach(calendarEdit , {Date: tuesdayDate, Day:"Tuesday",Color : "#f27522   "}  );
-        wednesday.forEach(calendarEdit , {Date: wednesdayDate, Day:"Wednesday",Color : "#fbbd08"}  );
-        thursday.forEach(calendarEdit , {Date: thusdayDate, Day:"Thursday",Color : "#64cf7d"}  );
-        friday.forEach(calendarEdit , {Date: fridayDate, Day:"Friday",Color : "#31c3bd"}  );
-        saturday.forEach(calendarEdit , {Date: saturdayDate, Day:"Saturday",Color : "#2285d0"}  ); 
+function calendarDisplay(monday, tuesday, wednesday, thursday, friday, saturday) {
+
+  const date = new Date();
+  const today = date.getDate();
+  const dayOfTheWeek = date.getDay();
+  //const sundayDate =new Date(    date.setDate(today - dayOfTheWeek ));
+  const mondayDate = new Date(date.setDate(today - dayOfTheWeek + 1));
+  const tuesdayDate = new Date(date.setDate(today - dayOfTheWeek + 2));
+  const wednesdayDate = new Date(date.setDate(today - dayOfTheWeek + 3));
+  const thusdayDate = new Date(date.setDate(today - dayOfTheWeek + 4));
+  const fridayDate = new Date(date.setDate(today - dayOfTheWeek + 5));
+  const saturdayDate = new Date(date.setDate(today - dayOfTheWeek + 6));
+  var display = [];
+
+  monday.forEach(calendarEdit, { Date: mondayDate, Day: "Monday", Color: "#e04a4a" });
+  tuesday.forEach(calendarEdit, { Date: tuesdayDate, Day: "Tuesday", Color: "#f27522   " });
+  wednesday.forEach(calendarEdit, { Date: wednesdayDate, Day: "Wednesday", Color: "#fbbd08" });
+  thursday.forEach(calendarEdit, { Date: thusdayDate, Day: "Thursday", Color: "#64cf7d" });
+  friday.forEach(calendarEdit, { Date: fridayDate, Day: "Friday", Color: "#31c3bd" });
+  saturday.forEach(calendarEdit, { Date: saturdayDate, Day: "Saturday", Color: "#2285d0" });
 
 
-        
-    function calendarEdit(item,index){ 
-        var obj =   this.valueOf()   ;
-         var date =  new Date(  obj.Date ).toISOString() ;
-        var st = date.split('T');
-        var stDF =  item.ct_from.split(':');
-        let str = st[0] + "T" + stDF[0]  + ":" + stDF[1] + ":00";
-        
-          var endstDF = item.ct_to.split(':');
-        let endstr = st[0] + "T" + endstDF[0] + ":" + endstDF[1] + ":00";
 
-        
-        var obj = {
-            title: " ", start: str, end: endstr,startStr :obj.Day,
-            color: obj.Color,
-            editable:false,resourceEditable: false 
-        //    extendedProps: { element: item }
-        };
-        display.push(obj);
+  function calendarEdit(item, index) {
+    var obj = this.valueOf();
+    var date = new Date(obj.Date).toISOString();
+    var st = date.split('T');
+    var stDF = item.ct_from.split(':');
+    let str = st[0] + "T" + stDF[0] + ":" + stDF[1] + ":00";
 
-    }   
-return display;
+    var endstDF = item.ct_to.split(':');
+    let endstr = st[0] + "T" + endstDF[0] + ":" + endstDF[1] + ":00";
+
+
+    var obj = {
+      title: " ", start: str, end: endstr, startStr: obj.Day,
+      color: obj.Color,
+      editable: false, resourceEditable: false
+      //    extendedProps: { element: item }
+    };
+    display.push(obj);
+
+  }
+  return display;
 };
 
 
@@ -80,23 +82,53 @@ return display;
 //       .json([{ error: "An error occurred ", message: "An error occurred" }]);
 //   }
 // });
-
-router.get("/getCounsellors", authorization,  async (req, res) => {
-  console.log("var id = req.params.id;") ;
-  var final_details = [];
-
+router.get("/getVerificationDocuments/:id", async (req, res) => {
+  console.log("getVerificationDocuments");
+  var  CT_COUNSELLOR_ID   = req.params.id;
+  var object = {};
+  console.log(req.body);
+  const user = await pool.query('SELECT  * FROM "CT_COUNSELLOR_DETAILS" WHERE "CT_COUNSELLOR_ID" = $1', [CT_COUNSELLOR_ID]);
   try {
-    const user = await pool.query(
-      'SELECT  * FROM "CT_COUNSELLOR_DETAILS"  '    );
+
 
     if (user.rowCount > 0) {
-     
+
+      var item = user.rows[0].CT_COUNSELLOR_VERIFY;
+
+      console.log(item);
+      object = await awsS3.getFromS3(item, "counsellorverifydocuments",user.rows[0].CT_FIRST_NAME +user.rows[0].CT_LAST_NAME  );
+    }
+    if (object.result) {
+
+      res.status(200).json(object.url);
+    } else { res.status(400).json("an error occured"); }
+  } catch (error) {
+    console.error(["api consellee update", error.message]);
+    res.status(400).json([{ error: "An error occurred ", message: "An error occurred" }]);
+  }
+});
+
+
+
+
+
+
+router.get("/getCounsellors", authorization, async (req, res) => {
+  console.log("var id = req.params.id;");
+  var final_details = [];
+  try {
+    const user = await pool.query(
+      'SELECT  * FROM "CT_COUNSELLOR_DETAILS"  ');
+
+
+    if (user.rowCount > 0) {
+
       var details = user.rows;
 
       for (let i = 0; i < details.length; i++) {
-        var item =  details[i].CT_COUNSELLOR_ID;
+        var item = details[i].CT_COUNSELLOR_ID;
         console.log(details[i])
-        var counsellor_details =  details[i] ;
+        var counsellor_details = details[i];
         var counsellor_review = await pool.query(
           'SELECT  "CT_COUNSELLOR_REVIEW"."ct_request_id","CT_COUNSELLOR_REVIEW"."ct_date"    ,   "CT_COUNSELLOR_REVIEW"."id", "CT_COUNSELLOR_REVIEW"."ct_counsellor_review","CT_COUNSELLOR_REVIEW"."ct_counsellor_stars", "CT_COUNSELLOR_REVIEW"."ct_counsellor_date","CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" ,"T_USER"."TX_USER_NAME" ,"T_USER"."TX_PICTURE"         FROM public."CT_COUNSELLOR_REVIEW" INNER JOIN public."T_USER" ON  CAST("CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" AS INTEGER) = "T_USER"."ID_USER_UUID" WHERE  "CT_COUNSELLOR_REVIEW"."ct_counsellor_id" = $1',
           [item]
@@ -218,7 +250,7 @@ router.get("/getCounsellors", authorization,  async (req, res) => {
           counselling_total_price / counselling_details.rowCount;
         var counselling_average_review =
           counselling_total_review / counsellor_review.rowCount;
-        
+
         var calendar = await calendarDisplay(
           counselling_monday.rows,
           counselling_tuesday.rows,
@@ -230,7 +262,7 @@ router.get("/getCounsellors", authorization,  async (req, res) => {
 
         var account = {
           counsellor_details: [counsellor_details],
-         
+
           counsellor_review: view_counsellor_review,
           counselling_details: counselling_details_values,
           counselling_introduction: counselling_introduction.rows,
@@ -256,28 +288,28 @@ router.get("/getCounsellors", authorization,  async (req, res) => {
   res.json({ counsellor: final_details });
 });
 
-// router.post("/removeFavorites", authorization, async (req, res) => {
-//   var { userID, favouriteID } = req.body.formData;
+router.post("/update", authorization, async (req, res) => {
+  var { counsellorID, response } = req.body.formData;
 
-//   try {
-//     const user = await pool.query(
-//       'SELECT  * FROM "T_USER_FAVORITES" WHERE "ct_user_id" = $1',
-//       [userID]
-//     );
+  try {
+    const user = await pool.query(
+      'SELECT  * FROM "CT_COUNSELLOR_DETAILS" WHERE "CT_COUNSELLOR_ID" = $1',
+      [counsellorID]
+    );
 
-//     if (user.rowCount > 0) {
-//       let newUser = await pool.query(
-//         'UPDATE   "T_USER_FAVORITES"   SET ct_user_fav = array_remove(ct_user_fav,   $1  )  WHERE "ct_user_id" = $2',
-//         [favouriteID, userID]
-//       );
-//     }
-//     res.status(200).json("success");
-//   } catch (error) {
-//     console.error(["api consellee update", error.message]);
-//     res
-//       .status(400)
-//       .json([{ error: "An error occurred ", message: "An error occurred" }]);
-//   }
-// });
+    if (user.rowCount > 0) {
+      let newUser = await pool.query(
+        'UPDATE   "CT_COUNSELLOR_DETAILS"   SET "CT_COUNSELLOR_VERIFIED" =  $1  WHERE "CT_COUNSELLOR_ID" = $2',
+        [response, counsellorID]
+      );
+    }
+    res.status(200).json("success");
+  } catch (error) {
+    console.error(["api consellee update", error.message]);
+    res
+      .status(400)
+      .json([{ error: "An error occurred ", message: "An error occurred" }]);
+  }
+});
 
 module.exports = router;

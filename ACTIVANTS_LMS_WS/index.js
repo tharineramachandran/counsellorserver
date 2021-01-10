@@ -45,11 +45,9 @@ app.use(bodyParser.urlencoded({ limit: "100mb", extended: true, parameterLimit: 
 //routes
 
 app.use("/rating", require("./routes/rating.js"));
-app.use("/notification", require("./routes/notification.js"));
- 
+app.use("/notification", require("./routes/notification.js"));    
 app.use("/notificationPref", require("./routes/notificationPref.js"));
-
- 
+app.use("/verification", require("./routes/verification.js"));
 app.use("/favourites", require("./routes/favourites"));
 app.use("/password", require("./routes/password"));
 app.use("/messages", require("./routes/messages"));

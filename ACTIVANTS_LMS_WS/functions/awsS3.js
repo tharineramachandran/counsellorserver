@@ -41,4 +41,51 @@
       }
       return true;
 }
-module.exports = { uploadtoS3 }
+
+ 
+ function getFromS3( object ,bucket,filename) {
+    try {
+
+        const AWS = require('aws-sdk')
+        //  AWS.config.update({  accessKeyId: keys.awsS3.accessKeyId, secretAccessKey: keys.awsS3.secretAccessKey   });
+          
+          const s3 = new AWS.S3({
+            accessKeyId: keys.awsS3.accessKeyId, secretAccessKey: keys.awsS3.secretAccessKey  
+        }); 
+       
+    var params = { 
+      
+      Key: object,
+      Bucket:   bucket  ,
+        signedUrlExpireSeconds: 60 * 5
+       
+    };
+
+    const url = s3.getSignedUrl('getObject', {
+      Key: object,
+      Bucket:   bucket  ,
+      Expires: 60 * 5   ,
+      ResponseContentDisposition: 'attachment; filename='+filename+'.pdf',
+     })
+
+     
+     console.log(url);
+    // s3.getSignedUrl(params, function(err, data){
+    //  console.log(data);
+    //           if (err) { 
+    //       console.log(err);
+    //       console.log('Error uploading data: ', data); 
+    //     } else {
+    //       console.log('successfully uploaded the object!');
+          
+    //     }
+    // });
+        
+    return {result : true,url : url};
+      } catch (error) {
+        console.log(error.message);
+        return {result : false};
+      }
+      
+}
+module.exports = { uploadtoS3,getFromS3 }
