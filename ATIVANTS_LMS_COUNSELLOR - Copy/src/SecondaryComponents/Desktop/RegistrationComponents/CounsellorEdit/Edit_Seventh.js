@@ -14,12 +14,7 @@ const Edit_Seventh = ({ formData, setForm, navigation, step }) => {
     const { handleSubmit, register, errors } = useForm({
 
     });
-
-    const onSubmit = (data) => {
-
-        navigation.next()
-    };
-
+ 
     useEffect(() => {
         if (step.id == 'Counsellor_video')
             setIcon_name('circle')
@@ -88,20 +83,14 @@ const Edit_Seventh = ({ formData, setForm, navigation, step }) => {
                         <div style={{ width: '100%' }}>
                             <center>
                                 <Segment style={{ width: '95%' }}>
-                                    <center>
-                                        <Grid>
-                                            <Grid.Row>
-                                                <Grid.Column width={8}>
-                                                    <Segment style={{ width: '100%' }}>
+                                   
+                                      
+                                       
                                                         <ChangePref /> 
                                                     </Segment>
-                                                </Grid.Column>
-
-                                            </Grid.Row>
-                                        </Grid>
+                                                 
                                     </center>
-                                </Segment>
-                            </center>
+                              
                         </div>
                     </Segment>
                 </center>

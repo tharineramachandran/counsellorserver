@@ -168,7 +168,7 @@ class ChangePassword extends React.Component {
   render() {
     return (
 
-      <Container> <Segment>
+      <Container>  
         {this.state.body ? (
           <Form  >
             < Form.Group widths='equal' >
@@ -210,7 +210,7 @@ class ChangePassword extends React.Component {
 
           (
             <Form >
-              <Segment stacked>
+              <Segment  >
                 <Form.Group widths='equal'>
 
                   <Form.Field className="CustomForm">
@@ -250,7 +250,7 @@ class ChangePassword extends React.Component {
         }
 
 
-      </Segment>
+ 
 
 
       </Container>

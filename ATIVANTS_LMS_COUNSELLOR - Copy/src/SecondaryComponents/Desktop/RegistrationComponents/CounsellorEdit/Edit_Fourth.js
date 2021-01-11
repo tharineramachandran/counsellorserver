@@ -687,7 +687,7 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
                                                                         <React.Fragment>
                                                                             <div style={{ width: '100%' }}>
                                                                                 <center>
-                                                                                    <Segment stacked style={{ padding: '0px' }}>
+                                                                                     
                                                                                         <Grid columns='equal'>
                                                                                             <Grid.Column>
                                                                                                 <Label>
@@ -741,7 +741,6 @@ const Edit_Fourth = ({ formData, setForm, navigation, step }) => {
 
                                                                                             </Grid.Column>
                                                                                         </Grid>
-                                                                                    </Segment>
                                                                                 </center>
                                                                             </div>
                                                                         </React.Fragment>

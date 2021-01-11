@@ -7,8 +7,14 @@ const { baseURLAPI, baseURL } = require("../Global");
 
 const awsS3 = require("../functions/awsS3");
 
-function calendarDisplay(monday, tuesday, wednesday, thursday, friday, saturday) {
-
+function calendarDisplay(
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday
+) {
   const date = new Date();
   const today = date.getDate();
   const dayOfTheWeek = date.getDay();
@@ -21,113 +27,152 @@ function calendarDisplay(monday, tuesday, wednesday, thursday, friday, saturday)
   const saturdayDate = new Date(date.setDate(today - dayOfTheWeek + 6));
   var display = [];
 
-  monday.forEach(calendarEdit, { Date: mondayDate, Day: "Monday", Color: "#e04a4a" });
-  tuesday.forEach(calendarEdit, { Date: tuesdayDate, Day: "Tuesday", Color: "#f27522   " });
-  wednesday.forEach(calendarEdit, { Date: wednesdayDate, Day: "Wednesday", Color: "#fbbd08" });
-  thursday.forEach(calendarEdit, { Date: thusdayDate, Day: "Thursday", Color: "#64cf7d" });
-  friday.forEach(calendarEdit, { Date: fridayDate, Day: "Friday", Color: "#31c3bd" });
-  saturday.forEach(calendarEdit, { Date: saturdayDate, Day: "Saturday", Color: "#2285d0" });
-
-
+  monday.forEach(calendarEdit, {
+    Date: mondayDate,
+    Day: "Monday",
+    Color: "#e04a4a",
+  });
+  tuesday.forEach(calendarEdit, {
+    Date: tuesdayDate,
+    Day: "Tuesday",
+    Color: "#f27522   ",
+  });
+  wednesday.forEach(calendarEdit, {
+    Date: wednesdayDate,
+    Day: "Wednesday",
+    Color: "#fbbd08",
+  });
+  thursday.forEach(calendarEdit, {
+    Date: thusdayDate,
+    Day: "Thursday",
+    Color: "#64cf7d",
+  });
+  friday.forEach(calendarEdit, {
+    Date: fridayDate,
+    Day: "Friday",
+    Color: "#31c3bd",
+  });
+  saturday.forEach(calendarEdit, {
+    Date: saturdayDate,
+    Day: "Saturday",
+    Color: "#2285d0",
+  });
 
   function calendarEdit(item, index) {
     var obj = this.valueOf();
     var date = new Date(obj.Date).toISOString();
-    var st = date.split('T');
-    var stDF = item.ct_from.split(':');
+    var st = date.split("T");
+    var stDF = item.ct_from.split(":");
     let str = st[0] + "T" + stDF[0] + ":" + stDF[1] + ":00";
 
-    var endstDF = item.ct_to.split(':');
+    var endstDF = item.ct_to.split(":");
     let endstr = st[0] + "T" + endstDF[0] + ":" + endstDF[1] + ":00";
 
-
     var obj = {
-      title: " ", start: str, end: endstr, startStr: obj.Day,
+      title: " ",
+      start: str,
+      end: endstr,
+      startStr: obj.Day,
       color: obj.Color,
-      editable: false, resourceEditable: false
+      editable: false,
+      resourceEditable: false,
       //    extendedProps: { element: item }
     };
     display.push(obj);
-
   }
   return display;
-};
-
-
-// router.post("/addFavorites", authorization, async (req, res) => {
-//   var { userID, favouriteID } = req.body.formData;
-
-//   try {
-//     const user = await pool.query(
-//       'SELECT  * FROM "T_USER_FAVORITES" WHERE "ct_user_id" = $1',
-//       [userID]
-//     );
-
-//     if (user.rowCount > 0) {
-//       let newUser = await pool.query(
-//         'UPDATE   "T_USER_FAVORITES"   SET ct_user_fav = array_cat(ct_user_fav,   $1  )  WHERE "ct_user_id" = $2',
-//         [[favouriteID], userID]
-//       );
-//     } else {
-//       let newUser = await pool.query(
-//         ' INSERT INTO "T_USER_FAVORITES" (ct_user_id, ct_user_fav) VALUES($1,     $2 ) RETURNING *',
-//         [userID, [favouriteID]]
-//       );
-//     }
-//     res.status(200).json("success");
-//   } catch (error) {
-//     console.error(["api consellee update", error.message]);
-//     res
-//       .status(400)
-//       .json([{ error: "An error occurred ", message: "An error occurred" }]);
-//   }
-// });
+}
+ 
 router.get("/getVerificationDocuments/:id", async (req, res) => {
-  console.log("getVerificationDocuments");
-  var  CT_COUNSELLOR_ID   = req.params.id;
-  var object = {};
-  console.log(req.body);
-  const user = await pool.query('SELECT  * FROM "CT_COUNSELLOR_DETAILS" WHERE "CT_COUNSELLOR_ID" = $1', [CT_COUNSELLOR_ID]);
+   
+  var CT_COUNSELLOR_ID = req.params.id;
+  var object = {}; 
+  const user = await pool.query(
+    'SELECT  * FROM "CT_COUNSELLOR_DETAILS" WHERE "CT_COUNSELLOR_ID" = $1',
+    [CT_COUNSELLOR_ID]
+  );
   try {
-
-
     if (user.rowCount > 0) {
-
       var item = user.rows[0].CT_COUNSELLOR_VERIFY;
-
-      console.log(item);
-      object = await awsS3.getFromS3(item, "counsellorverifydocuments",user.rows[0].CT_FIRST_NAME +user.rows[0].CT_LAST_NAME  );
+ 
+      object = await awsS3.getFromS3(
+        item,
+        "counsellorverifydocuments",
+        user.rows[0].CT_FIRST_NAME + user.rows[0].CT_LAST_NAME
+      );
     }
     if (object.result) {
-
       res.status(200).json(object.url);
-    } else { res.status(400).json("an error occured"); }
+    } else {
+      res.status(400).json("an error occured");
+    }
   } catch (error) {
-    console.error(["api consellee update", error.message]);
+    console.error(["api consellor", error.message]);
+    res
+      .status(400)
+      .json([{ error: "An error occurred ", message: "An error occurred" }]);
+  }
+});
+
+router.post("/UpdateDetails", authorization, async (req, res) => {
+  var { COUNSELLOR_FILES } = req.body.formData;
+  var CT_COUNSELLOR_ID = req.body.COUNSELLORID;
+
+  var object = {};
+  const user = await pool.query(
+    'SELECT  * FROM "CT_COUNSELLOR_DETAILS" WHERE "CT_COUNSELLOR_ID" = $1',
+    [CT_COUNSELLOR_ID]
+  );
+  try {
+    if (user.rowCount > 0) {
+      await awsS3.deleteFromS3(
+        "counsellorverifydocuments",
+        user.rows[0].CT_COUNSELLOR_VERIFY
+      );
+
+      var uploadtoS3 = false;
+      var filestring = [];
+
+      for (i = 0; i < COUNSELLOR_FILES.length; i++) {
+        var file = COUNSELLOR_FILES[i];
+        file.name =
+        CT_COUNSELLOR_ID + "-" + Math.floor(Math.random() * (1000000 - 1) + 1);
+        filestring.push(file.name);
+      }
+
+      if (user.rows.length == 1 && COUNSELLOR_FILES.length > 0) {
+        uploadtoS3 = await awsS3.uploadtoS3(
+          COUNSELLOR_FILES,
+          "counsellorverifydocuments"
+        );
+
+        const updatedUser = pool.query(
+          'UPDATE   "CT_COUNSELLOR_DETAILS" SET  "CT_COUNSELLOR_VERIFY" = $1   WHERE "CT_COUNSELLOR_ID" = $2',
+          [filestring[0].toString(), CT_COUNSELLOR_ID ]
+        );}
+       
+     
+    }
+ res.status(200).json("success");
+    
+  } catch (error) {
+ 
     res.status(400).json([{ error: "An error occurred ", message: "An error occurred" }]);
   }
 });
 
-
-
-
-
-
 router.get("/getCounsellors", authorization, async (req, res) => {
-  console.log("var id = req.params.id;");
+  
   var final_details = [];
   try {
-    const user = await pool.query(
-      'SELECT  * FROM "CT_COUNSELLOR_DETAILS"  ');
-
+    const user = await pool.query('SELECT  * FROM "CT_COUNSELLOR_DETAILS"  ');
 
     if (user.rowCount > 0) {
-
       var details = user.rows;
 
       for (let i = 0; i < details.length; i++) {
         var item = details[i].CT_COUNSELLOR_ID;
-        console.log(details[i])
+        
         var counsellor_details = details[i];
         var counsellor_review = await pool.query(
           'SELECT  "CT_COUNSELLOR_REVIEW"."ct_request_id","CT_COUNSELLOR_REVIEW"."ct_date"    ,   "CT_COUNSELLOR_REVIEW"."id", "CT_COUNSELLOR_REVIEW"."ct_counsellor_review","CT_COUNSELLOR_REVIEW"."ct_counsellor_stars", "CT_COUNSELLOR_REVIEW"."ct_counsellor_date","CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" ,"T_USER"."TX_USER_NAME" ,"T_USER"."TX_PICTURE"         FROM public."CT_COUNSELLOR_REVIEW" INNER JOIN public."T_USER" ON  CAST("CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" AS INTEGER) = "T_USER"."ID_USER_UUID" WHERE  "CT_COUNSELLOR_REVIEW"."ct_counsellor_id" = $1',
@@ -283,7 +328,7 @@ router.get("/getCounsellors", authorization, async (req, res) => {
       }
     }
   } catch (error) {
-    console.error(["api consellee asdfasdfasdf", error.message]);
+    console.error(["api consellor", error.message]);
   }
   res.json({ counsellor: final_details });
 });
@@ -305,7 +350,7 @@ router.post("/update", authorization, async (req, res) => {
     }
     res.status(200).json("success");
   } catch (error) {
-    console.error(["api consellee update", error.message]);
+    console.error(["api consellor", error.message]);
     res
       .status(400)
       .json([{ error: "An error occurred ", message: "An error occurred" }]);

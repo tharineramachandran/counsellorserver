@@ -161,13 +161,7 @@ console.log(files);
                                             <Card.Content className="customCard">
                                                 <Card.Meta>Upload your document</Card.Meta>
                                                 <Card.Description>
-                                                    <Form.Field>
-                                                        <Button as="label" htmlFor="file" type="button" animated="fade">
-                                                            <Button.Content visible>
-                                                                <Icon name="file" color="grey" />
-                                                            </Button.Content>
-                                                            <Button.Content hidden>Choose a File</Button.Content>
-                                                        </Button>
+                                                    <Form.Field> 
                                                         <input
                                                             type="file"
                                                             id="file"

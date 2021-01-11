@@ -1,4 +1,3 @@
- 
 import React, { useState, useContext, useEffect } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -58,6 +57,9 @@ class ViewVerification extends React.Component {
   state = {
     loading: true,
     activeIndex: 0,
+    rejectedItems: 0,
+    acceptedItems: 0,
+    pendingItems: 0,
     post: [],
     allPosts: [],
     minValue: 0,
@@ -150,16 +152,13 @@ class ViewVerification extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                
-                  this.state.post.length == 0 && (
-                    <div class="ui card" style={{ width: "100%" }}>
-                      <h3 style={{ padding: "3%", color: "grey" }}>
-                       No counsellors for you
-                      </h3>
-                    </div>
-                  )
-                
-  
+                this.state.pendingItems == 0 && (
+                  <div class="ui card" style={{ width: "100%" }}>
+                    <h3 style={{ padding: "3%", color: "grey" }}>
+                      No counsellors for you
+                    </h3>
+                  </div>
+                )
               )}
 
               {this.state.post.map((person, index) => (
@@ -168,6 +167,7 @@ class ViewVerification extends React.Component {
                     person.counsellor_details[0].CT_COUNSELLOR_VERIFIED
                   ) == 0 && (
                     <div class="ui card" style={{ width: "100%" }}>
+                        
                       <Modal
                         onClose={() => this.setState({ showMessage: false })}
                         onOpen={() => this.setState({ showMessage: true })}
@@ -481,18 +481,15 @@ class ViewVerification extends React.Component {
                     <Icon size="huge" loading name="spinner" />
                   </div>{" "}
                 </Segment>
-              )  :(
-                
-                this.state.post.length == 0 && (
+              ) : (
+                this.state.acceptedItems == 0 && (
                   <div class="ui card" style={{ width: "100%" }}>
                     <h3 style={{ padding: "3%", color: "grey" }}>
-                    No counsellors for you
+                      No counsellors for you
                     </h3>
                   </div>
                 )
-              
-
-            )}
+              )}
 
               {this.state.post.map((person, index) => (
                 <div>
@@ -500,6 +497,7 @@ class ViewVerification extends React.Component {
                     person.counsellor_details[0].CT_COUNSELLOR_VERIFIED
                   ) == 1 && (
                     <div class="ui card" style={{ width: "100%" }}>
+                        
                       <Modal
                         onClose={() => this.setState({ showMessage: false })}
                         onOpen={() => this.setState({ showMessage: true })}
@@ -594,6 +592,19 @@ class ViewVerification extends React.Component {
                           <div style={{ width: "20%", float: "right" }}>
                             <Table floated="right" basic="very" collapsing>
                               <Table.Body>
+                              <Table.Row>
+                                  <Table.Cell colspan="2">
+                                    {" "}
+                                    <Button
+                                      style={{ width: "100%" }}
+                                      onClick={() => this.documents(person)}
+                                    >
+                                      <Icon name="paperclip" />
+                                      View documents
+                                    </Button>
+                                  </Table.Cell>
+                                </Table.Row>
+
                                 <Table.Row>
                                   <Table.Cell colspan="2">
                                     <Button
@@ -747,7 +758,7 @@ class ViewVerification extends React.Component {
       },
       {
         menuItem: "Rejected",
-        render: ( ) => (
+        render: () => (
           <Tab.Pane>
             <Container>
               {this.state.post.length > 2 && (
@@ -777,24 +788,21 @@ class ViewVerification extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                
-                this.state.post.length == 0 && (
+                this.state.rejectedItems == 0 && (
                   <div class="ui card" style={{ width: "100%" }}>
                     <h3 style={{ padding: "3%", color: "grey" }}>
-                    No counsellors for you
+                      No counsellors for you
                     </h3>
                   </div>
                 )
-              
-
-            )}
+              )}
 
               {this.state.post.map((person, index) => (
                 <div>
                   {parseInt(
                     person.counsellor_details[0].CT_COUNSELLOR_VERIFIED
-                  ) == 2 ? (
-                    <div class="ui card" style={{ width: "100%" }}>
+                  ) == 2 && (
+                    <div class="ui card" style={{ width: "100%" }}> 
                       <Modal
                         onClose={() => this.setState({ showMessage: false })}
                         onOpen={() => this.setState({ showMessage: true })}
@@ -914,6 +922,19 @@ class ViewVerification extends React.Component {
                                     </Button.Group>
                                   </Table.Cell>
                                 </Table.Row>
+                                <Table.Row>
+                                  <Table.Cell colspan="2">
+                                    {" "}
+                                    <Button
+                                      style={{ width: "100%" }}
+                                      onClick={() => this.documents(person)}
+                                    >
+                                      <Icon name="paperclip" />
+                                      View documents
+                                    </Button>
+                                  </Table.Cell>
+                                </Table.Row>
+
                                 <Table.Row>
                                   <Table.Cell colspan="2">
                                     <Button
@@ -1058,9 +1079,6 @@ class ViewVerification extends React.Component {
                         </Card.Content>
                       </Card>
                     </div>
-                  ):( <div>
-{this.CheckIfNone("rejected")}
-  </div>
                   )}
                 </div>
               ))}
@@ -1070,10 +1088,7 @@ class ViewVerification extends React.Component {
       },
     ],
   };
-  CheckIfNone= (value) => {  
-    if (asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)
-return <h2>{value}</h2>
-  };
+  
   loadMore = (person) => {
     console.log(person);
     this.setState({ displayReview: this.state.displayReview + 2 });
@@ -1200,6 +1215,8 @@ return <h2>{value}</h2>
   };
 
   setTable = () => {
+
+    var posts = [];
     axios
       .get(baseURLAPI + "/verification/getCounsellors/", {
         headers: {
@@ -1211,6 +1228,29 @@ return <h2>{value}</h2>
       })
       .then((res) => {
         const persons = res.data.counsellor;
+        posts = persons;
+        console.log("persons")
+        this.setState ({ pendingItems : 0,rejectedItems:0,acceptedItems:0 })
+console.log(persons)
+persons.forEach(element => {
+        if( element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
+            == 0  ){
+              this.setState({pendingItems :1})
+              console.log("pendingItems")
+            }  
+            if( element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
+              == 1 ){
+                this.setState({acceptedItems :1})
+                console.log("acceptedItems")
+              }  
+
+              if( element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
+                ==2 ){
+                  console.log("rejectedItems")
+                  this.setState({rejectedItems :1})
+                }  
+    
+        });
 
         this.setState({
           post: persons,
@@ -1218,6 +1258,9 @@ return <h2>{value}</h2>
           allPosts: persons,
         });
       });
+
+
+
   };
   componentDidMount() {
     var counsellingSubjectNameOptions = [
@@ -1236,7 +1279,7 @@ return <h2>{value}</h2>
       maxValue: maxValue,
       counsellingSubjectName: "00",
       show: false,
-      
+
       counsellingDayName: "Anyday",
       counsellingLevelName: "00",
     });
@@ -1271,7 +1314,13 @@ return <h2>{value}</h2>
       });
     });
   }
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
 
+    this.setState({ activeIndex: newIndex, displayReview: 2 });
+  };
   _onKeyUp = (e) => {
     // filter post list by description  using onKeyUp function
     var post = [];
@@ -1549,6 +1598,7 @@ return <h2>{value}</h2>
       )
       .then((res) => {
         console.log(res);
+ 
         this.setTable();
         this.resetSearch();
         toast.success("Successfully verified counsellor!", {
@@ -1754,6 +1804,7 @@ return <h2>{value}</h2>
               }}
               panes={this.state.panes}
             />
+         
           </Grid.Column>
         </Grid.Row>
       </Grid>

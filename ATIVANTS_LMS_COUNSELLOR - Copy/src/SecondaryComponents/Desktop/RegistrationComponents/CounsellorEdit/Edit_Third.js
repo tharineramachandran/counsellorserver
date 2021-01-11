@@ -351,16 +351,14 @@ const Edit_Third = ({ formData, setForm, navigation, step }) => {
                                             </Item>
                                         </Item.Group>
                                     </Segment>
-                                        <Form.Group widths='equal'>
-                                            <Form.Field className="CustomForm">
+                                    <center>
+                                            
                                                 <Button className="appBanner" color='blue' onClick={_handleSubmitClick}>
                                                     <Icon name='send' className="appBanner" /> Update Details &nbsp;&nbsp;
                                     </Button> &nbsp;&nbsp;&nbsp;
-                                                    </Form.Field>
+                                                   
 
-                                            <Form.Field>
-                                            </Form.Field>
-                                        </Form.Group>
+                                    </center>
                                     </Form>
                                 </Segment>
                             </center>

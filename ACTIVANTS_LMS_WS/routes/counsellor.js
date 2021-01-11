@@ -77,7 +77,7 @@ router.get("/GetCounsellorDetails/:id", async (req, res) => {
         var details = [];
         var final_details = [];
 
-        const query = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" ');
+        const query = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_VERIFIED" = $1', [1]);
 
         for (let i = 0; i < query.rowCount; i++) {
 
@@ -154,8 +154,6 @@ router.get("/GetCounsellorDetails/:id", async (req, res) => {
                 view_counsellor_review.push(counsellor_review.rows[x]);
 
             }
-
-
             var counselling_average_price = counselling_total_price / counselling_details.rowCount;
             var counselling_average_review = counselling_total_review / counsellor_review.rowCount;
             var FavisAvailable = false;

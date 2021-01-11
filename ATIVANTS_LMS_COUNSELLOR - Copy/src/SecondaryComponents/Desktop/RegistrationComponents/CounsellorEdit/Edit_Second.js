@@ -230,7 +230,8 @@ const Edit_Second = ({ formData, setForm, navigation, step }) => {
                                         <Grid>
                                             <Grid.Row>
                                                 <Grid.Column width={8}>
-                                                    <Segment stacked style={{ width: '100%' }}>
+                                                <Segment>   
+                                                    <Segment   style={{ width: '100%' }}>
                                                                    
                                         <div style={{ width: '100%',  padding:'5px '}}><Label color='blue' horizontal   > 
                                         Add a profile picture and crop it</Label>  
@@ -263,7 +264,7 @@ const Edit_Second = ({ formData, setForm, navigation, step }) => {
                                                         <br/>
  <label class="custom-file-input" for="Upload" > </label>
                                                     </Segment>
-                                                    <Segment>   
+                                                   
                                                      <center>
                                                      <Button className="appBanner" color='blue' onClick={_handleSubmitClick}>
                                                          <Icon name='send' className="appBanner" /> Update Details &nbsp;&nbsp;

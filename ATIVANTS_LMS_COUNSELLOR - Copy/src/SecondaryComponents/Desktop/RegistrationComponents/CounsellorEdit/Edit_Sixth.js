@@ -87,16 +87,9 @@ const Edit_Sixth = ({ formData, setForm, navigation, step }) => {
                             <center>
                                 <Segment style={{ width: '95%' }}>
                                     <center>
-                                        <Grid>
-                                            <Grid.Row>
-                                                <Grid.Column width={8}>
-                                                    <Segment style={{ width: '100%' }}>
+                                       
                                                         <ChangePassword />
-                                                    </Segment>
-                                                </Grid.Column>
-
-                                            </Grid.Row>
-                                        </Grid>
+                                                  
                                     </center>
                                 </Segment>
                             </center>

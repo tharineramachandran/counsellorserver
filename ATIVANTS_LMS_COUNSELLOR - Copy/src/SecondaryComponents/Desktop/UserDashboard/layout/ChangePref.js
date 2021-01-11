@@ -128,17 +128,14 @@ class ChangePref extends React.Component {
 
                             </Table.Cell>
                         </Table.Row>
-                        < Table.Row><Table.Cell>
-                            <Button className="appBanner" color='blue' onClick={this.submitRequest}>
-                                <Icon name='send' className="appBanner" /> Update preferances &nbsp;&nbsp;
-                    </Button> &nbsp;&nbsp;&nbsp;
-                        </Table.Cell>
-                        </Table.Row>
+                         
+                           
                     </Table.Body>
-                </Table> <Segment>
-
-
-                </Segment>
+                </Table>
+                <centre>   <Button className="appBanner" color='blue' onClick={this.submitRequest}>
+                                 <Icon name='send' className="appBanner" /> Update preferances &nbsp;&nbsp;
+                    </Button> &nbsp;&nbsp;&nbsp;
+                    </centre>   
             </Container>
         )
     }
