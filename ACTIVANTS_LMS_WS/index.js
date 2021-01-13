@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const pool = require('./database/Db_Connection');
 
+const notification = require("../functions/noti");
 const email = require('./functions/email');
 const socialAuth = require("./routes/socialAuth");
 const profileAuth = require("./routes/profileAuth");
@@ -219,6 +220,7 @@ console.log([ session, date, userId, counsellorId, sessionDetails]);
         var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + startDate + " to " + endDate;
         console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
         await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message);
+     await    notification.addNoti( parseInt (updatedRequest.rows[0].ct_user_id)  , "you received a new notification"   );    
      console.log([startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']); 
       
      

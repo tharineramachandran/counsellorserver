@@ -8,6 +8,7 @@ import matthew from '../../../../Static/Images/matthew.png'
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 
+import { baseURLAPI, baseURL } from "../../../../Global";
 toast.configure();
 const Registration_Result = ({ formData, setForm, navigation, step }) => {
 
@@ -51,7 +52,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
         var seventhString = []; 
         var eightString = []; 
     
-        axios.post(`http://localhost:5000/Counsellor/createCounsellor`, { formData: formData, COUNSELLORID: localStorage.userID })
+        axios.post(baseURLAPI +`/Counsellor/createCounsellor`, { formData: formData, COUNSELLORID: localStorage.userID })
             .then(res => {
                 console.log(res);
                 console.log(res.data);

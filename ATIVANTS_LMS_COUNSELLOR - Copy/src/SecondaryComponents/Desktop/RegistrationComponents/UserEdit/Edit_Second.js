@@ -110,7 +110,7 @@ const Edit_Second = ({ formData, setForm, navigation, step }) => {
             jwtToken: localStorage.jwtToken
         }
           
-        axios.post(`http://localhost:5000/Counsellee/UpdatePhoto`, { formData: formData, COUNSELLORID: localStorage.userID },
+        axios.post(baseURLAPI+`/Counsellee/UpdatePhoto`, { formData: formData, COUNSELLORID: localStorage.userID },
         
         {
             headers: headers

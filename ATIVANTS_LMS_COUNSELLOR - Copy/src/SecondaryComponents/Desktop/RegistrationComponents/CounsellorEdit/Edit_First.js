@@ -477,7 +477,7 @@ const Edit_First = ({ formData, setForm, navigation, step }) => {
         var seventhString = [];
         var eightString = [];
 
-        axios.post(`http://localhost:5000/Counsellor/UpdateDetails`, { formData: formData, COUNSELLORID: localStorage.userID })
+        axios.post(baseURLAPI + `/Counsellor/UpdateDetails`, { formData: formData, COUNSELLORID: localStorage.userID })
             .then(res => {
                 console.log(res);
                 console.log(res.data);

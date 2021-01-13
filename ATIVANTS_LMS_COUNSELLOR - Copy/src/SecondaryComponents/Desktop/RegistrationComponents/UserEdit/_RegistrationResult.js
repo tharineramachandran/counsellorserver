@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import axios from 'axios';
 import ReCAPTCHA from "react-google-recaptcha";
 import keys from "../../../../env";
+import { baseURLAPI } from '../../../../Global';
 toast.configure();
 const Registration_Result = ({ formData, setForm, navigation, step }) => {
 
@@ -67,7 +68,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
         var seventhString = [];
         var eightString = [];
         if (checkedstate.checked && recapcha.value) {
-            axios.post(`http://localhost:5000/Counsellee/createCounsellee`, { formData: formData, COUNSELLORID: localStorage.userID })
+            axios.post(baseURLAPI+`/Counsellee/createCounsellee`, { formData: formData, COUNSELLORID: localStorage.userID })
                 .then(res => {
                     console.log(res);
                     console.log(res.data);
