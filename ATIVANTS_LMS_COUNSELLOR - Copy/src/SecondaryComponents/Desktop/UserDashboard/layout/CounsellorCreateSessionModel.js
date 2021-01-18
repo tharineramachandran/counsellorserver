@@ -150,7 +150,7 @@ class CreateSession extends React.Component {
             console.log(["eeeeeeeeeeeeeee",error])    
             console.log(["eeeeeeeeeeeeeee",error.response.data.message])  
             
-            toast.error(error.response.data.message, {
+            toast.error("An error occured", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: true,

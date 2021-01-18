@@ -2,12 +2,14 @@ const pool = require("../database/Db_Connection");
 
 async function addNoti(userID,noti) {
     try {
-         
+      console.log(userID)
         const user = await pool.query('SELECT  * FROM "CT_NOTIFICATION" WHERE "ct_user_id" = $1', [parseInt(userID) ]);
         var datetime = new Date();
         if (user.rowCount > 0) {
+          
      var existing = user.rows[0].ct_notification ;
            
+     
            
           await existing.value.push({ "notification"  : noti , "unread" : 1  , date :datetime.toISOString().slice(0, 10) , time :datetime.toISOString().slice(11, 16) }) ;
           
@@ -25,6 +27,7 @@ async function addNoti(userID,noti) {
     
     
       } catch (error) {
+        console.log("Notifcaiton");
         console.log(error.message);
       }
 }

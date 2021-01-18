@@ -30,8 +30,9 @@ router.post("/register", validInfo, async (req, res) => {
       'INSERT INTO "T_USER" ("TX_USER_NAME", "TX_USER_EMAIL","TX_USER_PASSWORD","TX_VERIFICATION_STATUS","DT_DATE_CREATED","IN_ACTIVE","IS_COUNSELLOR","TX_IS_COMPLETED") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
       [TX_USER_NAME, TX_USER_EMAIL.toLowerCase(), bcryptPassword, 0, datetime.toISOString().slice(0, 10), 0, 0, 0]
     );
-
-    await email.sendEmail(TX_USER_EMAIL, "verify email address", "Dear user, please click on the following link to confirm your email address :  " + CLIENT_BASEURL_PAGE_URL + "/emailVerify/" + TX_USER_EMAIL);
+var message =  "Dear user, please click on the following link to confirm your email address :  " + CLIENT_BASEURL_PAGE_URL + "/emailVerify/" + TX_USER_EMAIL ;
+   
+    await email.sendEmail(TX_USER_EMAIL, "verify email address",  message,0, 0 );  
     console.log()
 
 
@@ -109,7 +110,8 @@ router.post("/counsellor/register", validInfo, async (req, res) => {
     );
 
     const jwtToken = jwtGenerator(newUser.rows[0].ID_USER_UUID);
-    await email.sendEmail(newUser.rows[0].TX_USER_EMAIL, "Confirm your email", "We are here to help you find the best counsellor.to start messaging your consellor and book an appointment please verify your email address by clicking on this link. Link : " + CLIENT_BASEURL_PAGE_URL + "/emailVerify/" + newUser.rows[0].TX_USER_EMAIL);
+     
+    await email.sendEmail(newUser.rows[0].TX_USER_EMAIL, "Confirm your email", "We are here to help you find the best counsellor.to start messaging your consellor and book an appointment please verify your email address by clicking on this link. Link : " + CLIENT_BASEURL_PAGE_URL + "/emailVerify/" + newUser.rows[0].TX_USER_EMAIL,0, 0 );
     res.json({ jwtToken, user: newUser.rows[0] });
 
   } catch (err) {

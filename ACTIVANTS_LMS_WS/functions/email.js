@@ -1,16 +1,21 @@
 
 const pool = require("../database/Db_Connection")
 
-function sendEmail(sendEmail, subject, message, matter, userID) {
+function sendEmail(sendEmail, subject, message, matter, userID ) {
   try {
+ 
 
-
-
-
-    const user = await pool.query('SELECT * FROM "CT_NOTIFICATION_PREF" WHERE "ct_user_id" = $1', [
+    const user =   pool.query('SELECT * FROM "CT_NOTIFICATION_PREF" WHERE "ct_user_id" = $1', [
       userID]);
 
     var allowEmail = false;
+
+    if (matter == 0 && userID ==0 ) {
+      allowEmail = true;
+
+    }
+
+
 
     if (matter == 2 && user.rows[0].ct_session_scheduling) {
       allowEmail = true;
@@ -44,8 +49,9 @@ function sendEmail(sendEmail, subject, message, matter, userID) {
       allowEmail = true;
 
     }
-
-    if (allowEmail) {
+    console.log("allowEmail");
+    console.log(allowEmail);
+    if (allowEmail ) {
       const nodemailer = require("nodemailer");
 
       let transporter = nodemailer.createTransport({
@@ -67,12 +73,13 @@ function sendEmail(sendEmail, subject, message, matter, userID) {
         html: message, // html body
       });
 
-      console.log("Message sent: %s", info.messageId);
-    }
+      console.log("Message sent ");
+    }else { console.log("Message sent: no permission to send" ); }
 
 
 
   } catch (error) {
+    console.log("Email");
     console.log(error.message);
   }
 }
