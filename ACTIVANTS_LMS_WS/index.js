@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const pool = require('./database/Db_Connection');
 
-const notification = require("../functions/noti");
+const notification = require("./functions/noti");
 const email = require('./functions/email');
 const socialAuth = require("./routes/socialAuth");
 const profileAuth = require("./routes/profileAuth");
@@ -17,6 +17,9 @@ var open = require('open');
 const { options } = require("./routes/socialAuth");
 const bodyParser = require('body-parser');
 
+const sms = require("./functions/SMS");
+
+var AWS = require('aws-sdk');
 //app.use(cors()); 
 app.use(express.json({ limit: '500mb' }));
 app.use(cookieSession({
@@ -64,6 +67,32 @@ app.use("/session", require("./routes/session"));
 app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
 
 
+ 
+app.get("/sendSMS", async (req, res) => {  
+ 
+  var params = {
+      Message: "req.query.message",
+      PhoneNumber:  "+6585201483",
+      MessageAttributes: {
+          'AWS.SNS.SMS.SenderID': {
+              'DataType': 'String',
+              'StringValue': "8520iu"
+          }
+      }
+  }; 
+
+  var publishTextPromise = new AWS.SNS({ apiVersion: '2010-03-31' , accessKeyId: keys.awsS3.accessKeyId,
+  secretAccessKey: keys.awsS3.secretAccessKey,
+   region: 'ap-southeast-1'}).publish(params).promise();
+
+  publishTextPromise.then(
+      function (data) {
+          res.end(JSON.stringify({ MessageID: data }));
+      }).catch( 
+          function (err) {
+              res.end(JSON.stringify({ Error: err }));
+          });
+})
 
 //get All counsellor
 app.get("/user/:id", async (req, res) => {
@@ -208,7 +237,7 @@ console.log([ session, date, userId, counsellorId, sessionDetails]);
 
     const counsellor = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL" from "T_USER" where "ID_USER_UUID" = $1 ', [counsellorId]);
      
-    const user = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL" from "T_USER" where "ID_USER_UUID" = $1 ', [userId]);
+    const user = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL","ID_USER_UUID" from "T_USER" where "ID_USER_UUID" = $1 ', [userId]);
     
     const request  = await pool.query('select  * from "CT_COUNSELLOR_COUNSELLING_DETAILS" where "id" = $1 ', [requestID]);
     
@@ -217,10 +246,21 @@ console.log([ session, date, userId, counsellorId, sessionDetails]);
     
      
         var subject = "new session request";
-        var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + startDate + " to " + endDate;
+
+        let strsa = startDate;
+        var st = strsa.split('T');
+        var stDF = st[1].split(':');
+        let startDateTimestr =  stDF[0]     +":"  +stDF[1] ;
+ 
+        let endstrsa = endDate;
+        var endst = endstrsa.split('T');
+        var endstDF = endst[1].split(':');
+        let endDateTimestr =  endstDF[0]     +":"  +endstDF[1] ;
+ 
+        var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " +st+" from"+ startDateTimestr+ " to " + endDateTimestr;
         console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
-        await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message);
-     await    notification.addNoti( parseInt (updatedRequest.rows[0].ct_user_id)  , "you received a new notification"   );    
+        await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message,2,counsellorId);  
+     await    notification.addNoti( counsellorId , message );    
      console.log([startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']); 
       
      

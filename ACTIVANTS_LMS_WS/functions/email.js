@@ -14,9 +14,6 @@ function sendEmail(sendEmail, subject, message, matter, userID ) {
       allowEmail = true;
 
     }
-
-
-
     if (matter == 2 && user.rows[0].ct_session_scheduling) {
       allowEmail = true;
 

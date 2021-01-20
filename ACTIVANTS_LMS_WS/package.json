@@ -29,6 +29,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.3.3",
+    "twilio": "^3.55.0",
     "window": "^4.2.7"
   },
   "devDependencies": {},
