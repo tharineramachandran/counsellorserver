@@ -17,7 +17,7 @@ var open = require('open');
 const { options } = require("./routes/socialAuth");
 const bodyParser = require('body-parser');
 
-const sms = require("./functions/SMS");
+const SMS = require("./functions/SMS");
 
 var AWS = require('aws-sdk');
 //app.use(cors()); 
@@ -49,7 +49,7 @@ app.use(bodyParser.urlencoded({ limit: "100mb", extended: true, parameterLimit: 
 //routes
 
 app.use("/rating", require("./routes/rating.js"));
-app.use("/notification", require("./routes/notification.js"));    
+app.use("/notification", require("./routes/notification.js"));
 app.use("/notificationPref", require("./routes/notificationPref.js"));
 app.use("/verification", require("./routes/verification.js"));
 app.use("/favourites", require("./routes/favourites"));
@@ -67,32 +67,6 @@ app.use("/session", require("./routes/session"));
 app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
 
 
- 
-app.get("/sendSMS", async (req, res) => {  
- 
-  var params = {
-      Message: "req.query.message",
-      PhoneNumber:  "+6585201483",
-      MessageAttributes: {
-          'AWS.SNS.SMS.SenderID': {
-              'DataType': 'String',
-              'StringValue': "8520iu"
-          }
-      }
-  }; 
-
-  var publishTextPromise = new AWS.SNS({ apiVersion: '2010-03-31' , accessKeyId: keys.awsS3.accessKeyId,
-  secretAccessKey: keys.awsS3.secretAccessKey,
-   region: 'ap-southeast-1'}).publish(params).promise();
-
-  publishTextPromise.then(
-      function (data) {
-          res.end(JSON.stringify({ MessageID: data }));
-      }).catch( 
-          function (err) {
-              res.end(JSON.stringify({ Error: err }));
-          });
-})
 
 //get All counsellor
 app.get("/user/:id", async (req, res) => {
@@ -217,78 +191,81 @@ app.get("/openLink/:id", async (req, res) => {
 
 // Add event 
 app.post("/addevent", async (req, res) => {
-  try { 
-    var { session, date, userId, counsellorId, sessionDetails , requestID} = req.body;
+  try {
+    var { session, date, userId, counsellorId, sessionDetails, requestID } = req.body;
     /// Date time things  
-console.log([ session, date, userId, counsellorId, sessionDetails]);
+    console.log([session, date, userId, counsellorId, sessionDetails]);
 
     var datestr = date.split("T");
     var datestr3 = datestr[0].split("-");
     var day = (parseInt(datestr3[2]) + 1).toString();
 
-    if(day.length ==1){ day = "0"+day}
+    if (day.length == 1) { day = "0" + day }
 
     var startDate = datestr3[0] + "-" + datestr3[1] + "-" + day + "T" + sessionDetails.ct_from + ":00.000+08:00";
     var endDate = datestr3[0] + "-" + datestr3[1] + "-" + day + "T" + sessionDetails.ct_to + ":00.000+08:00";
-     
+
 
     const userrepeat = await pool.query('SELECT * FROM "CT_COUNSELLOR_REQUESTS" WHERE    "ct_session_start_time" = $1 AND "ct_session_end_time" = $2 AND "ct_session_date" = $3 AND "ct_user_id" = $4 AND "ct_counsellor_id" = $5 AND "ct_counsellor_timezone_code"= $6 ', [startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code]);
 
 
-    const counsellor = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL" from "T_USER" where "ID_USER_UUID" = $1 ', [counsellorId]);
-     
+    const counsellor = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL","TX_PHONE_NUMBER" from "T_USER" where "ID_USER_UUID" = $1 ', [counsellorId]);
+
     const user = await pool.query('select "TX_USER_NAME","TX_USER_EMAIL","ID_USER_UUID" from "T_USER" where "ID_USER_UUID" = $1 ', [userId]);
-    
-    const request  = await pool.query('select  * from "CT_COUNSELLOR_COUNSELLING_DETAILS" where "id" = $1 ', [requestID]);
-    
 
-    if(userrepeat.rowCount == 0   &&  counsellor.rowCount >0   &&  user.rowCount >0           ){ 
-    
-     
-        var subject = "new session request";
-
-        let strsa = startDate;
-        var st = strsa.split('T');
-        var stDF = st[1].split(':');
-        let startDateTimestr =  stDF[0]     +":"  +stDF[1] ;
- 
-        let endstrsa = endDate;
-        var endst = endstrsa.split('T');
-        var endstDF = endst[1].split(':');
-        let endDateTimestr =  endstDF[0]     +":"  +endstDF[1] ;
- 
-        var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " +st+" from"+ startDateTimestr+ " to " + endDateTimestr;
-        console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
-        await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message,2,counsellorId);  
-     await    notification.addNoti( counsellorId , message );    
-     console.log([startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']); 
-      
-     
-     await  pool.query(
-          'INSERT INTO "CT_COUNSELLOR_REQUESTS" (  ct_conselling_id, ct_counselling_level_code, ct_counselling_subject_code, ct_counsellor_hourly_rate,                                      ct_session_start_time, ct_session_end_time, ct_session_date,ct_user_id,ct_counsellor_id, ct_counsellor_timezone_code ,ct_counsellor_response  ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *',
-          [ requestID ,request.rows[0].ct_counselling_level_code,   request.rows[0].ct_counselling_subject_code        ,request.rows[0].ct_counsellor_hourly_rate       ,          startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
-    
+    const request = await pool.query('select  * from "CT_COUNSELLOR_COUNSELLING_DETAILS" where "id" = $1 ', [requestID]);
 
 
- 
+    if (userrepeat.rowCount == 0 && counsellor.rowCount > 0 && user.rowCount > 0) {
 
- 
-    // // Load client secrets from a local file.
-    // fs.readFile('credentials.json', (err, content) => {
-    //   if (err) return console.log('Error loading client secret file:', err);
-    //   // Authorize a client with credentials, then call the Google Calendar API.
-    //     authorize(JSON.parse(content), addEvents );
-    res.status(200).json({
-      message: "Request is sent"
-    })
-    // });
-    } else { res.status(400).json({
-      message: "you already have a session with this user"
-    })} 
-    
+
+      var subject = "new session request";
+
+      let strsa = startDate;
+      var st = strsa.split('T');
+      var stDF = st[1].split(':');
+      let startDateTimestr = stDF[0] + ":" + stDF[1];
+
+      let endstrsa = endDate;
+      var endst = endstrsa.split('T');
+      var endstDF = endst[1].split(':');
+      let endDateTimestr = endstDF[0] + ":" + endstDF[1];
+
+      var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + day + "-" + datestr3[1] + "-" + datestr3[0] + " from " + startDateTimestr + " to " + endDateTimestr;
+      console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
+      await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message, 2, parseInt(counsellorId));
+     // await SMS.sendSMS(parseInt(counsellorId), message, counsellor.rows[0].TX_PHONE_NUMBER)
+      await notification.addNoti(counsellorId, message);
+      console.log([startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
+
+
+      await pool.query(
+        'INSERT INTO "CT_COUNSELLOR_REQUESTS" (  ct_conselling_id, ct_counselling_level_code, ct_counselling_subject_code, ct_counsellor_hourly_rate,                                      ct_session_start_time, ct_session_end_time, ct_session_date,ct_user_id,ct_counsellor_id, ct_counsellor_timezone_code ,ct_counsellor_response  ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *',
+        [requestID, request.rows[0].ct_counselling_level_code, request.rows[0].ct_counselling_subject_code, request.rows[0].ct_counsellor_hourly_rate, startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
+
+
+
+
+
+
+      // // Load client secrets from a local file.
+      // fs.readFile('credentials.json', (err, content) => {
+      //   if (err) return console.log('Error loading client secret file:', err);
+      //   // Authorize a client with credentials, then call the Google Calendar API.
+      //     authorize(JSON.parse(content), addEvents );
+      res.status(200).json({
+        message: "Request is sent"
+      })
+      // });
+    } else {
+      res.status(400).json({
+        message: "you already have a session with this user"
+      })
+    }
+
 
   } catch (error) {
-    console.log("dghdfgh"+error.message);
+    console.log("dghdfgh" + error.message);
   }
 })
 

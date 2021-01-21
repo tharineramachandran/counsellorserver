@@ -40,12 +40,12 @@ class CreateSession extends React.Component {
   componentDidMount() {
 
     console.log("---------------------------------");
-    console.log(this.state); 
-    console.log(this.props); 
+    console.log(this.state);
+    console.log(this.props);
 
-    var slotOptions = [ 
+    var slotOptions = [
     ]
-    
+
 
 
     console.log(this.props);
@@ -83,19 +83,19 @@ class CreateSession extends React.Component {
   }
   isWeekday = date => {
     const day = date.getDay();
-    var today = new Date(); 
-    if (date < today) { return false; } 
+    var today = new Date();
+    if (date < today) { return false; }
 
     return day !== 0 && !(daysNotAvailableList.includes(day));
   };
   slotChange = (e, data) => {
-     
+
     this.setState({ slotValue: data.value, formWarning: '' });
 
     console.log(data);
   };
   programmeslotChange = (e, data) => {
-     
+
     this.setState({ programmeslotValue: data.value, formWarning: '' });
 
     console.log(data);
@@ -147,10 +147,10 @@ class CreateSession extends React.Component {
             });
 
           }).catch((error) => {
-            console.log(["eeeeeeeeeeeeeee",error])    
-            console.log(["eeeeeeeeeeeeeee",error.response.data.message])  
-            
-            toast.error("An error occured", {
+            console.log(["eeeeeeeeeeeeeee", error])
+
+            try {
+              toast.error(error.response.data.message, {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: true,
@@ -159,7 +159,18 @@ class CreateSession extends React.Component {
                 draggable: true,
                 progress: '',
               });
-             
+            } catch (error) {
+              toast.error("An error occurred.try again later", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: '',
+              });
+            }
+
 
           });
 
@@ -199,16 +210,16 @@ class CreateSession extends React.Component {
     console.log(["ddddddddddddddddd", date]);
     var counselling_details = this.props.person.counselling_details;
     var programmeslotoptions = [];
-    
-console.log(["-------------------",counselling_details]); 
+
+    console.log(["-------------------", counselling_details]);
     for (var details in counselling_details) {
 
-      programmeslotoptions.push({ key: counselling_details[details].id, value: counselling_details[details].id, text: counselling_details[details].ct_counselling_level_name +"-"+  counselling_details[details].ct_counselling_subject_name+',$'+counselling_details[details].ct_counsellor_hourly_rate }    );
+      programmeslotoptions.push({ key: counselling_details[details].id, value: counselling_details[details].id, text: counselling_details[details].ct_counselling_level_name + "-" + counselling_details[details].ct_counselling_subject_name + ',$' + counselling_details[details].ct_counsellor_hourly_rate });
 
-      
-    } 
 
-    this.setState({ startDate: date, slotValue: date , programmeslotOptions: programmeslotoptions});
+    }
+
+    this.setState({ startDate: date, slotValue: date, programmeslotOptions: programmeslotoptions });
     var slot = [];
     var slotOptions = [];
 
@@ -237,14 +248,14 @@ console.log(["-------------------",counselling_details]);
       slot = this.props.person.counselling_saturday;
     }
 
-     
+
     for (var details in slot) {
 
       slotOptions.push({ key: slot[details].id, value: slot[details].id, text: slot[details].ct_from + " to " + slot[details].ct_to });
 
     }
- 
-    this.setState({ slots: slot, slotOptions: slotOptions, formWarning: '', slotValue: ''      });
+
+    this.setState({ slots: slot, slotOptions: slotOptions, formWarning: '', slotValue: '' });
   };
 
   render() {

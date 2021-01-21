@@ -5,7 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 import _AxiosInstance from '../../../../Store/_AxiosInstance'
-
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 const Registration_First = ({ formData, setForm, navigation, step }) => {
 
     const {
@@ -24,6 +25,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     console.log(formData)
 
     const [icon_name, setIcon_name] = useState('circle');
+    const [PhoneValue, setPhoneValue] = useState()
 
     const { handleSubmit, register, errors } = useForm({});
     const [WS_Countries, setWS_Countries] = useState({});
@@ -35,9 +37,9 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     const [inputCounsellingDetailsList, setInputCounsellingDetailsList] = useState([{
         CT_COUNSELLING_SUBJECT_CODE: "", CT_COUNSELLING_LEVEL_CODE: "", COUNSELLOR_HOURLY_RATE: "",
         CT_COUNSELLING_SUBJECT_NAME: "", CT_COUNSELLING_LEVEL_NAME: ""
-    }]); 
+    }]);
 
-     useEffect(() => {
+    useEffect(() => {
         _AxiosInstance.get('form/list')
             .then(res => {
                 console.log(res.data)
@@ -112,7 +114,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     const onSubmit = (data) => {
 
         navigation.next();
-    };  
+    };
 
     useEffect(() => {
 
@@ -138,7 +140,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
 
     }, [inputCounsellingDetailsList])
 
-   
+
 
     useEffect(() => {
         if (step.id == 'Counsellor_details')
@@ -201,13 +203,13 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     const handleInputChangeForCounselling = (e, index) => {
         const { name, value } = e.target;
         const list = [...inputCounsellingDetailsList];
-        list[index][name] = value; 
+        list[index][name] = value;
         if (name == "CT_COUNSELLING_LEVEL_CODE") {
             var CT_COUNSELLING_LEVEL_NAME = WS_Counselling_Levels.find(x => x.CT_COUNSELLING_LEVEL_CODE === value).CT_COUNSELLING_LEVEL_NAME;
             list[index]["CT_COUNSELLING_LEVEL_NAME"] = CT_COUNSELLING_LEVEL_NAME;
-    
+
         }
-    
+
         if (name == "CT_COUNSELLING_SUBJECT_CODE") {
             var CT_COUNSELLING_SUBJECT_NAME = WS_Counselling_Subjects.find(x => x.CT_COUNSELLING_SUBJECT_CODE === value).CT_COUNSELLING_SUBJECT_NAME;
             list[index]["CT_COUNSELLING_SUBJECT_NAME"] = CT_COUNSELLING_SUBJECT_NAME;
@@ -221,6 +223,20 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
         const list = [...inputCounsellingDetailsList];
         list.splice(index, 1);
         setInputCounsellingDetailsList(list);
+    };
+
+
+    const handlephonevalue = (value) => {
+        console.log(value)
+
+        const e = {
+            target: {
+                name: "COUNSELLOR_PHONE_NUMBER",
+                value: value
+            }
+        };
+        setForm(e);
+        console.log(formData)
     };
 
     // handle click event of the Add button
@@ -241,7 +257,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                             <Segment inverted color='teal' size="mini" style={{ width: '85%', textAlign: 'center' }}>
                                 <Container>
                                     <div style={{ float: 'left', marginLeft: '2rem' }}>
-                                        
+
                                     </div>
                                     <div style={{ float: 'right', padding: '1rem;' }}>
                                         <Label as='a' onClick={() => navigation.next()}>
@@ -279,7 +295,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                                     <Icon name="circle outline" />
                                                 Verification&nbsp;
                                             </Label> */}
-                                            <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
+                                                <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
                                                     <Icon name="circle outline" />
                                                 Summary&nbsp;
                                             </Label>
@@ -352,18 +368,19 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                                     </Form.Field>
 
                                                     <Form.Field className="CustomForm">
-                                                        <Icon name="phone" className="customIconsAlign" />
-                                                        &nbsp;&nbsp;&nbsp;
-                                                        <input
-                                                            fluid
-                                                            placeholder='Phone number'
-                                                            type='text'
-                                                            name="COUNSELLOR_PHONE_NUMBER"
-                                                            onChange={setForm}
-                                                            value={COUNSELLOR_PHONE_NUMBER}
-                                                        // ref={register({ validate: COUNSELLOR_PHONE_NUMBER => COUNSELLOR_PHONE_NUMBER && COUNSELLOR_PHONE_NUMBER.length > 3 })}
-                                                        />
+
+
+                                                        <PhoneInput
+                                                            placeholder="Enter phone number"
+                                                            value={PhoneValue}
+                                                             onChange={handlephonevalue} />
+
+
                                                         {errors.COUNSELLOR_PHONE_NUMBER && <p className="customError">Username invalid</p>}
+
+
+
+
                                                     </Form.Field>
 
                                                 </Form.Group>

@@ -1,11 +1,11 @@
 
 const pool = require("../database/Db_Connection")
 
-function sendEmail(sendEmail, subject, message, matter, userID ) {
+async function sendEmail(sendEmail, subject, message, matter, userID ) {
   try {
  
 
-    const user =   pool.query('SELECT * FROM "CT_NOTIFICATION_PREF" WHERE "ct_user_id" = $1', [
+    const user =  await pool.query('SELECT * FROM "CT_NOTIFICATION_PREF" WHERE "ct_user_id" = $1', [
       userID]);
 
     var allowEmail = false;
