@@ -3,8 +3,11 @@ import {
     Header, Icon, Form, Image, Message,
     Segment, Grid, Modal, Search, Button, Dimmer, Loader, Label, Container, Breadcrumb, Divider, Popup, List, Dropdown, Select
 } from 'semantic-ui-react';
+
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
 import { useForm } from "react-hook-form";
-import _AxiosInstance from '../../../../Store/_AxiosInstance'
+import _AxiosInstance from '../../../../Store/_AxiosInstance';
 
 const Registration_First = ({ formData, setForm, navigation, step }) => {
 
@@ -211,7 +214,18 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     useEffect(() => {
 
     }, [])
+    const handlephonevalue = (value) => {
+        console.log(value)
 
+        const e = {
+            target: {
+                name: "COUNSELLOR_PHONE_NUMBER",
+                value: value
+            }
+        };
+        setForm(e);
+        console.log(formData)
+    };
     // handle input change
     const handleInputChangeForQualification = (e, index) => {
         const { name, value } = e.target;
@@ -399,17 +413,18 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
                                                     </Form.Field>
 
                                                     <Form.Field className="CustomForm">
-                                                        <Icon name="phone" className="customIconsAlign" />
-                                                        &nbsp;&nbsp;&nbsp;
-                                                        <input
-                                                            fluid
-                                                            placeholder='Phone number'
-                                                            type='text'
-                                                            name="COUNSELLOR_PHONE_NUMBER"
-                                                            onChange={setForm}
+                                                    <PhoneInput
+                                                            placeholder="Enter phone number"
                                                             value={COUNSELLOR_PHONE_NUMBER}
-                                                        // ref={register({ validate: COUNSELLOR_PHONE_NUMBER => COUNSELLOR_PHONE_NUMBER && COUNSELLOR_PHONE_NUMBER.length > 3 })}
-                                                        />
+                                                             onChange={handlephonevalue} />
+
+                                                      
+
+
+
+
+
+
                                                         {errors.COUNSELLOR_PHONE_NUMBER && <p className="customError">Username invalid</p>}
                                                     </Form.Field>
 

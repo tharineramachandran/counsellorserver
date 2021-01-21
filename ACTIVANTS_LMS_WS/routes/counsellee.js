@@ -53,8 +53,8 @@ router.post("/createCounsellee", createCounselleeValidation, async (req, res) =>
 
             }
             let newUser = pool.query(
-                'UPDATE   "T_USER" SET  "TX_IS_COMPLETED" = $1 , "TX_PICTURE" = $2  WHERE "ID_USER_UUID" = $3', [
-                1, COUNSELLOR_PHOTO, COUNSELLORID
+                'UPDATE   "T_USER" SET  "TX_IS_COMPLETED" = $1 , "TX_PICTURE" = $2, "TX_PHONE_NUMBER"= $4  WHERE "ID_USER_UUID" = $3', [
+                1, COUNSELLOR_PHOTO, COUNSELLORID ,COUNSELLOR_PHONE_NUMBER
             ])
 
             res.status(200).json("success");
@@ -106,10 +106,10 @@ router.post("/UpdateDetails", checkCounselleeUpdate, async (req, res) => {
             let newUser = pool.query(
                 'UPDATE   "CT_COUNSELLEE_DETAILS" SET  "CT_EMAIL" = $1 , "CT_FIRST_NAME" = $2   , "CT_LAST_NAME" = $3   , "CT_PHONE_NUMBER" = $4    , "CT_COUNTRY_CODE" = $5 WHERE "CT_COUNSELLEE_ID" = $6', [
                 COUNSELLOR_EMAIL, COUNSELLOR_FIRST_NAME, COUNSELLOR_LAST_NAME, COUNSELLOR_PHONE_NUMBER, COUNSELLOR_COUNTRY_CODE, COUNSELLORID])
-
+                 
             let UPDATEUser = pool.query(
-                'UPDATE   "T_USER" SET  "TX_USER_EMAIL" = $1   WHERE "ID_USER_UUID" = $2', [
-                COUNSELLOR_EMAIL, COUNSELLORID])
+                'UPDATE   "T_USER" SET  "TX_USER_EMAIL" = $1 ,"TX_PHONE_NUMBER" = $3  WHERE "ID_USER_UUID" = $2', [
+                COUNSELLOR_EMAIL, COUNSELLORID,COUNSELLOR_PHONE_NUMBER])
 
             res.status(200).json("success");
 

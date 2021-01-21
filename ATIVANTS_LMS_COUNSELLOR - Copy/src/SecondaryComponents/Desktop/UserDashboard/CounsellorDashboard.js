@@ -69,6 +69,7 @@ const CounsellorDashboard = (props) => {
   const [isViewAcceptSelected, setViewAcceptSelected] = useState(false);
   const { name, email, isCounsellor, isDetailsProvided } = userDetails;
 
+  const [activeItem, setactiveItem] = useState(false);
   const [OpenNotiSelected, setOpenNotiSelected] = useState(false);
 
   const [totalnoti, settotalnoti] = useState(0);
@@ -255,7 +256,10 @@ const CounsellorDashboard = (props) => {
                 </Menu.Item>
                 <Menu.Menu position="right">
                   <Menu.Item
-                    onClick={() => {
+                     active={activeItem === 'Home'}
+                
+                     onClick={() => {
+                       setactiveItem(  "Home"  ) 
                       setIsMessagesSelected(false);
                       setisRequestSelected(false);
                       setViewChangeSelected(false);
@@ -267,7 +271,10 @@ const CounsellorDashboard = (props) => {
                   </Menu.Item>
 
                   <Menu.Item
-                    onClick={() => {
+                   active={activeItem === 'Profile'}
+                
+                   onClick={() => {
+                     setactiveItem(  "Profile"  ) 
                       setIsProfileSelected(!isProfileSelected);
                       setisRequestSelected(false);
                       setViewDeclineSelected(false);
@@ -281,7 +288,10 @@ const CounsellorDashboard = (props) => {
                   </Menu.Item>
 
                   <Menu.Item
-                    onClick={() => {
+                active={activeItem === 'Request'}
+                
+                onClick={() => {
+                  setactiveItem(  "Request"  ) 
                       setIsMessagesSelected(false);
                       setisRequestSelected(!isRequestSelected);
                       setViewAcceptSelected(false);
@@ -294,7 +304,10 @@ const CounsellorDashboard = (props) => {
                   </Menu.Item>
 
                   <Menu.Item
+                    active={activeItem === 'Declined'}
+                
                     onClick={() => {
+                      setactiveItem(  "Declined"  ) 
                       setIsMessagesSelected(false);
                       setViewDeclineSelected(!isViewDeclineSelected);
                       setViewAcceptSelected(false);
@@ -306,7 +319,10 @@ const CounsellorDashboard = (props) => {
                     View Declined Request
                   </Menu.Item>
                   <Menu.Item
+                    active={activeItem === 'Accepted'}
+                
                     onClick={() => {
+                      setactiveItem(  "Accepted"  ) 
                       setIsMessagesSelected(false);
                       setViewAcceptSelected(!isViewAcceptSelected);
                       setViewDeclineSelected(false);
@@ -319,7 +335,10 @@ const CounsellorDashboard = (props) => {
                   </Menu.Item>
 
                   <Menu.Item
-                    onClick={() => {
+                   active={activeItem === 'Change'}
+                
+                   onClick={() => {
+                     setactiveItem(  "Change"  ) 
                       setIsMessagesSelected(false);
                       setViewChangeSelected(!isViewChangeSelected);
                       setViewAcceptSelected(false);

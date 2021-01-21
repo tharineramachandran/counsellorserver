@@ -37,7 +37,7 @@ module.exports = (req, res, next) => {
             errorlist.push({ error: "COUNSELLOR_PHONE_NUMBER", message: "No phone number provided" });
         } else if (isNaN(COUNSELLOR_PHONE_NUMBER)) {
             errorlist.push({ error: "COUNSELLOR_PHONE_NUMBER", message: "Invalid phone number provided" });
-        }else if (COUNSELLOR_PHONE_NUMBER.length >  10){
+        }else if (COUNSELLOR_PHONE_NUMBER.length >  15){
             errorlist.push({ error: "COUNSELLOR_PHONE_NUMBER", message: "phone number not more than  10 numbers" });
         }
 

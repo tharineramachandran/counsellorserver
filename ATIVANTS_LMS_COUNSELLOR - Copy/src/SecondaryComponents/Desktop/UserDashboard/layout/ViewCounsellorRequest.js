@@ -215,7 +215,7 @@ class ViewRequest extends React.Component {
                                 { 
                         this.state.loading ? (<Segment>
                                             <div textAlign="center">
-                                            <h3>  Page is loading...........   </h3>
+                                            <h3>  Page is loading...</h3>
                                               <Icon size = "huge" loading name='spinner' />
                                               </div>       </Segment>
                                       ):( <Table basic='very' celled collapsing>

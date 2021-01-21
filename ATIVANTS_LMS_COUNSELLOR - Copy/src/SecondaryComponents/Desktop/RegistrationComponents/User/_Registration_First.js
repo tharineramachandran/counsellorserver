@@ -24,9 +24,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
     } = formData;
     console.log(formData)
 
-    const [icon_name, setIcon_name] = useState('circle');
-    const [PhoneValue, setPhoneValue] = useState()
-
+    const [icon_name, setIcon_name] = useState('circle');  
     const { handleSubmit, register, errors } = useForm({});
     const [WS_Countries, setWS_Countries] = useState({});
     const [WS_Institutes, setWS_Institutes] = useState({});
@@ -372,7 +370,7 @@ const Registration_First = ({ formData, setForm, navigation, step }) => {
 
                                                         <PhoneInput
                                                             placeholder="Enter phone number"
-                                                            value={PhoneValue}
+                                                            value={COUNSELLOR_PHONE_NUMBER}
                                                              onChange={handlephonevalue} />
 
 

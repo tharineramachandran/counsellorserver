@@ -335,6 +335,16 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
                 'INSERT INTO "CT_COUNSELLOR_DETAILS" ("CT_EMAIL", "CT_FIRST_NAME", "CT_LAST_NAME", "CT_PHONE_NUMBER", "CT_COUNTRY_CODE", "CT_COUNSELLOR_ID","CT_COUNSELLOR_VERIFY") VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *',
                 [COUNSELLOR_EMAIL, COUNSELLOR_FIRST_NAME, COUNSELLOR_LAST_NAME, COUNSELLOR_PHONE_NUMBER, COUNSELLOR_COUNTRY_CODE, COUNSELLORID, filestring.toString()]);
 
+
+                 
+                let newUser = pool.query(
+                    'UPDATE   "T_USER" SET   "TX_PHONE_NUMBER"= $2  WHERE "ID_USER_UUID" = $1', [
+                        COUNSELLORID ,COUNSELLOR_PHONE_NUMBER
+                ])
+
+
+
+                
             const newCounsellorIntroductionDetails = await pool.query(
                 'INSERT INTO "CT_COUNSELLOR_INTRODUCTION" (   ct_counsellor_about_description, ct_counsellor_photo, ct_counsellor_headline, ct_counsellor_video_url, ct_counsellor_id) VALUES($1,$2,$3,$4,$5) RETURNING *',
                 [COUNSELLOR_ABOUT_DESCRIPTION, COUNSELLOR_PHOTO, COUNSELLOR_HEADLINE, COUNSELLOR_VIDEO_URL, COUNSELLORID]);
@@ -716,9 +726,11 @@ router.post("/UpdateDetails", checkCounsellorUpdate, async (req, res) => {
             'UPDATE   "CT_COUNSELLOR_DETAILS" SET  "CT_EMAIL" = $1 , "CT_FIRST_NAME" = $2   , "CT_LAST_NAME" = $3   , "CT_PHONE_NUMBER" = $4    , "CT_COUNTRY_CODE" = $5 WHERE "CT_COUNSELLOR_ID" = $6', [
             COUNSELLOR_EMAIL, COUNSELLOR_FIRST_NAME, COUNSELLOR_LAST_NAME, COUNSELLOR_PHONE_NUMBER, COUNSELLOR_COUNTRY_CODE, COUNSELLORID])
 
+
+             
         let updateUser = pool.query(
-            'UPDATE   "T_USER" SET  "TX_USER_EMAIL" = $1   WHERE "ID_USER_UUID" = $2', [
-            COUNSELLOR_EMAIL, COUNSELLORID])
+            'UPDATE   "T_USER" SET  "TX_USER_EMAIL" = $1  ,  "TX_PHONE_NUMBER"= $3  WHERE "ID_USER_UUID" = $2', [
+            COUNSELLOR_EMAIL, COUNSELLORID,      COUNSELLOR_PHONE_NUMBER      ])
         let delete_Edu = pool.query(
             'DELETE FROM "CT_COUNSELLOR_QUALIFICATION_INSTITUTE"   WHERE "ct_counsellor_id" = $1', [
             COUNSELLORID])
