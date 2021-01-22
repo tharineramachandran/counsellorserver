@@ -25,8 +25,8 @@ router.post("/confirmEmail", async (req, res) => {
         );
         var subject = "Password Change";
         var message = await "Dear " + user.rows[0].TX_USER_NAME + " ,your password change code is  " + ct_password_code;
-        
-        await email.sendEmail(user.rows[0].TX_USER_EMAIL, subject, message);
+ 
+        await email.sendEmail(user.rows[0].TX_USER_EMAIL,    subject, message,0,user.rows[0].ID_USER_UUID);
         res.status(200).json({ message: "Reset code is sent to your email address", code: true })
       }
 

@@ -9,8 +9,9 @@ async function sendEmail(sendEmail, subject, message, matter, userID ) {
       userID]);
 
     var allowEmail = false;
-
-    if (matter == 0 && userID ==0 ) {
+console.log("matter")
+console.log(matter )
+    if (matter == 0  ) {
       allowEmail = true;
 
     }

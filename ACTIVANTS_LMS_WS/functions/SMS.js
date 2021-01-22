@@ -13,7 +13,8 @@ async function sendSMS(userID, message, contact) {
     if (user.rows[0].ct_sms_sessions_messages) {
       client.messages.create({
         body: message,
-        from: '+19034195148',
+        from: '+12019879531', 
+
         to: contact
       })
         .then(message => console.log(message.sid));
