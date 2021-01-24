@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 
-import ChangePassword from "../../UserDashboard/layout/ChangePasswordModel"
+import ChangePassword from "../../UserDashboard/layout/SharedComponents/ChangePasswordModel"
 const Edit_Sixth = ({ formData, setForm, navigation, step }) => {
 
     const { COUNSELLOR_VIDEO_URL } = formData;

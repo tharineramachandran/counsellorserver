@@ -9,7 +9,7 @@ import Counsellor_Registration from './_Counsellor_Registration';
 import ReCAPTCHA from "react-google-recaptcha";
 import keys from "../../env";
 import UserRegisteration from "./userRegistrationModel/UserRegisteration"
-import ChangePassword from "./UserDashboard/layout/ChangePasswordModel"
+import ChangePassword from "./UserDashboard/layout/SharedComponents/ChangePasswordModel"
 import { Authorize } from "../../MainComponents/DesktopComponent";
 import axios from '../../Store/_AxiosInstance';
 import { ToastContainer, toast } from 'react-toastify';

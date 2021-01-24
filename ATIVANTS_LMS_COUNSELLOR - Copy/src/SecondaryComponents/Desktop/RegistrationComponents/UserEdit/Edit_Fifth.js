@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 
-import ChangePref from "../../UserDashboard/layout/ChangePref"
+import ChangePref from "../../UserDashboard/layout/SharedComponents/ChangePref"
 const Edit_Fifth = ({ formData, setForm, navigation, step }) => {
 
     const { COUNSELLOR_VIDEO_URL } = formData;

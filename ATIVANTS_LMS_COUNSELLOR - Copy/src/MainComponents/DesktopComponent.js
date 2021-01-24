@@ -5,9 +5,9 @@ import _NavigationItems from "../SecondaryComponents/Desktop/_NavigationItems";
 import _Promos from "../SecondaryComponents/Desktop/_Promos";
 import axios from "axios";
 import { Responsive } from "semantic-ui-react";
-import UserDashboard from "../SecondaryComponents/Desktop/UserDashboard/UserDashboard";
-import CounsellorDashboard from "../SecondaryComponents/Desktop/UserDashboard/CounsellorDashboard";
-import AdminDashboard from "../SecondaryComponents/Desktop/UserDashboard/AdminDashboard";
+import UserDashboard from "../SecondaryComponents/Desktop/UserDashboard/layout/Counsellee/CounselleDashboard/UserDashboard";
+import CounsellorDashboard from "../SecondaryComponents/Desktop/UserDashboard/layout/Counsellor/CounsellorDashboard/CounsellorDashboard";
+import AdminDashboard from "../SecondaryComponents/Desktop/UserDashboard/layout/Admin/AdminDashboard/AdminDashboard";
 
  
 import Cookies from "js-cookie";
