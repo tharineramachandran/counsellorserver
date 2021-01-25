@@ -47,7 +47,7 @@ const Edit_Fifth = ({ formData, setForm, navigation, step }) => {
 
   const { handleSubmit, register, errors } = useForm({});
 
-    handleFileChange = (e) => {
+const    handleFileChange = (e) => {
     selectFile(URL.createObjectURL(e.target.files[0]));
     setFileName({ file: e.target.files[0], name: e.target.files[0].name });
     getCroppedImg();

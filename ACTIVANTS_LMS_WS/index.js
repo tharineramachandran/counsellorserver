@@ -66,7 +66,8 @@ app.use("/request", require("./routes/request"));
 app.use("/session", require("./routes/session"));
 app.use("/counsellorSocialAuth", require("./routes/counsellorSocialAuth"));
 
-
+app.use("/newsletter", require("./routes/newsletter"));
+ 
 
 //get All counsellor
 app.get("/user/:id", async (req, res) => {
