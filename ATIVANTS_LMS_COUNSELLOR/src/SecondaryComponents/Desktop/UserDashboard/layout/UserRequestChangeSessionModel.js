@@ -226,8 +226,7 @@ class ChangeSession extends React.Component {
         <DatePicker
           selected={this.state.startDate}
           onChange={this.onDateChange}
-          filterDate={this.isWeekday}
-          onCalendarClose={this.handleCalendarClose}
+          filterDate={this.isWeekday} 
           placeholderText="Select a day for meeting " />
 
 

@@ -152,298 +152,298 @@ class ViewVerification extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                this.state.pendingItems == 0 && (
-                  <div class="ui card" style={{ width: "100%" }}>
-                    <h3 style={{ padding: "3%", color: "grey" }}>
-                      No counsellors for you
+                  this.state.pendingItems == 0 && (
+                    <div class="ui card" style={{ width: "100%" }}>
+                      <h3 style={{ padding: "3%", color: "grey" }}>
+                        No counsellors for you
                     </h3>
-                  </div>
-                )
-              )}
+                    </div>
+                  )
+                )}
 
               {this.state.post.map((person, index) => (
                 <div>
                   {parseInt(
                     person.counsellor_details[0].CT_COUNSELLOR_VERIFIED
                   ) == 0 && (
-                    <div class="ui card" style={{ width: "100%" }}>
-                        
-                      <Modal
-                        onClose={() => this.setState({ showMessage: false })}
-                        onOpen={() => this.setState({ showMessage: true })}
-                        open={this.state.showMessage}
-                      >
-                        <Modal.Header>Message to counsellor</Modal.Header>
-                        <Modal.Content>
-                          <Modal.Description>
-                            <CreateMessage
-                              CounsellorID={this.state.messageCounsellorID}
-                              person={this.state.messagePerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ show: false })}
-                        onOpen={() => this.setState({ show: true })}
-                        open={this.state.show}
-                      >
-                        <Modal.Header>Create a session request</Modal.Header>
-                        <Modal.Content>
-                          {/* <Image style={{ padding: '5%' }} size='medium' src={person.counselling_introduction[0].ct_counsellor_photo} wrapped /> */}
-                          <Modal.Description>
-                            <CreateSession
-                              CounsellorID={this.state.sessionCounsellorID}
-                              person={this.state.sessionPerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>{" "}
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ showMessage: false })}
-                        onOpen={() => this.setState({ showMessage: true })}
-                        open={this.state.showMessage}
-                      >
-                        <Modal.Header>Message to counsellor</Modal.Header>
-                        <Modal.Content>
-                          <Modal.Description>
-                            <CreateMessage
-                              CounsellorID={this.state.messageCounsellorID}
-                              person={this.state.messagePerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ showVideo: false })}
-                        onOpen={() => this.setState({ showVideo: true })}
-                        open={this.state.showVideo}
-                      >
-                        <Modal.Content>
-                          <h2>Counsellor Introduction Video</h2>
-                          <Segment textAlign="center">
-                            {this.state.videoURL ? (
-                              <iframe
-                                width="900"
-                                height="400"
-                                src={this.state.videoURL}
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                              ></iframe>
-                            ) : (
-                              <p style={{ color: "red" }}>
-                                No video was provided
-                              </p>
-                            )}
-                          </Segment>
-                        </Modal.Content>
-                      </Modal>
-                      <Card style={{ width: "100%" }}>
-                        <Card.Content>
-                          <div style={{ float: "left", paddingRight: "2%" }}>
-                            <Image
-                              width="200px"
-                              bordered
-                              src={
-                                person.counselling_introduction[0]
-                                  .ct_counsellor_photo
-                              }
-                              verticalAlign="top"
-                            />{" "}
-                          </div>
+                      <div class="ui card" style={{ width: "100%" }}>
 
-                          <div style={{ width: "20%", float: "right" }}>
-                            <Table floated="right" basic="very" collapsing>
-                              <Table.Body>
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    <Button.Group style={{ width: "100%" }}>
+                        <Modal
+                          onClose={() => this.setState({ showMessage: false })}
+                          onOpen={() => this.setState({ showMessage: true })}
+                          open={this.state.showMessage}
+                        >
+                          <Modal.Header>Message to counsellor</Modal.Header>
+                          <Modal.Content>
+                            <Modal.Description>
+                              <CreateMessage
+                                CounsellorID={this.state.messageCounsellorID}
+                                person={this.state.messagePerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ show: false })}
+                          onOpen={() => this.setState({ show: true })}
+                          open={this.state.show}
+                        >
+                          <Modal.Header>Create a session request</Modal.Header>
+                          <Modal.Content>
+                            {/* <Image style={{ padding: '5%' }} size='medium' src={person.counselling_introduction[0].ct_counsellor_photo} wrapped /> */}
+                            <Modal.Description>
+                              <CreateSession
+                                CounsellorID={this.state.sessionCounsellorID}
+                                person={this.state.sessionPerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>{" "}
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ showMessage: false })}
+                          onOpen={() => this.setState({ showMessage: true })}
+                          open={this.state.showMessage}
+                        >
+                          <Modal.Header>Message to counsellor</Modal.Header>
+                          <Modal.Content>
+                            <Modal.Description>
+                              <CreateMessage
+                                CounsellorID={this.state.messageCounsellorID}
+                                person={this.state.messagePerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ showVideo: false })}
+                          onOpen={() => this.setState({ showVideo: true })}
+                          open={this.state.showVideo}
+                        >
+                          <Modal.Content>
+                            <h2>Counsellor Introduction Video</h2>
+                            <Segment textAlign="center">
+                              {this.state.videoURL ? (
+                                <iframe
+                                  width="900"
+                                  height="400"
+                                  src={this.state.videoURL}
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen
+                                ></iframe>
+                              ) : (
+                                  <p style={{ color: "red" }}>
+                                    No video was provided
+                                  </p>
+                                )}
+                            </Segment>
+                          </Modal.Content>
+                        </Modal>
+                        <Card style={{ width: "100%" }}>
+                          <Card.Content>
+                            <div style={{ float: "left", paddingRight: "2%" }}>
+                              <Image
+                                width="200px"
+                                bordered
+                                src={
+                                  person.counselling_introduction[0]
+                                    .ct_counsellor_photo
+                                }
+                                verticalAlign="top"
+                              />{" "}
+                            </div>
+
+                            <div style={{ width: "20%", float: "right" }}>
+                              <Table floated="right" basic="very" collapsing>
+                                <Table.Body>
+                                  <Table.Row>
+                                    <Table.Cell colspan="2">
+                                      <Button.Group style={{ width: "100%" }}>
+                                        <Button
+                                          positive
+                                          onClick={() =>
+                                            this.updateUser(person, 1)
+                                          }
+                                        >
+                                          {" "}
+                                          <Icon name="checkmark" />{" "}
+                                        </Button>
+                                        <Button.Or text="or" />
+                                        <Button
+                                          negative
+                                          onClick={() =>
+                                            this.updateUser(person, 2)
+                                          }
+                                        >
+                                          {" "}
+                                          <Icon name="close" />
+                                        </Button>
+                                      </Button.Group>
+                                    </Table.Cell>
+                                  </Table.Row>
+                                  <Table.Row>
+                                    <Table.Cell colspan="2">
+                                      {" "}
                                       <Button
-                                        positive
-                                        onClick={() =>
-                                          this.updateUser(person, 1)
-                                        }
+                                        style={{ width: "100%" }}
+                                        onClick={() => this.documents(person)}
                                       >
-                                        {" "}
-                                        <Icon name="checkmark" />{" "}
-                                      </Button>
-                                      <Button.Or text="or" />
-                                      <Button
-                                        negative
-                                        onClick={() =>
-                                          this.updateUser(person, 2)
-                                        }
-                                      >
-                                        {" "}
-                                        <Icon name="close" />
-                                      </Button>
-                                    </Button.Group>
-                                  </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    {" "}
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.documents(person)}
-                                    >
-                                      <Icon name="paperclip" />
+                                        <Icon name="paperclip" />
                                       View documents
                                     </Button>
-                                  </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.messageModel(person)}
-                                    >
-                                      {" "}
-                                      <Icon name="inbox" />
-                                      Send a message
-                                    </Button>
-                                  </Table.Cell>
-                                </Table.Row>
-                                {person.counselling_introduction[0]
-                                  .ct_counsellor_video_url ? (
+                                    </Table.Cell>
+                                  </Table.Row>
                                   <Table.Row>
                                     <Table.Cell colspan="2">
                                       <Button
                                         style={{ width: "100%" }}
-                                        onClick={() => this.videoModel(person)}
-                                        color="youtube"
+                                        onClick={() => this.messageModel(person)}
                                       >
-                                        <Icon name="youtube" />
-                                        View Video
-                                      </Button>
+                                        {" "}
+                                        <Icon name="inbox" />
+                                      Send a message
+                                    </Button>
                                     </Table.Cell>
                                   </Table.Row>
-                                ) : (
-                                  // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                  // </iframe>
+                                  {person.counselling_introduction[0]
+                                    .ct_counsellor_video_url ? (
+                                      <Table.Row>
+                                        <Table.Cell colspan="2">
+                                          <Button
+                                            style={{ width: "100%" }}
+                                            onClick={() => this.videoModel(person)}
+                                            color="youtube"
+                                          >
+                                            <Icon name="youtube" />
+                                        View Video
+                                      </Button>
+                                        </Table.Cell>
+                                      </Table.Row>
+                                    ) : (
+                                      // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                                      // </iframe>
 
-                                  <p style={{ color: "red" }}></p>
-                                )}
-                              </Table.Body>
-                            </Table>
-                          </div>
-                          <div
-                            style={{
-                              float: "left",
-                              width: "50%",
-                              textAlign: "left",
-                            }}
-                          >
-                            <Card.Header>
-                              {" "}
-                              <List size="large" horizontal>
-                                <List.Item as="a">
-                                  {" "}
-                                  {
-                                    person.counsellor_details[0].CT_FIRST_NAME
-                                  }{" "}
-                                </List.Item>
-                                <List.Item as="a">
-                                  {person.counsellor_details[0].CT_LAST_NAME}{" "}
-                                </List.Item>
-                              </List>
-                            </Card.Header>
-                            <Card.Description>
-                              <strong>My Counselling Group(s)</strong>
-                              {person.counselling_details.map(
-                                (details, index) => (
-                                  <p>
-                                    <span>
-                                      {" "}
-                                      {details.ct_counselling_level_name} -{" "}
-                                      {details.ct_counselling_subject_name} - S$
+                                      <p style={{ color: "red" }}></p>
+                                    )}
+                                </Table.Body>
+                              </Table>
+                            </div>
+                            <div
+                              style={{
+                                float: "left",
+                                width: "50%",
+                                textAlign: "left",
+                              }}
+                            >
+                              <Card.Header>
+                                {" "}
+                                <List size="large" horizontal>
+                                  <List.Item as="a">
+                                    {" "}
+                                    {
+                                      person.counsellor_details[0].CT_FIRST_NAME
+                                    }{" "}
+                                  </List.Item>
+                                  <List.Item as="a">
+                                    {person.counsellor_details[0].CT_LAST_NAME}{" "}
+                                  </List.Item>
+                                </List>
+                              </Card.Header>
+                              <Card.Description>
+                                <strong>My Counselling Group(s)</strong>
+                                {person.counselling_details.map(
+                                  (details, index) => (
+                                    <p>
+                                      <span>
+                                        {" "}
+                                        {details.ct_counselling_level_name} -{" "}
+                                        {details.ct_counselling_subject_name} - S$
                                       {details.ct_counsellor_hourly_rate}{" "}
-                                    </span>
-                                  </p>
-                                )
-                              )}
-                              <strong>My Qualification</strong>
-                              {person.counselling_education.map(
-                                (details, index) => (
-                                  <p>
-                                    <span>
-                                      {" "}
-                                      {details.ct_qualification_name} -{" "}
-                                      {details.ct_institute_name}{" "}
-                                    </span>
-                                  </p>
-                                )
-                              )}
-                              <strong>
-                                {
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_headline
-                                }
-                              </strong>
-                              <p>
-                                {
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_about_description
-                                }
-                              </p>
-                            </Card.Description>
-                          </div>
-                        </Card.Content>
-                        <Card.Content extra>
-                          <Accordion>
-                            <Accordion.Title
-                              active={this.state.activeIndex === index}
-                              index={index}
-                              onClick={this.handleClick}
-                            >
-                              <Icon name="dropdown" />
+                                      </span>
+                                    </p>
+                                  )
+                                )}
+                                <strong>My Qualification</strong>
+                                {person.counselling_education.map(
+                                  (details, index) => (
+                                    <p>
+                                      <span>
+                                        {" "}
+                                        {details.ct_qualification_name} -{" "}
+                                        {details.ct_institute_name}{" "}
+                                      </span>
+                                    </p>
+                                  )
+                                )}
+                                <strong>
+                                  {
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_headline
+                                  }
+                                </strong>
+                                <p>
+                                  {
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_about_description
+                                  }
+                                </p>
+                              </Card.Description>
+                            </div>
+                          </Card.Content>
+                          <Card.Content extra>
+                            <Accordion>
+                              <Accordion.Title
+                                active={this.state.activeIndex === index}
+                                index={index}
+                                onClick={this.handleClick}
+                              >
+                                <Icon name="dropdown" />
                               Read More{" "}
-                            </Accordion.Title>
-                            <Accordion.Content
-                              active={this.state.activeIndex === index}
-                            >
-                              <Segment>
-                                <h2>Available Counselling Sessions</h2>
-                                <div
-                                  style={{
-                                    position: "relative",
-                                  }}
-                                >
-                                  {this.state.activeIndex === index && (
-                                    <FullCalendar
-                                      expandRows={true}
-                                      handleWindowResize={true}
-                                      nowIndicator={false}
-                                      plugins={[
-                                        dayGridPlugin,
-                                        timeGridPlugin,
-                                        interactionPlugin,
-                                      ]}
-                                      headerToolbar={false}
-                                      height={500}
-                                      initialView="timeGridWeek"
-                                      duration={{ days: 7 }}
-                                      dayHeaderFormat={{
-                                        weekday: "long",
-                                      }}
-                                      events={person.calendar}
-                                    />
-                                  )}
-                                </div>
-                              </Segment>
-                            </Accordion.Content>
-                          </Accordion>
-                        </Card.Content>
-                      </Card>
-                    </div>
-                  )}
+                              </Accordion.Title>
+                              <Accordion.Content
+                                active={this.state.activeIndex === index}
+                              >
+                                <Segment>
+                                  <h2>Available Counselling Sessions</h2>
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                    }}
+                                  >
+                                    {this.state.activeIndex === index && (
+                                      <FullCalendar
+                                        expandRows={true}
+                                        handleWindowResize={true}
+                                        nowIndicator={false}
+                                        plugins={[
+                                          dayGridPlugin,
+                                          timeGridPlugin,
+                                          interactionPlugin,
+                                        ]}
+                                        headerToolbar={false}
+                                        height={500}
+                                        initialView="timeGridWeek"
+                                        duration={{ days: 7 }}
+                                        dayHeaderFormat={{
+                                          weekday: "long",
+                                        }}
+                                        events={person.calendar}
+                                      />
+                                    )}
+                                  </div>
+                                </Segment>
+                              </Accordion.Content>
+                            </Accordion>
+                          </Card.Content>
+                        </Card>
+                      </div>
+                    )}
                 </div>
               ))}
             </Container>
@@ -482,274 +482,274 @@ class ViewVerification extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                this.state.acceptedItems == 0 && (
-                  <div class="ui card" style={{ width: "100%" }}>
-                    <h3 style={{ padding: "3%", color: "grey" }}>
-                      No counsellors for you
+                  this.state.acceptedItems == 0 && (
+                    <div class="ui card" style={{ width: "100%" }}>
+                      <h3 style={{ padding: "3%", color: "grey" }}>
+                        No counsellors for you
                     </h3>
-                  </div>
-                )
-              )}
+                    </div>
+                  )
+                )}
 
               {this.state.post.map((person, index) => (
                 <div>
                   {parseInt(
                     person.counsellor_details[0].CT_COUNSELLOR_VERIFIED
                   ) == 1 && (
-                    <div class="ui card" style={{ width: "100%" }}>
-                        
-                      <Modal
-                        onClose={() => this.setState({ showMessage: false })}
-                        onOpen={() => this.setState({ showMessage: true })}
-                        open={this.state.showMessage}
-                      >
-                        <Modal.Header>Message to counsellor</Modal.Header>
-                        <Modal.Content>
-                          <Modal.Description>
-                            <CreateMessage
-                              CounsellorID={this.state.messageCounsellorID}
-                              person={this.state.messagePerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ show: false })}
-                        onOpen={() => this.setState({ show: true })}
-                        open={this.state.show}
-                      >
-                        <Modal.Header>Create a session request</Modal.Header>
-                        <Modal.Content>
-                          {/* <Image style={{ padding: '5%' }} size='medium' src={person.counselling_introduction[0].ct_counsellor_photo} wrapped /> */}
-                          <Modal.Description>
-                            <CreateSession
-                              CounsellorID={this.state.sessionCounsellorID}
-                              person={this.state.sessionPerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>{" "}
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ showMessage: false })}
-                        onOpen={() => this.setState({ showMessage: true })}
-                        open={this.state.showMessage}
-                      >
-                        <Modal.Header>Message to counsellor</Modal.Header>
-                        <Modal.Content>
-                          <Modal.Description>
-                            <CreateMessage
-                              CounsellorID={this.state.messageCounsellorID}
-                              person={this.state.messagePerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ showVideo: false })}
-                        onOpen={() => this.setState({ showVideo: true })}
-                        open={this.state.showVideo}
-                      >
-                        <Modal.Content>
-                          <h2>Counsellor Introduction Video</h2>
-                          <Segment textAlign="center">
-                            {this.state.videoURL ? (
-                              <iframe
-                                width="900"
-                                height="400"
-                                src={this.state.videoURL}
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                              ></iframe>
-                            ) : (
-                              <p style={{ color: "red" }}>
-                                No video was provided
-                              </p>
-                            )}
-                          </Segment>
-                        </Modal.Content>
-                      </Modal>
-                      <Card style={{ width: "100%" }}>
-                        <Card.Content>
-                          <div style={{ float: "left", paddingRight: "2%" }}>
-                            <Image
-                              width="200px"
-                              bordered
-                              src={
-                                person.counselling_introduction[0]
-                                  .ct_counsellor_photo
-                              }
-                              verticalAlign="top"
-                            />{" "}
-                          </div>
+                      <div class="ui card" style={{ width: "100%" }}>
 
-                          <div style={{ width: "20%", float: "right" }}>
-                            <Table floated="right" basic="very" collapsing>
-                              <Table.Body>
-                              <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    {" "}
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.documents(person)}
-                                    >
-                                      <Icon name="paperclip" />
+                        <Modal
+                          onClose={() => this.setState({ showMessage: false })}
+                          onOpen={() => this.setState({ showMessage: true })}
+                          open={this.state.showMessage}
+                        >
+                          <Modal.Header>Message to counsellor</Modal.Header>
+                          <Modal.Content>
+                            <Modal.Description>
+                              <CreateMessage
+                                CounsellorID={this.state.messageCounsellorID}
+                                person={this.state.messagePerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ show: false })}
+                          onOpen={() => this.setState({ show: true })}
+                          open={this.state.show}
+                        >
+                          <Modal.Header>Create a session request</Modal.Header>
+                          <Modal.Content>
+                            {/* <Image style={{ padding: '5%' }} size='medium' src={person.counselling_introduction[0].ct_counsellor_photo} wrapped /> */}
+                            <Modal.Description>
+                              <CreateSession
+                                CounsellorID={this.state.sessionCounsellorID}
+                                person={this.state.sessionPerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>{" "}
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ showMessage: false })}
+                          onOpen={() => this.setState({ showMessage: true })}
+                          open={this.state.showMessage}
+                        >
+                          <Modal.Header>Message to counsellor</Modal.Header>
+                          <Modal.Content>
+                            <Modal.Description>
+                              <CreateMessage
+                                CounsellorID={this.state.messageCounsellorID}
+                                person={this.state.messagePerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ showVideo: false })}
+                          onOpen={() => this.setState({ showVideo: true })}
+                          open={this.state.showVideo}
+                        >
+                          <Modal.Content>
+                            <h2>Counsellor Introduction Video</h2>
+                            <Segment textAlign="center">
+                              {this.state.videoURL ? (
+                                <iframe
+                                  width="900"
+                                  height="400"
+                                  src={this.state.videoURL}
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen
+                                ></iframe>
+                              ) : (
+                                  <p style={{ color: "red" }}>
+                                    No video was provided
+                                  </p>
+                                )}
+                            </Segment>
+                          </Modal.Content>
+                        </Modal>
+                        <Card style={{ width: "100%" }}>
+                          <Card.Content>
+                            <div style={{ float: "left", paddingRight: "2%" }}>
+                              <Image
+                                width="200px"
+                                bordered
+                                src={
+                                  person.counselling_introduction[0]
+                                    .ct_counsellor_photo
+                                }
+                                verticalAlign="top"
+                              />{" "}
+                            </div>
+
+                            <div style={{ width: "20%", float: "right" }}>
+                              <Table floated="right" basic="very" collapsing>
+                                <Table.Body>
+                                  <Table.Row>
+                                    <Table.Cell colspan="2">
+                                      {" "}
+                                      <Button
+                                        style={{ width: "100%" }}
+                                        onClick={() => this.documents(person)}
+                                      >
+                                        <Icon name="paperclip" />
                                       View documents
                                     </Button>
-                                  </Table.Cell>
-                                </Table.Row>
+                                    </Table.Cell>
+                                  </Table.Row>
 
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.messageModel(person)}
-                                    >
-                                      {" "}
-                                      <Icon name="inbox" />
-                                      Send a message
-                                    </Button>
-                                  </Table.Cell>
-                                </Table.Row>
-                                {person.counselling_introduction[0]
-                                  .ct_counsellor_video_url ? (
                                   <Table.Row>
                                     <Table.Cell colspan="2">
                                       <Button
                                         style={{ width: "100%" }}
-                                        onClick={() => this.videoModel(person)}
-                                        color="youtube"
+                                        onClick={() => this.messageModel(person)}
                                       >
-                                        <Icon name="youtube" />
-                                        View Video
-                                      </Button>
+                                        {" "}
+                                        <Icon name="inbox" />
+                                      Send a message
+                                    </Button>
                                     </Table.Cell>
                                   </Table.Row>
-                                ) : (
-                                  // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                  // </iframe>
+                                  {person.counselling_introduction[0]
+                                    .ct_counsellor_video_url ? (
+                                      <Table.Row>
+                                        <Table.Cell colspan="2">
+                                          <Button
+                                            style={{ width: "100%" }}
+                                            onClick={() => this.videoModel(person)}
+                                            color="youtube"
+                                          >
+                                            <Icon name="youtube" />
+                                        View Video
+                                      </Button>
+                                        </Table.Cell>
+                                      </Table.Row>
+                                    ) : (
+                                      // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                                      // </iframe>
 
-                                  <p style={{ color: "red" }}></p>
-                                )}
-                              </Table.Body>
-                            </Table>
-                          </div>
-                          <div
-                            style={{
-                              float: "left",
-                              width: "50%",
-                              textAlign: "left",
-                            }}
-                          >
-                            <Card.Header>
-                              {" "}
-                              <List size="large" horizontal>
-                                <List.Item as="a">
-                                  {" "}
-                                  {
-                                    person.counsellor_details[0].CT_FIRST_NAME
-                                  }{" "}
-                                </List.Item>
-                                <List.Item as="a">
-                                  {person.counsellor_details[0].CT_LAST_NAME}{" "}
-                                </List.Item>
-                              </List>
-                            </Card.Header>
-                            <Card.Description>
-                              <strong>My Counselling Group(s)</strong>
-                              {person.counselling_details.map(
-                                (details, index) => (
-                                  <p>
-                                    <span>
-                                      {" "}
-                                      {details.ct_counselling_level_name} -{" "}
-                                      {details.ct_counselling_subject_name} - S$
+                                      <p style={{ color: "red" }}></p>
+                                    )}
+                                </Table.Body>
+                              </Table>
+                            </div>
+                            <div
+                              style={{
+                                float: "left",
+                                width: "50%",
+                                textAlign: "left",
+                              }}
+                            >
+                              <Card.Header>
+                                {" "}
+                                <List size="large" horizontal>
+                                  <List.Item as="a">
+                                    {" "}
+                                    {
+                                      person.counsellor_details[0].CT_FIRST_NAME
+                                    }{" "}
+                                  </List.Item>
+                                  <List.Item as="a">
+                                    {person.counsellor_details[0].CT_LAST_NAME}{" "}
+                                  </List.Item>
+                                </List>
+                              </Card.Header>
+                              <Card.Description>
+                                <strong>My Counselling Group(s)</strong>
+                                {person.counselling_details.map(
+                                  (details, index) => (
+                                    <p>
+                                      <span>
+                                        {" "}
+                                        {details.ct_counselling_level_name} -{" "}
+                                        {details.ct_counselling_subject_name} - S$
                                       {details.ct_counsellor_hourly_rate}{" "}
-                                    </span>
-                                  </p>
-                                )
-                              )}
-                              <strong>My Qualification</strong>
-                              {person.counselling_education.map(
-                                (details, index) => (
-                                  <p>
-                                    <span>
-                                      {" "}
-                                      {details.ct_qualification_name} -{" "}
-                                      {details.ct_institute_name}{" "}
-                                    </span>
-                                  </p>
-                                )
-                              )}
-                              <strong>
-                                {
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_headline
-                                }
-                              </strong>
-                              <p>
-                                {
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_about_description
-                                }
-                              </p>
-                            </Card.Description>
-                          </div>
-                        </Card.Content>
-                        <Card.Content extra>
-                          <Accordion>
-                            <Accordion.Title
-                              active={this.state.activeIndex === index}
-                              index={index}
-                              onClick={this.handleClick}
-                            >
-                              <Icon name="dropdown" />
+                                      </span>
+                                    </p>
+                                  )
+                                )}
+                                <strong>My Qualification</strong>
+                                {person.counselling_education.map(
+                                  (details, index) => (
+                                    <p>
+                                      <span>
+                                        {" "}
+                                        {details.ct_qualification_name} -{" "}
+                                        {details.ct_institute_name}{" "}
+                                      </span>
+                                    </p>
+                                  )
+                                )}
+                                <strong>
+                                  {
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_headline
+                                  }
+                                </strong>
+                                <p>
+                                  {
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_about_description
+                                  }
+                                </p>
+                              </Card.Description>
+                            </div>
+                          </Card.Content>
+                          <Card.Content extra>
+                            <Accordion>
+                              <Accordion.Title
+                                active={this.state.activeIndex === index}
+                                index={index}
+                                onClick={this.handleClick}
+                              >
+                                <Icon name="dropdown" />
                               Read More{" "}
-                            </Accordion.Title>
-                            <Accordion.Content
-                              active={this.state.activeIndex === index}
-                            >
-                              <Segment>
-                                <h2>Available Counselling Sessions</h2>
-                                <div
-                                  style={{
-                                    position: "relative",
-                                  }}
-                                >
-                                  {this.state.activeIndex === index && (
-                                    <FullCalendar
-                                      expandRows={true}
-                                      handleWindowResize={true}
-                                      nowIndicator={false}
-                                      plugins={[
-                                        dayGridPlugin,
-                                        timeGridPlugin,
-                                        interactionPlugin,
-                                      ]}
-                                      headerToolbar={false}
-                                      height={500}
-                                      initialView="timeGridWeek"
-                                      duration={{ days: 7 }}
-                                      dayHeaderFormat={{
-                                        weekday: "long",
-                                      }}
-                                      events={person.calendar}
-                                    />
-                                  )}
-                                </div>
-                              </Segment>
-                            </Accordion.Content>
-                          </Accordion>
-                        </Card.Content>
-                      </Card>
-                    </div>
-                  )}
+                              </Accordion.Title>
+                              <Accordion.Content
+                                active={this.state.activeIndex === index}
+                              >
+                                <Segment>
+                                  <h2>Available Counselling Sessions</h2>
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                    }}
+                                  >
+                                    {this.state.activeIndex === index && (
+                                      <FullCalendar
+                                        expandRows={true}
+                                        handleWindowResize={true}
+                                        nowIndicator={false}
+                                        plugins={[
+                                          dayGridPlugin,
+                                          timeGridPlugin,
+                                          interactionPlugin,
+                                        ]}
+                                        headerToolbar={false}
+                                        height={500}
+                                        initialView="timeGridWeek"
+                                        duration={{ days: 7 }}
+                                        dayHeaderFormat={{
+                                          weekday: "long",
+                                        }}
+                                        events={person.calendar}
+                                      />
+                                    )}
+                                  </div>
+                                </Segment>
+                              </Accordion.Content>
+                            </Accordion>
+                          </Card.Content>
+                        </Card>
+                      </div>
+                    )}
                 </div>
               ))}
             </Container>
@@ -788,298 +788,298 @@ class ViewVerification extends React.Component {
                   </div>{" "}
                 </Segment>
               ) : (
-                this.state.rejectedItems == 0 && (
-                  <div class="ui card" style={{ width: "100%" }}>
-                    <h3 style={{ padding: "3%", color: "grey" }}>
-                      No counsellors for you
+                  this.state.rejectedItems == 0 && (
+                    <div class="ui card" style={{ width: "100%" }}>
+                      <h3 style={{ padding: "3%", color: "grey" }}>
+                        No counsellors for you
                     </h3>
-                  </div>
-                )
-              )}
+                    </div>
+                  )
+                )}
 
               {this.state.post.map((person, index) => (
                 <div>
                   {parseInt(
                     person.counsellor_details[0].CT_COUNSELLOR_VERIFIED
                   ) == 2 && (
-                    <div class="ui card" style={{ width: "100%" }}> 
-                      <Modal
-                        onClose={() => this.setState({ showMessage: false })}
-                        onOpen={() => this.setState({ showMessage: true })}
-                        open={this.state.showMessage}
-                      >
-                        <Modal.Header>Message to counsellor</Modal.Header>
-                        <Modal.Content>
-                          <Modal.Description>
-                            <CreateMessage
-                              CounsellorID={this.state.messageCounsellorID}
-                              person={this.state.messagePerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ show: false })}
-                        onOpen={() => this.setState({ show: true })}
-                        open={this.state.show}
-                      >
-                        <Modal.Header>Create a session request</Modal.Header>
-                        <Modal.Content>
-                          {/* <Image style={{ padding: '5%' }} size='medium' src={person.counselling_introduction[0].ct_counsellor_photo} wrapped /> */}
-                          <Modal.Description>
-                            <CreateSession
-                              CounsellorID={this.state.sessionCounsellorID}
-                              person={this.state.sessionPerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>{" "}
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ showMessage: false })}
-                        onOpen={() => this.setState({ showMessage: true })}
-                        open={this.state.showMessage}
-                      >
-                        <Modal.Header>Message to counsellor</Modal.Header>
-                        <Modal.Content>
-                          <Modal.Description>
-                            <CreateMessage
-                              CounsellorID={this.state.messageCounsellorID}
-                              person={this.state.messagePerson}
-                              UserID={this.state.userID}
-                            />
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal>
-                      <Modal
-                        closeIcon
-                        onClose={() => this.setState({ showVideo: false })}
-                        onOpen={() => this.setState({ showVideo: true })}
-                        open={this.state.showVideo}
-                      >
-                        <Modal.Content>
-                          <h2>Counsellor Introduction Video</h2>
-                          <Segment textAlign="center">
-                            {this.state.videoURL ? (
-                              <iframe
-                                width="900"
-                                height="400"
-                                src={this.state.videoURL}
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                              ></iframe>
-                            ) : (
-                              <p style={{ color: "red" }}>
-                                No video was provided
-                              </p>
-                            )}
-                          </Segment>
-                        </Modal.Content>
-                      </Modal>
-                      <Card style={{ width: "100%" }}>
-                        <Card.Content>
-                          <div style={{ float: "left", paddingRight: "2%" }}>
-                            <Image
-                              width="200px"
-                              bordered
-                              src={
-                                person.counselling_introduction[0]
-                                  .ct_counsellor_photo
-                              }
-                              verticalAlign="top"
-                            />{" "}
-                          </div>
+                      <div class="ui card" style={{ width: "100%" }}>
+                        <Modal
+                          onClose={() => this.setState({ showMessage: false })}
+                          onOpen={() => this.setState({ showMessage: true })}
+                          open={this.state.showMessage}
+                        >
+                          <Modal.Header>Message to counsellor</Modal.Header>
+                          <Modal.Content>
+                            <Modal.Description>
+                              <CreateMessage
+                                CounsellorID={this.state.messageCounsellorID}
+                                person={this.state.messagePerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ show: false })}
+                          onOpen={() => this.setState({ show: true })}
+                          open={this.state.show}
+                        >
+                          <Modal.Header>Create a session request</Modal.Header>
+                          <Modal.Content>
+                            {/* <Image style={{ padding: '5%' }} size='medium' src={person.counselling_introduction[0].ct_counsellor_photo} wrapped /> */}
+                            <Modal.Description>
+                              <CreateSession
+                                CounsellorID={this.state.sessionCounsellorID}
+                                person={this.state.sessionPerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>{" "}
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ showMessage: false })}
+                          onOpen={() => this.setState({ showMessage: true })}
+                          open={this.state.showMessage}
+                        >
+                          <Modal.Header>Message to counsellor</Modal.Header>
+                          <Modal.Content>
+                            <Modal.Description>
+                              <CreateMessage
+                                CounsellorID={this.state.messageCounsellorID}
+                                person={this.state.messagePerson}
+                                UserID={this.state.userID}
+                              />
+                            </Modal.Description>
+                          </Modal.Content>
+                        </Modal>
+                        <Modal
+                          closeIcon
+                          onClose={() => this.setState({ showVideo: false })}
+                          onOpen={() => this.setState({ showVideo: true })}
+                          open={this.state.showVideo}
+                        >
+                          <Modal.Content>
+                            <h2>Counsellor Introduction Video</h2>
+                            <Segment textAlign="center">
+                              {this.state.videoURL ? (
+                                <iframe
+                                  width="900"
+                                  height="400"
+                                  src={this.state.videoURL}
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen
+                                ></iframe>
+                              ) : (
+                                  <p style={{ color: "red" }}>
+                                    No video was provided
+                                  </p>
+                                )}
+                            </Segment>
+                          </Modal.Content>
+                        </Modal>
+                        <Card style={{ width: "100%" }}>
+                          <Card.Content>
+                            <div style={{ float: "left", paddingRight: "2%" }}>
+                              <Image
+                                width="200px"
+                                bordered
+                                src={
+                                  person.counselling_introduction[0]
+                                    .ct_counsellor_photo
+                                }
+                                verticalAlign="top"
+                              />{" "}
+                            </div>
 
-                          <div style={{ width: "20%", float: "right" }}>
-                            <Table floated="right" basic="very" collapsing>
-                              <Table.Body>
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    <Button.Group style={{ width: "100%" }}>
+                            <div style={{ width: "20%", float: "right" }}>
+                              <Table floated="right" basic="very" collapsing>
+                                <Table.Body>
+                                  <Table.Row>
+                                    <Table.Cell colspan="2">
+                                      <Button.Group style={{ width: "100%" }}>
+                                        <Button
+                                          positive
+                                          onClick={() =>
+                                            this.updateUser(person, 1)
+                                          }
+                                        >
+                                          {" "}
+                                          <Icon name="checkmark" />{" "}
+                                        </Button>
+                                        <Button.Or text="or" />
+                                        <Button
+                                          negative
+                                          onClick={() =>
+                                            this.updateUser(person, 2)
+                                          }
+                                        >
+                                          {" "}
+                                          <Icon name="close" />
+                                        </Button>
+                                      </Button.Group>
+                                    </Table.Cell>
+                                  </Table.Row>
+                                  <Table.Row>
+                                    <Table.Cell colspan="2">
+                                      {" "}
                                       <Button
-                                        positive
-                                        onClick={() =>
-                                          this.updateUser(person, 1)
-                                        }
+                                        style={{ width: "100%" }}
+                                        onClick={() => this.documents(person)}
                                       >
-                                        {" "}
-                                        <Icon name="checkmark" />{" "}
-                                      </Button>
-                                      <Button.Or text="or" />
-                                      <Button
-                                        negative
-                                        onClick={() =>
-                                          this.updateUser(person, 2)
-                                        }
-                                      >
-                                        {" "}
-                                        <Icon name="close" />
-                                      </Button>
-                                    </Button.Group>
-                                  </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    {" "}
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.documents(person)}
-                                    >
-                                      <Icon name="paperclip" />
+                                        <Icon name="paperclip" />
                                       View documents
                                     </Button>
-                                  </Table.Cell>
-                                </Table.Row>
+                                    </Table.Cell>
+                                  </Table.Row>
 
-                                <Table.Row>
-                                  <Table.Cell colspan="2">
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      onClick={() => this.messageModel(person)}
-                                    >
-                                      {" "}
-                                      <Icon name="inbox" />
-                                      Send a message
-                                    </Button>
-                                  </Table.Cell>
-                                </Table.Row>
-                                {person.counselling_introduction[0]
-                                  .ct_counsellor_video_url ? (
                                   <Table.Row>
                                     <Table.Cell colspan="2">
                                       <Button
                                         style={{ width: "100%" }}
-                                        onClick={() => this.videoModel(person)}
-                                        color="youtube"
+                                        onClick={() => this.messageModel(person)}
                                       >
-                                        <Icon name="youtube" />
-                                        View Video
-                                      </Button>
+                                        {" "}
+                                        <Icon name="inbox" />
+                                      Send a message
+                                    </Button>
                                     </Table.Cell>
                                   </Table.Row>
-                                ) : (
-                                  // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
-                                  // </iframe>
+                                  {person.counselling_introduction[0]
+                                    .ct_counsellor_video_url ? (
+                                      <Table.Row>
+                                        <Table.Cell colspan="2">
+                                          <Button
+                                            style={{ width: "100%" }}
+                                            onClick={() => this.videoModel(person)}
+                                            color="youtube"
+                                          >
+                                            <Icon name="youtube" />
+                                        View Video
+                                      </Button>
+                                        </Table.Cell>
+                                      </Table.Row>
+                                    ) : (
+                                      // <iframe width="600" height="315" src={COUNSELLOR_VIDEO_URL}>
+                                      // </iframe>
 
-                                  <p style={{ color: "red" }}></p>
-                                )}
-                              </Table.Body>
-                            </Table>
-                          </div>
-                          <div
-                            style={{
-                              float: "left",
-                              width: "50%",
-                              textAlign: "left",
-                            }}
-                          >
-                            <Card.Header>
-                              {" "}
-                              <List size="large" horizontal>
-                                <List.Item as="a">
-                                  {" "}
-                                  {
-                                    person.counsellor_details[0].CT_FIRST_NAME
-                                  }{" "}
-                                </List.Item>
-                                <List.Item as="a">
-                                  {person.counsellor_details[0].CT_LAST_NAME}{" "}
-                                </List.Item>
-                              </List>
-                            </Card.Header>
-                            <Card.Description>
-                              <strong>My Counselling Group(s)</strong>
-                              {person.counselling_details.map(
-                                (details, index) => (
-                                  <p>
-                                    <span>
-                                      {" "}
-                                      {details.ct_counselling_level_name} -{" "}
-                                      {details.ct_counselling_subject_name} - S$
+                                      <p style={{ color: "red" }}></p>
+                                    )}
+                                </Table.Body>
+                              </Table>
+                            </div>
+                            <div
+                              style={{
+                                float: "left",
+                                width: "50%",
+                                textAlign: "left",
+                              }}
+                            >
+                              <Card.Header>
+                                {" "}
+                                <List size="large" horizontal>
+                                  <List.Item as="a">
+                                    {" "}
+                                    {
+                                      person.counsellor_details[0].CT_FIRST_NAME
+                                    }{" "}
+                                  </List.Item>
+                                  <List.Item as="a">
+                                    {person.counsellor_details[0].CT_LAST_NAME}{" "}
+                                  </List.Item>
+                                </List>
+                              </Card.Header>
+                              <Card.Description>
+                                <strong>My Counselling Group(s)</strong>
+                                {person.counselling_details.map(
+                                  (details, index) => (
+                                    <p>
+                                      <span>
+                                        {" "}
+                                        {details.ct_counselling_level_name} -{" "}
+                                        {details.ct_counselling_subject_name} - S$
                                       {details.ct_counsellor_hourly_rate}{" "}
-                                    </span>
-                                  </p>
-                                )
-                              )}
-                              <strong>My Qualification</strong>
-                              {person.counselling_education.map(
-                                (details, index) => (
-                                  <p>
-                                    <span>
-                                      {" "}
-                                      {details.ct_qualification_name} -{" "}
-                                      {details.ct_institute_name}{" "}
-                                    </span>
-                                  </p>
-                                )
-                              )}
-                              <strong>
-                                {
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_headline
-                                }
-                              </strong>
-                              <p>
-                                {
-                                  person.counselling_introduction[0]
-                                    .ct_counsellor_about_description
-                                }
-                              </p>
-                            </Card.Description>
-                          </div>
-                        </Card.Content>
-                        <Card.Content extra>
-                          <Accordion>
-                            <Accordion.Title
-                              active={this.state.activeIndex === index}
-                              index={index}
-                              onClick={this.handleClick}
-                            >
-                              <Icon name="dropdown" />
+                                      </span>
+                                    </p>
+                                  )
+                                )}
+                                <strong>My Qualification</strong>
+                                {person.counselling_education.map(
+                                  (details, index) => (
+                                    <p>
+                                      <span>
+                                        {" "}
+                                        {details.ct_qualification_name} -{" "}
+                                        {details.ct_institute_name}{" "}
+                                      </span>
+                                    </p>
+                                  )
+                                )}
+                                <strong>
+                                  {
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_headline
+                                  }
+                                </strong>
+                                <p>
+                                  {
+                                    person.counselling_introduction[0]
+                                      .ct_counsellor_about_description
+                                  }
+                                </p>
+                              </Card.Description>
+                            </div>
+                          </Card.Content>
+                          <Card.Content extra>
+                            <Accordion>
+                              <Accordion.Title
+                                active={this.state.activeIndex === index}
+                                index={index}
+                                onClick={this.handleClick}
+                              >
+                                <Icon name="dropdown" />
                               Read More{" "}
-                            </Accordion.Title>
-                            <Accordion.Content
-                              active={this.state.activeIndex === index}
-                            >
-                              <Segment>
-                                <h2>Available Counselling Sessions</h2>
-                                <div
-                                  style={{
-                                    position: "relative",
-                                  }}
-                                >
-                                  {this.state.activeIndex === index && (
-                                    <FullCalendar
-                                      expandRows={true}
-                                      handleWindowResize={true}
-                                      nowIndicator={false}
-                                      plugins={[
-                                        dayGridPlugin,
-                                        timeGridPlugin,
-                                        interactionPlugin,
-                                      ]}
-                                      headerToolbar={false}
-                                      height={500}
-                                      initialView="timeGridWeek"
-                                      duration={{ days: 7 }}
-                                      dayHeaderFormat={{
-                                        weekday: "long",
-                                      }}
-                                      events={person.calendar}
-                                    />
-                                  )}
-                                </div>
-                              </Segment>
-                            </Accordion.Content>
-                          </Accordion>
-                        </Card.Content>
-                      </Card>
-                    </div>
-                  )}
+                              </Accordion.Title>
+                              <Accordion.Content
+                                active={this.state.activeIndex === index}
+                              >
+                                <Segment>
+                                  <h2>Available Counselling Sessions</h2>
+                                  <div
+                                    style={{
+                                      position: "relative",
+                                    }}
+                                  >
+                                    {this.state.activeIndex === index && (
+                                      <FullCalendar
+                                        expandRows={true}
+                                        handleWindowResize={true}
+                                        nowIndicator={false}
+                                        plugins={[
+                                          dayGridPlugin,
+                                          timeGridPlugin,
+                                          interactionPlugin,
+                                        ]}
+                                        headerToolbar={false}
+                                        height={500}
+                                        initialView="timeGridWeek"
+                                        duration={{ days: 7 }}
+                                        dayHeaderFormat={{
+                                          weekday: "long",
+                                        }}
+                                        events={person.calendar}
+                                      />
+                                    )}
+                                  </div>
+                                </Segment>
+                              </Accordion.Content>
+                            </Accordion>
+                          </Card.Content>
+                        </Card>
+                      </div>
+                    )}
                 </div>
               ))}
             </Container>
@@ -1088,7 +1088,7 @@ class ViewVerification extends React.Component {
       },
     ],
   };
-  
+
   loadMore = (person) => {
     console.log(person);
     this.setState({ displayReview: this.state.displayReview + 2 });
@@ -1230,26 +1230,26 @@ class ViewVerification extends React.Component {
         const persons = res.data.counsellor;
         posts = persons;
         console.log("persons")
-        this.setState ({ pendingItems : 0,rejectedItems:0,acceptedItems:0 })
-console.log(persons)
-persons.forEach(element => {
-        if( element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
-            == 0  ){
-              this.setState({pendingItems :1})
-              console.log("pendingItems")
-            }  
-            if( element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
-              == 1 ){
-                this.setState({acceptedItems :1})
-                console.log("acceptedItems")
-              }  
+        this.setState({ pendingItems: 0, rejectedItems: 0, acceptedItems: 0 })
+        console.log(persons)
+        persons.forEach(element => {
+          if (element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
+            == 0) {
+            this.setState({ pendingItems: 1 })
+            console.log("pendingItems")
+          }
+          if (element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
+            == 1) {
+            this.setState({ acceptedItems: 1 })
+            console.log("acceptedItems")
+          }
 
-              if( element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
-                ==2 ){
-                  console.log("rejectedItems")
-                  this.setState({rejectedItems :1})
-                }  
-    
+          if (element.counsellor_details[0].CT_COUNSELLOR_VERIFIED
+            == 2) {
+            console.log("rejectedItems")
+            this.setState({ rejectedItems: 1 })
+          }
+
         });
 
         this.setState({
@@ -1562,8 +1562,8 @@ persons.forEach(element => {
     axios
       .get(
         baseURLAPI +
-          "/verification/getVerificationDocuments/" +
-          person.counsellor_details[0].CT_COUNSELLOR_ID,
+        "/verification/getVerificationDocuments/" +
+        person.counsellor_details[0].CT_COUNSELLOR_ID,
         {
           headers: {
             jwtToken: localStorage.jwtToken,
@@ -1598,7 +1598,7 @@ persons.forEach(element => {
       )
       .then((res) => {
         console.log(res);
- 
+
         this.setTable();
         this.resetSearch();
         toast.success("Successfully verified counsellor!", {
@@ -1804,7 +1804,7 @@ persons.forEach(element => {
               }}
               panes={this.state.panes}
             />
-         
+
           </Grid.Column>
         </Grid.Row>
       </Grid>

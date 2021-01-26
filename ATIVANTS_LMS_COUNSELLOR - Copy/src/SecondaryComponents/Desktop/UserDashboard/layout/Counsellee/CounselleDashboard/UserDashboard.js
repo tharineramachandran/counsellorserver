@@ -58,9 +58,9 @@ const UserDashboard = (props) => {
     image: "",
     isCompleted: "",
   });
-  const [isProfileSelected, setIsProfileSelected] = useState(false);
+  const [isProfileSelected, setIsProfileSelected] = useState(true);
   const [isRequestAcceptSelected, setIsRequestAcceptSelected] = useState(false);
-  const [isRequestChangeSelected, setIsRequestChangeSelected] = useState(true);
+  const [isRequestChangeSelected, setIsRequestChangeSelected] = useState(false);
   const [open, setOpen] = useState(false);
   const [isMessagesSelected, setIsMessagesSelected] = useState(false);
   const [isRequestSelected, setIsRequestSelected] = useState(false);
@@ -68,7 +68,7 @@ const UserDashboard = (props) => {
   const [IsLikeSelected, setIsLikeSelected] = useState(false);
   const [OpenMessageSelected, setOpenMessageSelected] = useState(false);
   
-  const [activeItem, setactiveItem] = useState(false);
+  const [activeItem, setactiveItem] = useState("home");
    
   const [OpenNotiSelected, setOpenNotiSelected] = useState(false);
   const [totalmessages, settotalmessages] = useState(0);

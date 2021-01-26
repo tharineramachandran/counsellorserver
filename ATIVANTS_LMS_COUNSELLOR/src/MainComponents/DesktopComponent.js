@@ -52,7 +52,7 @@ const DesktopComponent = ({ children }) => {
             
             if (response.status == 200)
             {
-              window.close();
+              //window.close();
                           
             }
           }
