@@ -41,10 +41,10 @@ router.post("/sendNewsletter", authorization, async (req, res) => {
 
         sendusers.push(users.rows[i].TX_USER_EMAIL);
       }
-      sendEmails = sendusers.concat(data.currentValues);
-      console.log(sendEmails);
+     
     }
-
+ sendEmails = sendusers.concat(data.currentValues);
+      console.log(sendEmails);
      email.sendNewsletter (sendEmails, data.subject, data.body  ,file )
 
     res.status(200).json("Successful");

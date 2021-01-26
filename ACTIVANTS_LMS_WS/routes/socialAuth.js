@@ -24,7 +24,7 @@ router.get('/google/:id', function (req, res, next) {
                 var isCounsellorValue = parseInt(req.query.state);
                 if (user.hasOwnProperty('rows')) {
                     if (user.rows[0].IS_COUNSELLOR != 1 || user.rows[0].IS_COUNSELLOR != 2) {
-                        console.log(["================user ", user]);
+                      
                         let newUser = pool.query(
                             'UPDATE   "T_USER" SET  "IS_COUNSELLOR" = $1  WHERE "ID_USER_UUID" = $2', [
                             isCounsellorValue, user.rows[0].ID_USER_UUID
@@ -37,8 +37,7 @@ router.get('/google/:id', function (req, res, next) {
                         });
                     }
                 }
-                console.log(["===============updated ", user]);
-
+                
                 res.redirect(CLIENT_HOME_PAGE_URL);
             });
         })(req, res, next);
@@ -59,10 +58,10 @@ router.get("/login/failed", (req, res) => {
 
 router.get("/login/success", async (req, res) => {
     try {
-        console.log("-------------------------user success-------------------------");
+     
         var resUser = res;
         var reqUser = req;
-        console.log(reqUser.user);
+      
         if (reqUser.user) {
             if (reqUser.user.hasOwnProperty("rows")) {
                 const jwtToken = jwtGenerator(req.user.googleId);
@@ -83,8 +82,6 @@ router.get("/login/success", async (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.logout();
-    console.log(req.user)
-    console.log(req.user)
     res.redirect(CLIENT_HOME_PAGE_URL);
 })
 

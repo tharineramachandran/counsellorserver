@@ -9,7 +9,7 @@ router.post("/confirmEmail", async (req, res) => {
   try {
     const data = req.body.email;
     const user = await pool.query('SELECT * FROM "T_USER" WHERE "TX_USER_EMAIL" = $1', [
-      data
+      data.toLowerCase()
     ]);
 
     if (user.rows.length !== 0) {
@@ -44,8 +44,7 @@ router.post("/reset", async (req, res) => {
   try {
     const data = req.body;
     const request = await pool.query('SELECT * FROM "CT_PASSWORD_CHANGE" WHERE "ct_password_code" = $1', [
-      data.code
-    ]);
+      data.code.toLowerCase()    ]);
     if (request.rows.length === 0) {
       return res.status(400).json("Wrong Reset Code");
     }

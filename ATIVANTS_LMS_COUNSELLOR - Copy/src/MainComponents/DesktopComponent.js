@@ -82,15 +82,7 @@ const DesktopComponent = ({ children }) => {
           localStorage.clear();
 
           setIsAuthenticated(false);
-          toast.error("Your session expired.Login again", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: "",
-          });
+       
         }
 
         fetch(baseURLAPI + "/user/" + localStorage.userID, {

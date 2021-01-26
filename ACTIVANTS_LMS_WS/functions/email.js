@@ -1,5 +1,5 @@
 const pool = require("../database/Db_Connection");
-
+const keys = require("../config/keys");
 async function sendNewsletter(sendEmail, subject, message, attachment) {
   const nodemailer = require("nodemailer");
 
@@ -8,8 +8,8 @@ async function sendNewsletter(sendEmail, subject, message, attachment) {
     port: 465, // Port
     secure: true, // this is true as port is 465
     auth: {
-      user: "counsellorapp49@gmail.com", // generated ethereal user
-      pass: "Red12!@12", // generated ethereal password
+      user: keys.mail.user, // generated ethereal user
+      pass: keys.mail.pass, // generated ethereal password
     },
   });
   for (i = 0; i < sendEmail.length; i++) {
@@ -17,7 +17,7 @@ async function sendNewsletter(sendEmail, subject, message, attachment) {
       console.log(sendEmail[i]);
       // send mail with defined transport object
       let info = transporter.sendMail({
-        from: "counsellorapp49@gmail.com", // sender address
+        from: keys.mail.user, // sender address
         to: sendEmail[i], // list of receivers
         subject: subject, // Subject line
         //text: "Hello world?", // plain text body
@@ -76,14 +76,14 @@ async function sendEmail(sendEmail, subject, message, matter, userID) {
         port: 465, // Port
         secure: true, // this is true as port is 465
         auth: {
-          user: "counsellorapp49@gmail.com", // generated ethereal user
-          pass: "Red12!@12", // generated ethereal password
+          user: keys.mail.user, // generated ethereal user
+          pass: keys.mail.pass, // generated ethereal password
         },
       });
 
       // send mail with defined transport object
       let info = transporter.sendMail({
-        from: "counsellorapp49@gmail.com", // sender address
+        from: keys.mail.user, // sender address
         to: sendEmail, // list of receivers
         subject: subject, // Subject line
         //text: "Hello world?", // plain text body

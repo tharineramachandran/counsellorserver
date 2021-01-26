@@ -63,6 +63,7 @@ const AdminDashboard = (props) => {
   var user = [];
   const [open, setOpen] = useState(false);
 
+  const [activeItem, setactiveItem] = useState(false);
   async function getName() {
     try {
       axios
@@ -243,7 +244,10 @@ const AdminDashboard = (props) => {
                 </Menu.Item>
                 <Menu.Menu position="right">
                   <Menu.Item
-                    onClick={() => {
+                   active={activeItem === 'verify'}
+                
+                   onClick={() => {
+                     setactiveItem(  "verify"  ) 
                         setIsVerification(!IsVerification); 
                         setNewsletter(false)
                     }}
@@ -251,7 +255,10 @@ const AdminDashboard = (props) => {
                     Verification
                   </Menu.Item>
                   <Menu.Item
-                    onClick={() => {
+                 active={activeItem === 'news'}
+                
+                 onClick={() => {
+                   setactiveItem(  "news"  ) 
                         setIsVerification(false); 
                         setNewsletter(!Newsletter)
                     }}

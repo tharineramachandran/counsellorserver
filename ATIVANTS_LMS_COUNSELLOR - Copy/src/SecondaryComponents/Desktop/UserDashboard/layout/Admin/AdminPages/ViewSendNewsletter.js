@@ -181,6 +181,7 @@ var  options= [ ];
       <Container>
         {" "}
         <Segment>
+          <h1> Send newsletter to users</h1>
           <Form style={{ width: "100%" }}>
             <Form.Group widths="equal">
               <Form.Input
@@ -203,10 +204,12 @@ var  options= [ ];
                 placeholder="message"
               />
      </Form.Group> 
-            <Form.Group>
+            
+            <Form.Field>
+              <label>  Additional users </label>
               <Dropdown
                 options={this.state.options}
-                placeholder="Additional users"
+                placeholder="add or select user email"
                 search
                 selection
                 fluid
@@ -215,8 +218,8 @@ var  options= [ ];
                 value={this.state.currentValues}
                 onAddItem={this.handleAddition}
                 onChange={this.handleChange}
-              /> 
-            </Form.Group>
+              />   </Form.Field>
+            
             <Form.Group>
               <Form.Checkbox
                 type="checkbox"
@@ -225,9 +228,9 @@ var  options= [ ];
                 onClick={this.handleCheckChange}
               />
             </Form.Group>
-            <Form.Group>
-              <p>Upload your document</p>
-
+            <Form.Field>
+              <label>  Upload your document </label>
+              
               <input
                 type="file"
                 id="file"
@@ -236,7 +239,7 @@ var  options= [ ];
               />
 
               <FileBase64 multiple={true} onDone={this.getFiles} />
-            </Form.Group>
+              </Form.Field>
           </Form>
         </Segment>
         <p style={{ color: "red" }}>{this.state.formWarning}</p>
