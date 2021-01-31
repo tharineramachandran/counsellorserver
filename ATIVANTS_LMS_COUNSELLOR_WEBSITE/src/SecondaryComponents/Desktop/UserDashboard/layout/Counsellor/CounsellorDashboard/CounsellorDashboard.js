@@ -61,9 +61,9 @@ const CounsellorDashboard = (props) => {
     isDetailsProvided: true,
   });
   const [isProfileSelected, setIsProfileSelected] = useState(false);
-  const [isRequestSelected, setisRequestSelected] = useState(false);
+  const [isRequestSelected, setisRequestSelected] = useState(true);
   const [isViewDeclineSelected, setViewDeclineSelected] = useState(false);
-  const [isViewChangeSelected, setViewChangeSelected] = useState(true);
+  const [isViewChangeSelected, setViewChangeSelected] = useState(false);
   const [isMessagesSelected, setIsMessagesSelected] = useState(false);
   const [isViewAcceptSelected, setViewAcceptSelected] = useState(false);
   const { name, email, isCounsellor, isDetailsProvided } = userDetails;

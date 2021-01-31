@@ -47,6 +47,15 @@ const DesktopComponent = ({ children }) => {
         setMessage({ header, content, color });
       }
 
+
+      
+        const CalendarId = urlParams.get("id");
+
+        if (CalendarId  ) { 
+            window.close();
+           
+        }
+     
       if (localStorage.jwtToken) {
         const CalendarId = urlParams.get("id");
 

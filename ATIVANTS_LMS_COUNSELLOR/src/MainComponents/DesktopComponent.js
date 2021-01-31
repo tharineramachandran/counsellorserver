@@ -55,9 +55,7 @@ const DesktopComponent = ({ children }) => {
               //window.close();
                           
             }
-          }
-
-     
+          } 
         const res = await fetch(baseURLAPI+"/auth/verify/", {
           
           method: "GET",

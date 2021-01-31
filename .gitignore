@@ -2,6 +2,11 @@
 *.gz
  
 ACTIVANTS_LMS_WS/node_modules/*
+ATIVANTS_LMS_COUNSELLOR_WEBSITE/node_modules/*
+.gitignore
+ATIVANTS_LMS_COUNSELLOR_WEBSITE/node_modules/
+
+ACTIVANTS_LMS_WS/node_modules/*
 ATIVANTS_LMS_COUNSELLOR - Copy/node_modules/*
 .gitignore
 ATIVANTS_LMS_COUNSELLOR - Copy/node_modules/

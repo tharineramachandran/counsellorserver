@@ -195,8 +195,8 @@ app.post("/addevent", async (req, res) => {
   try {
     var { session, date, userId, counsellorId, sessionDetails, requestID } = req.body;
     /// Date time things  
-    console.log([session, date, userId, counsellorId, sessionDetails]);
 
+    
     var datestr = date.split("T");
     var datestr3 = datestr[0].split("-");
     var day = (parseInt(datestr3[2]) + 1).toString();
@@ -233,13 +233,9 @@ app.post("/addevent", async (req, res) => {
       let endDateTimestr = endstDF[0] + ":" + endstDF[1];
 
       var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + day + "-" + datestr3[1] + "-" + datestr3[0] + " from " + startDateTimestr + " to " + endDateTimestr;
-      console.log([counsellor.rows[0].TX_USER_EMAIL, subject, message]);
-      await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message, 2, parseInt(counsellorId));
+       await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message, 2, parseInt(counsellorId));
      // await SMS.sendSMS(parseInt(counsellorId), message, counsellor.rows[0].TX_PHONE_NUMBER)
       await notification.addNoti(counsellorId, message);
-      console.log([startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
-
-
       await pool.query(
         'INSERT INTO "CT_COUNSELLOR_REQUESTS" (  ct_conselling_id, ct_counselling_level_code, ct_counselling_subject_code, ct_counsellor_hourly_rate,                                      ct_session_start_time, ct_session_end_time, ct_session_date,ct_user_id,ct_counsellor_id, ct_counsellor_timezone_code ,ct_counsellor_response  ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *',
         [requestID, request.rows[0].ct_counselling_level_code, request.rows[0].ct_counselling_subject_code, request.rows[0].ct_counsellor_hourly_rate, startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);

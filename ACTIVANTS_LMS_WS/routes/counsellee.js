@@ -30,8 +30,7 @@ router.post("/createCounsellee", createCounselleeValidation, async (req, res) =>
         const user = await pool.query('SELECT * FROM "T_USER" WHERE "ID_USER_UUID" = $1', [
             COUNSELLORID]);
 
-        console.log(user.rows);
-
+ 
         if (user.rows.length == 1) {
 
             const newCounsellorDetails = await pool.query(

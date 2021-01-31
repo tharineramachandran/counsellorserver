@@ -115,6 +115,7 @@ class ViewRequest extends React.Component {
         )
         .then((res) => {
           const requests = res.data;
+          console.log(requests);
           requests.forEach((element) => {
             var datestr = element.ct_session_start_time.split("T");
 
@@ -159,6 +160,7 @@ class ViewRequest extends React.Component {
             requestID: requestID,
             response: response,
             counsellorID: localStorage.userID,
+            redirect:0,
           },
         })
         .then((res) => {

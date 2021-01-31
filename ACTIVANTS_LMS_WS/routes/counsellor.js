@@ -65,8 +65,7 @@ return display;
 
 
 router.get("/GetCounsellorDetails/:id", async (req, res) => {
-    var id = req.params.id;
-    console.log(parseInt(id));
+    var id = req.params.id; 
     try {
         var user_fav = [];
         if (Number.isInteger(parseInt(id))) {
@@ -163,7 +162,7 @@ router.get("/GetCounsellorDetails/:id", async (req, res) => {
                 var FavisAvailable = true;
 
 
-                console.log(user_fav.rows[0].ct_user_fav)
+                
                 if (user_fav.rows[0].ct_user_fav.includes(counsellor_details.rows[0].CT_COUNSELLOR_ID)) {
                     counsellor_details.rows[0].FavisAvailable = 1;
                 } else { counsellor_details.rows[0].FavisAvailable = 0; }
@@ -610,13 +609,7 @@ router.post("/UpdateTimeTable", authorization, async (req, res) => {
         await pool.query(
             'DELETE FROM "CT_COUNSELLOR_AVAILABILITY_SATURDAY" WHERE "ct_counsellor_id" = $1',
             [COUNSELLORID]);
-
-        console.log({
-            COUNSELLOR_COUNTRY_CODE, COUNSELLOR_AVAILABILITY_MONDAY, COUNSELLOR_AVAILABILITY_TUESDAY, COUNSELLOR_AVAILABILITY_WEDNESDAY,
-            COUNSELLOR_AVAILABILITY_THURSDAY, COUNSELLOR_AVAILABILITY_FRIDAY, COUNSELLOR_AVAILABILITY_SATURDAY
-        });
-
-
+ 
         if (Array.isArray(COUNSELLOR_AVAILABILITY_MONDAY)) {
 
             COUNSELLOR_AVAILABILITY_MONDAY.forEach(insertConsellorMonday);
@@ -797,8 +790,7 @@ router.get('/info/:id', async (req, res) => {
     const item = req.params.id;
 
     try {
-        if (item) {
-            console.log(item);
+        if (item) { 
             var counsellor_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_ID" = $1', [item]);
             var counselling_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_COUNSELLING_DETAILS" where "ct_counsellor_id" = $1', [item]);
             var counselling_education = await pool.query('SELECT * FROM "CT_COUNSELLOR_QUALIFICATION_INSTITUTE" where "ct_counsellor_id" = $1', [item]);
@@ -832,8 +824,7 @@ router.get('/info/:id', async (req, res) => {
                 counselling_education: counselling_edu_values,
 
             };
-            console.log(account);
-            res.json({ counsellor: account });
+             res.json({ counsellor: account });
         } else { res.json("no id provided"); }
     } catch (error) {
         console.log(error.message);
@@ -848,8 +839,7 @@ router.get('/GetSingleCounsellorDetails/:id', async (req, res) => {
 
     try {
         if (item) {
-            console.log(item);
-            var counsellor_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_ID" = $1', [item]);
+             var counsellor_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" where "CT_COUNSELLOR_ID" = $1', [item]);
             var counsellor_review = await pool.query('SELECT "CT_COUNSELLOR_REVIEW"."id", "CT_COUNSELLOR_REVIEW"."ct_counsellor_review","CT_COUNSELLOR_REVIEW"."ct_counsellor_stars", "CT_COUNSELLOR_REVIEW"."ct_counsellor_date","CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" ,"T_USER"."TX_USER_NAME" FROM public."CT_COUNSELLOR_REVIEW" INNER JOIN public."T_USER" ON  CAST("CT_COUNSELLOR_REVIEW"."ct_counsellor_user_id" AS INTEGER) = "T_USER"."ID_USER_UUID" WHERE  "CT_COUNSELLOR_REVIEW"."ct_counsellor_id" = $1', [item]);
             var counselling_details = await pool.query('SELECT * FROM "CT_COUNSELLOR_COUNSELLING_DETAILS" where "ct_counsellor_id" = $1', [item]);
             var counselling_introduction = await pool.query('SELECT * FROM "CT_COUNSELLOR_INTRODUCTION" where "ct_counsellor_id" = $1', [item]);
@@ -896,8 +886,7 @@ router.get('/GetSingleCounsellorDetails/:id', async (req, res) => {
                 counselling_wednesday: counselling_wednesday.rows, counselling_thursday: counselling_thursday.rows,
                 counselling_friday: counselling_friday.rows, counselling_saturday: counselling_saturday.rows
             };
-            console.log(account);
-            res.json({ counsellor: account });
+             res.json({ counsellor: account });
         } else { res.json("no id provided"); }
     } catch (error) {
         console.log(error.message);
