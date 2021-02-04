@@ -66,7 +66,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
         var fifthString = [];
         var sixthString = [];
         var seventhString = [];
-        var eightString = [];
+        var eightString = []; window.location.reload();
         if (checkedstate.checked ) {
             axios.post(baseURLAPI + '/Counsellee/createCounsellee', { formData: formData, COUNSELLORID: localStorage.userID })
                 .then(res => {
@@ -88,7 +88,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                     for (var i = 0; i < els.length; i++) {
                         els[i].style.visibility = els[i].style.visibility == "hidden" ? "visible" : "hidden";
                     }
-
+                     
                 }).catch((error) => {
                     if (error.response) {
                         var list = error.response.data; // => the response payload 

@@ -20,7 +20,8 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
         COUNSELLOR_AVAILABILITY_FRIDAY,
         COUNSELLOR_AVAILABILITY_SATURDAY,
     } = formData;
-
+  
+    const [errorDisplay, seterrorDisplay] = useState("");
     const [icon_name, setIcon_name] = useState('circle');
     const [days, setDays] = useState({
         Monday: [{ FROM: "", TO: "" }],
@@ -146,7 +147,7 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
         const { name, value } = e.target;
         const list = [...days[day]];
         list[index][name] = value;
-
+        seterrorDisplay("");
         for (var i = 0; i < list.length; i++) {
             //check validity of date
             var validateResults = validate(list[i].TO, list[i].FROM, i, list);
@@ -156,18 +157,18 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
             if (!(validateResults.results)) {
                 if (!(validateResults.isNotOverlapping)) {
 
-                    resultsDisplay += "* Overlap with one another \r\n";
+                    resultsDisplay += "Overlap with one another \r\n";
                 }
                 if (!(validateResults.isdateTrue)) {
 
-                    resultsDisplay += "* start timing is after ending time \r\n ";
+                    resultsDisplay += "start timing is after ending time \r\n ";
 
                 }
                 if (!(validateResults.isNotSameDate)) {
-                    resultsDisplay += "* is the same time\r\n";
+                    resultsDisplay += "is the same time\r\n";
                 }
 
-                alert(resultsDisplay);
+                seterrorDisplay(resultsDisplay);
                 break;
 
             }
@@ -357,10 +358,16 @@ const Registration_Fifth = ({ formData, setForm, navigation, step }) => {
                                                     <Grid.Column width={16}>
                                                         <Segment style={{ width: '80%' }}>
                                                             <div style={{ width: '100%', textAlign: 'left' }}>
-                                                                <Label color='red' horizontal>
-                                                                    Select your time zone
-                                                        </Label>
-                                                            </div>
+                                                                
+                                                            </div> {errorDisplay && (
+                                <div>
+                                  <Message
+                                    icon="exclamation"
+                                    header="Overlapping dates"
+                                    content={errorDisplay}
+                                  />
+                                </div>
+                              )}
                                                             <br />
                                                             {Object.entries(days).map(([dayKey, day]) => {
                                                                 return day.map((x, i) => {

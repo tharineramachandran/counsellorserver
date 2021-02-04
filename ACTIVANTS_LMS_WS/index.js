@@ -234,22 +234,13 @@ app.post("/addevent", async (req, res) => {
 
       var message = await "Dear " + counsellor.rows[0].TX_USER_NAME + " ,you have received a new session request from " + user.rows[0].TX_USER_NAME + "," + user.rows[0].TX_USER_EMAIL + " on " + day + "-" + datestr3[1] + "-" + datestr3[0] + " from " + startDateTimestr + " to " + endDateTimestr;
        await email.sendEmail(counsellor.rows[0].TX_USER_EMAIL, subject, message, 2, parseInt(counsellorId));
-     // await SMS.sendSMS(parseInt(counsellorId), message, counsellor.rows[0].TX_PHONE_NUMBER)
+       await SMS.sendSMS(parseInt(counsellorId), message, counsellor.rows[0].TX_PHONE_NUMBER)
       await notification.addNoti(counsellorId, message);
       await pool.query(
         'INSERT INTO "CT_COUNSELLOR_REQUESTS" (  ct_conselling_id, ct_counselling_level_code, ct_counselling_subject_code, ct_counsellor_hourly_rate,                                      ct_session_start_time, ct_session_end_time, ct_session_date,ct_user_id,ct_counsellor_id, ct_counsellor_timezone_code ,ct_counsellor_response  ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *',
         [requestID, request.rows[0].ct_counselling_level_code, request.rows[0].ct_counselling_subject_code, request.rows[0].ct_counsellor_hourly_rate, startDate, endDate, startDate, userId, counsellorId, sessionDetails.ct_counsellor_timezone_code, '3']);
 
-
-
-
-
-
-      // // Load client secrets from a local file.
-      // fs.readFile('credentials.json', (err, content) => {
-      //   if (err) return console.log('Error loading client secret file:', err);
-      //   // Authorize a client with credentials, then call the Google Calendar API.
-      //     authorize(JSON.parse(content), addEvents );
+ 
       res.status(200).json({
         message: "Request is sent"
       })

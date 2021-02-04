@@ -31,7 +31,7 @@ var requestID = '';
 router.get("/getCounsellorRequests/:id", authorization, async (req, res) => {
   try { var id = req.params.id;
     
-      const user = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL" FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_user_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
+      const user = await pool.query('SELECT id, ct_session_start_time, ct_session_end_time, ct_session_date, ct_user_id, ct_counsellor_id, ct_counsellor_timezone_code, ct_counsellor_response, "ct_counsellor_eventID",  "TX_USER_NAME","TX_USER_EMAIL","TX_PICTURE"  FROM "CT_COUNSELLOR_REQUESTS" INNER JOIN "T_USER" ON CAST("CT_COUNSELLOR_REQUESTS"."ct_user_id" AS int) = "T_USER"."ID_USER_UUID" where "CT_COUNSELLOR_REQUESTS"."ct_counsellor_id" = $1 AND "CT_COUNSELLOR_REQUESTS"."ct_counsellor_response" = $2',
       [id, '3']);
  
     res.json(user.rows);
@@ -154,7 +154,7 @@ state:JSON.stringify({ counsellorID , requestID}),
 
         const counsellor = await pool.query('SELECT * FROM "CT_COUNSELLOR_DETAILS" WHERE "CT_COUNSELLOR_ID" = $1',
           [updatedRequest.rows[0].ct_counsellor_id]);
-
+        console.log(["asdfasdf",updatedRequest.rows[0]])
         const counsellee = await pool.query('SELECT *  FROM "T_USER" WHERE "ID_USER_UUID" = $1',
           [parseInt(updatedRequest.rows[0].ct_user_id)]);
 
@@ -210,7 +210,7 @@ state:JSON.stringify({ counsellorID , requestID}),
             if (err) {
               console.log('There was an error contacting the Calendar service: ' + err);
 
-          //    await opn(url);
+        //  await opn(url);
               res.status(400).json({ "message": "An Error Occured" });
             }
             var eventPatch = {
@@ -251,7 +251,7 @@ state:JSON.stringify({ counsellorID , requestID}),
               }
             });
             if (  parseInt(redirect) ==1) 
-            {   res.redirect(baseURL+'/?color=green&header=Success&content=Successfully+verified+email+address'); 
+            {   res.redirect(baseURL+'/?color=green&header=Success&content=Successfully+added+google+sign-in+and+request+was+accepted'); 
           
           }else{res.status(200).json({ "message": "Success" });}
             

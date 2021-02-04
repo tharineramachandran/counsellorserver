@@ -65,9 +65,7 @@ async function sendEmail(sendEmail, subject, message, matter, userID) {
     }
     if (matter == 8 && user.rows[0].ct_product_improvents) {
       allowEmail = true;
-    }
-    console.log("allowEmail");
-    console.log(allowEmail);
+    } 
     if (allowEmail) {
       const nodemailer = require("nodemailer");
 

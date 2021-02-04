@@ -200,10 +200,10 @@ const AdminDashboard = (props) => {
       } catch (error) {
         console.log(error.message);
       }
-    }, 50000);
+    }, 5000);
   });
   const logout = async () => {
-    window.open(baseURLAPI + "/socialauth/logout", "_self");
+    //window.open(baseURLAPI + "/socialauth/logout", "_self");
     setAuth(false);
     localStorage.removeItem("isCounsellor");
     localStorage.removeItem("jwtToken");
