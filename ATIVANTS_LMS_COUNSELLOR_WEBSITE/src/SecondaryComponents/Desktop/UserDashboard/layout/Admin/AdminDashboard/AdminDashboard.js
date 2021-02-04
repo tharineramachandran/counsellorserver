@@ -34,6 +34,7 @@ import ViewNoti from "../../SharedComponents/ViewNoti";
 import ViewMessages from "../../SharedComponents/ViewMessages";
 import ViewVerification from "../AdminPages/ViewVerification"; 
 import ViewSendNewsletter from "../AdminPages/ViewSendNewsletter"; 
+import ViewAddAdminAccount from "../AdminPages/ViewAddAdminAccount"; 
 import { baseURLAPI, baseURL } from "../../../../../../Global";
 const axios = require("axios");
 toast.configure();
@@ -59,6 +60,7 @@ const AdminDashboard = (props) => {
   
   const [ Newsletter, setNewsletter] = useState(false);
    
+  const [ AddAdminAccount, setAddAdminAccount] = useState(false);
   const [totalnoti, settotalnoti] = useState(0);
   var user = [];
   const [open, setOpen] = useState(false);
@@ -250,10 +252,26 @@ const AdminDashboard = (props) => {
                      setactiveItem(  "verify"  ) 
                         setIsVerification(!IsVerification); 
                         setNewsletter(false)
+                        setAddAdminAccount(false); 
                     }}
                   >
                     Verification
                   </Menu.Item>
+                  <Menu.Item
+                   active={activeItem === 'adminAccount'}
+                
+                   onClick={() => {
+                     setactiveItem(  "adminAccount"  ) 
+                        setIsVerification(false); 
+                        setNewsletter(false)
+                        setAddAdminAccount(!AddAdminAccount); 
+                    }}
+                  >
+                    Admin Account
+                  </Menu.Item>
+
+
+                   
                   <Menu.Item
                  active={activeItem === 'news'}
                 
@@ -261,6 +279,7 @@ const AdminDashboard = (props) => {
                    setactiveItem(  "news"  ) 
                         setIsVerification(false); 
                         setNewsletter(!Newsletter)
+                        setAddAdminAccount(false); 
                     }}
                   >
                     Send Newsletter
@@ -378,6 +397,8 @@ const AdminDashboard = (props) => {
       )} 
        {Newsletter  && (
         <ViewSendNewsletter />
+      )} { AddAdminAccount  && (
+        <ViewAddAdminAccount />
       )} 
     </>
   );

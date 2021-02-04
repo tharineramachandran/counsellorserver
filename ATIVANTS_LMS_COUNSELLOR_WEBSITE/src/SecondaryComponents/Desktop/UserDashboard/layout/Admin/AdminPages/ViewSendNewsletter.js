@@ -42,9 +42,7 @@ class ViewSendNewsletter extends React.Component {
     checked: false,
   };
 
-  componentDidMount() {
-    console.log("asd");
-
+  componentDidMount() { 
 
     axios
     .get(baseURLAPI + "/newsletter/getAdminEmail/"  , {

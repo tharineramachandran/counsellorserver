@@ -5,6 +5,8 @@ import {
     Message, Segment, Card, Img, Icon,
     Table, Label, Container, List, Popup
 } from "semantic-ui-react";
+
+import matthew from "../../../../../Static/Images/matthew.png";
 import { ToastContainer, toast } from 'react-toastify';
 import { baseURLAPI, baseURL } from "../../../../../Global";
 const axios = require('axios');
@@ -36,10 +38,10 @@ class ViewMessages extends React.Component {
         this.getData();
          
         this.intervalID = setInterval(this.getData, 5000);
-        console.log("is here    ");
+      
     }
     componentWillUnmount() {
-        console.log("asdfasdfasdf here    ");
+       
         clearInterval(this.intervalID) ;
     }
 
@@ -52,9 +54,7 @@ class ViewMessages extends React.Component {
                 userID: localStorage.userID
             }
         })
-            .then((res) => {
- console.log("res.data");
-                    console.log(res.data);
+            .then((res) => { 
                 if(parseInt(res.data) == 0 ) {
 
                     this.setState({ loadingChats: "No chats for you ",loadingMessages : 'No messages for you '})
@@ -83,8 +83,7 @@ class ViewMessages extends React.Component {
         })
             .then((res) => {
                 const requests = res.data;
-                const openModel = false;
-                console.log(["--requests---", requests])
+                const openModel = false; 
 
                 var unread = [];
                 var read = [];
@@ -110,9 +109,7 @@ class ViewMessages extends React.Component {
             })
             .catch(function (error) {
                 console.log(error);
-            });
-        console.log(["-----", this.state.read])
-        console.log(["-----", this.state.unread])
+            }); 
         var panes =
 
             [
@@ -173,8 +170,7 @@ class ViewMessages extends React.Component {
         this.setState({ panes })
     }
 
-    sendMessage = () => {
-        console.log(this.state.message);
+    sendMessage = () => { 
 
         const headers = {
             jwtToken: localStorage.jwtToken
@@ -189,8 +185,7 @@ class ViewMessages extends React.Component {
             headers: headers
         })
             .then((res) => {
-                console.log(res);
-                this.getNewMessages(this.state.chatID);
+                 this.getNewMessages(this.state.chatID);
             })
             .catch(function (error) {
                 console.log(error);
@@ -231,18 +226,17 @@ class ViewMessages extends React.Component {
         axios.post(baseURLAPI + '/messages/read/' + chatID, data, {
             headers: headers
         })
-            .then((res) => {
-                console.log(res);
+            .then((res) => { 
                 this.getNewMessages(this.state.chatID);
             })
             .catch(function (error) {
                 console.log(error);
             });
 
-
-        console.log([chatID, receiverImage]);
+ 
         var viewNotiMessage = true;
         this.setState({ chatID, receiverID, receiverName, receiverEmail, viewNotiMessage, receiverImage });
+     
         this.getNewMessages(chatID);
         this.setTable();
     };
@@ -255,10 +249,10 @@ class ViewMessages extends React.Component {
 
     renderDate = (date) => {
         var Date = date.split("T");
-        var dayofdate = Date[0];
+        var dayofdate = Date[0].split("-");
         var timeofdate = Date[1].substring(0, 5);
         return (
-            <p>{dayofdate} , {timeofdate} </p>
+            <p>{dayofdate[2]}/{dayofdate[1]}/{dayofdate[0]} , {timeofdate} </p>
         )
     };
 
@@ -280,6 +274,17 @@ class ViewMessages extends React.Component {
                                         <Table.Row>
                                             <Table.Cell>
                                                 <Image src={this.state.receiverImage} size='tiny' circular />
+
+                                                {this.state.receiverImage ? (
+                          
+                          <Image src={this.state.receiverImage} size='tiny' circular  />
+                          ) : (
+                            <Image size='tiny' circular 
+                              src={matthew} 
+                            />
+                          )}
+
+
                                                 <strong> {this.state.receiverName}</strong>
                                                 <p> {this.state.receiverEmail}</p>
                                             </Table.Cell>
@@ -292,7 +297,17 @@ class ViewMessages extends React.Component {
                                                             {this.state.receiverID == parseInt(details.ct_sender) ? (
                                                                 <List.Item style={{ width: '400px' }}>
                                                                     <List.Content floated='left' >
-                                                                        <Image src={this.state.receiverImage} avatar />
+                                                                        
+
+                                                                        {this.state.receiverImage ? (
+                          
+                          <Image src={this.state.receiverImage} avatar />
+                          ) : (
+                            <Image avatar
+                              src={matthew} 
+                            />
+                          )}
+
                                                                         <Label basic size='large' color='teal' pointing='left' > {details.ct_message}</Label>
                                                                         {this.renderDate(details.ct_date)}
                                                                     </List.Content>

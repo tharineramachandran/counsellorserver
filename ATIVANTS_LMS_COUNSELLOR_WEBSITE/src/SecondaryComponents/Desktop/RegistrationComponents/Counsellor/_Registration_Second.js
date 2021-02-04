@@ -29,7 +29,8 @@ const Registration_Second = ({ formData, setForm, navigation, step }) => {
     };
 
     const handleFileChange = e => {
-        selectFile(URL.createObjectURL(e.target.files[0]))
+        if(e.target.files[0]){
+        selectFile(URL.createObjectURL(e.target.files[0]))}
     }
 
     function getCroppedImg() {

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const pool = require("../database/Db_Connection");
 const authorization = require("../middleware/authorization");
-
+ 
 
 
 router.post("/createChats", authorization, async (req, res) => {
@@ -74,7 +74,7 @@ router.get("/getMessages/:id", authorization, async (req, res) => {
     const chats1 = await pool.query('SELECT  * FROM "CT_USER_MESSAGES" where "ct_chatid"  = $1  ',
       [id]);
 
-
+      
     res.json(chats1.rows);
   } catch (error) {
     console.log(error.message);
@@ -90,6 +90,7 @@ router.post("/read/:id", authorization, async (req, res) => {
     const chatunread = await pool.query('SELECT * FROM "CT_USER_CHAT" WHERE "id" = $1', [
       data.chatID
     ]);
+    
 
     if (parseInt(chatunread.rows[0].ct_user1) == parseInt(data.userID)) {
       const messagde = await pool.query('UPDATE "CT_USER_CHAT" SET "ct_unread_user1" = $1 WHERE "id" = $2',

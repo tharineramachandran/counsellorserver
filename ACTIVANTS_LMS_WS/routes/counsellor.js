@@ -337,8 +337,8 @@ router.post("/createCounsellor", createCounsellorValidation, async (req, res) =>
 
                  
                 let newUser = pool.query(
-                    'UPDATE   "T_USER" SET   "TX_PHONE_NUMBER"= $2  WHERE "ID_USER_UUID" = $1', [
-                        COUNSELLORID ,COUNSELLOR_PHONE_NUMBER
+                    'UPDATE   "T_USER" SET   "TX_PHONE_NUMBER"= $2 , "TX_USER_NAME" =$3 WHERE "ID_USER_UUID" = $1', [
+                        COUNSELLORID ,COUNSELLOR_PHONE_NUMBER,COUNSELLOR_FIRST_NAME+" "+COUNSELLOR_LAST_NAME
                 ])
 
 

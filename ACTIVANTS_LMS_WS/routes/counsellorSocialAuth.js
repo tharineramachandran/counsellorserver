@@ -5,10 +5,10 @@ const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validateInfo");
 const authorization = require("../middleware/authorization");
 const passport = require('passport');
-const { route } = require('./jwtAuth');
-const CLIENT_HOME_PAGE_URL = "http://localhost:3000";
+const { route } = require('./jwtAuth'); 
 
-
+const { baseURLAPI, baseURL } = require("../Global");
+const CLIENT_HOME_PAGE_URL = baseURL;
 router.get('/google' , function(req, res, next) {
     passport.authenticate('google', { scope: ["profile"] }, 
      function(err, user, info) {

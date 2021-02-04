@@ -35,7 +35,7 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
     const [sixthboxError, setsixthboxError] = useState([]);
     const [seventhboxError, setseventhboxError] = useState([]);
     const [eighthboxError, seteighthboxError] = useState([]);
-
+    const [appBanner, setappBanner] = useState(true);
 
     const [icon_name, setIcon_name] = useState('circle');
     const { handleSubmit, register, errors } = useForm({
@@ -57,21 +57,48 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                 console.log(res);
                 console.log(res.data);
                  
-               
-                    toast.success('Counsellor created successful!', {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                        progress: '',
-                    });
+
+                  
                     var els = document.getElementsByClassName('appBanner');
-                    for (var i = 0; i < els.length; i++) {
-                        els[i].style.visibility = els[i].style.visibility == "hidden" ? "visible" : "hidden";
-                    }
-                 
+                    setappBanner(false);
+                  fetch(baseURLAPI + "/user/" + localStorage.userID, {
+          method: "GET",
+        })
+          .then((response) => {
+            if (response.status === 200) return response.json();
+            throw new Error("failed to authenticate user");
+          })
+          .then((parseResponse) => {
+              console.log("parseResponse");
+              console.log(parseResponse);
+              localStorage.removeItem("isCompleted");
+            localStorage.setItem("email", parseResponse.user.TX_USER_EMAIL);
+            localStorage.setItem(
+              "isCounsellor",
+              parseResponse.user.IS_COUNSELLOR
+            );
+            localStorage.setItem("image", parseResponse.user.TX_PICTURE);
+            localStorage.setItem("userID", parseResponse.user.ID_USER_UUID);
+            localStorage.setItem("name", parseResponse.user.TX_USER_NAME);
+            localStorage.setItem(
+              "isCompleted",
+              parseResponse.user.TX_IS_COMPLETED
+            );
+
+            localStorage.setItem(
+              "verificationStatus",
+              parseResponse.user.TX_VERIFICATION_STATUS
+            );
+          });
+          toast.success('Counsellor created successful!', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: '',
+        });
             }).catch((error) => {
                 if (error.response) {
                     var list = error.response.data; // => the response payload 
@@ -160,7 +187,8 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                         <br />
                         <Container style={{ padding: '1rem 2rem', textAlign: 'left' }}>
                             <div style={{ backgroundColor: 'transparent' }}>
-                                <List horizontal className="appBanner"   >
+
+                                {appBanner && (  <List horizontal className="appBanner"   >
                                     <List.Item>
                                         <Label as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(0)}>
                                             <Icon name="circle outline" />
@@ -191,7 +219,8 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                                 Summary&nbsp;
                                             </Label>
                                     </List.Item>
-                                </List>
+                                </List>)}
+                              
                             </div>
                         </Container>
                         <Segment color='olive' size="mini" widths='equal'   >
@@ -199,15 +228,15 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 <Label as='a' color='blue' ribbon>
                                     Personal Details
                                                  </Label>
-
-                                <div className="appBanner" style={{ float: 'right' }}  >
+                                                 {appBanner && (   <div className="appBanner" style={{ float: 'right' }}  >
 
 
 
                                     <Label className="appBanner" as='a' className="activeBreadCrumb" circular onClick={() => navigation.go(0)}>
                                         <Icon name="edit" />
                                                     Edit&nbsp;
-                                            </Label></div>
+                                            </Label></div>)}
+                              
 
                             </div>
                             <br />
@@ -376,12 +405,13 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 <Label as='a' color='blue' ribbon>
                                     Photo
                         </Label>
-                                <div className="appBanner" style={{ float: 'right' }}  >
+                        {appBanner && ( <div className="appBanner" style={{ float: 'right' }}  >
                                     <Label as='a' class="appBanner" className="activeBreadCrumb" circular onClick={() => navigation.go(1)}>
                                         <Icon name="edit" />
                                                     Edit&nbsp;
                                             </Label>
-                                </div> </div>
+                                </div> )}
+                                </div>
                                 <br/>
                                 {fourthboxError.length > 0 && (
                                             <Form.Group widths='equal'>
@@ -416,12 +446,13 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 <Label as='a' color='blue' ribbon>
                                     Description
                         </Label>
-                                <div className="appBanner" style={{ float: 'right' }}  >
+                        {appBanner && ( <div className="appBanner" style={{ float: 'right' }}  >
                                     <Label as='a' className="appBanner" className="activeBreadCrumb" circular onClick={() => navigation.go(2)}>
                                         <Icon name="edit" />
                                                     Edit&nbsp;
                                             </Label>
-                                </div>         </div>
+                                </div>    )}
+                                     </div>
                             <br />
                             {fifthboxError.length > 0 && (
                                             <Form.Group widths='equal'>
@@ -467,12 +498,13 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 <Label as='a' color='blue' ribbon>
                                     Video
                         </Label>
-                                <div className="appBanner" style={{ float: 'right' }}  >
+                        {appBanner && ( <div className="appBanner" style={{ float: 'right' }}  >
                                     <Label as='a' className="appBanner" className="activeBreadCrumb" circular onClick={() => navigation.go(3)}>
                                         <Icon name="edit" />
                                                     Edit&nbsp;
                                             </Label>
-                                </div>            </div>
+                                </div>   )}
+                                         </div>
                             <br />
                             {sixthboxError.length > 0 && (
                                             <Form.Group widths='equal'>
@@ -512,12 +544,13 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 <Label as='a' color='blue' ribbon>
                                     Verification files
                         </Label>
-                                <div className="appBanner" style={{ float: 'right' }}  >
+                        {appBanner && (   <div className="appBanner" style={{ float: 'right' }}  >
                                     <Label as='a' className="appBanner" className="activeBreadCrumb" circular onClick={() => navigation.go(5)}>
                                         <Icon name="edit" />
                                                     Edit&nbsp;
                                             </Label>
-                                </div>            </div>
+                                </div>   )}
+                                       </div>
                             <br />
                             {eighthboxError.length > 0 && (
                                             <Form.Group widths='equal'>
@@ -597,11 +630,12 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 <Label as='a' color='blue' ribbon>
                                     Availability
                         </Label>
-                                <div className="appBanner" style={{ float: 'right' }}  > <Label as='a' className="appBanner" className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
+                        {appBanner && (  <div className="appBanner" style={{ float: 'right' }}  > <Label as='a' className="appBanner" className="activeBreadCrumb" circular onClick={() => navigation.go(4)}>
                                     <Icon name="edit" />
                                                     Edit&nbsp;
                                             </Label>
-                                </div>       </div>
+                                </div> )}
+                                     </div>
                             <br />
 
                             {seventhboxError.length > 0 && (
@@ -890,9 +924,9 @@ const Registration_Result = ({ formData, setForm, navigation, step }) => {
                                 </Table>
                             </div>
                         </Segment >
-                        <Button className="appBanner" color='blue' onClick={_handleSubmitClick}>
+                        {appBanner && (   <Button className="appBanner" color='blue' onClick={_handleSubmitClick}>
                             <Icon name='send' className="appBanner" /> Submit &nbsp;&nbsp;
-                                    </Button> &nbsp;&nbsp;&nbsp;
+                                    </Button> )}&nbsp;&nbsp;&nbsp;
                     </Segment >
                 </center>
             </Grid.Column>
